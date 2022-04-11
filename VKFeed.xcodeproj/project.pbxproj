@@ -11,6 +11,9 @@
 		67F3F7B62804664F0078CFEA /* VKFeed.h in Headers */ = {isa = PBXBuildFile; fileRef = 67F3F7B32804664F0078CFEA /* VKFeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67F3F7C3280466A00078CFEA /* VKFeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7C2280466A00078CFEA /* VKFeedTests.swift */; };
 		67F3F7C4280466A00078CFEA /* VKFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F3F7B02804664F0078CFEA /* VKFeed.framework */; };
+		67F3F7CC28046CBD0078CFEA /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7CB28046CBD0078CFEA /* FeedItem.swift */; };
+		67F3F7CE28046CE40078CFEA /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7CD28046CE40078CFEA /* FeedLoader.swift */; };
+		67F3F7D028046DAF0078CFEA /* RemoteFeedLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7CF28046DAF0078CFEA /* RemoteFeedLoaderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +32,9 @@
 		67F3F7B42804664F0078CFEA /* VKFeed.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = VKFeed.docc; sourceTree = "<group>"; };
 		67F3F7C0280466A00078CFEA /* VKFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F3F7C2280466A00078CFEA /* VKFeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedTests.swift; sourceTree = "<group>"; };
+		67F3F7CB28046CBD0078CFEA /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
+		67F3F7CD28046CE40078CFEA /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
+		67F3F7CF28046DAF0078CFEA /* RemoteFeedLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +77,7 @@
 		67F3F7B22804664F0078CFEA /* VKFeed */ = {
 			isa = PBXGroup;
 			children = (
+				67F3F7CA28046CAA0078CFEA /* Load Feed Feature */,
 				67F3F7B32804664F0078CFEA /* VKFeed.h */,
 				67F3F7B42804664F0078CFEA /* VKFeed.docc */,
 			);
@@ -81,8 +88,18 @@
 			isa = PBXGroup;
 			children = (
 				67F3F7C2280466A00078CFEA /* VKFeedTests.swift */,
+				67F3F7CF28046DAF0078CFEA /* RemoteFeedLoaderTests.swift */,
 			);
 			path = VKFeedTests;
+			sourceTree = "<group>";
+		};
+		67F3F7CA28046CAA0078CFEA /* Load Feed Feature */ = {
+			isa = PBXGroup;
+			children = (
+				67F3F7CB28046CBD0078CFEA /* FeedItem.swift */,
+				67F3F7CD28046CE40078CFEA /* FeedLoader.swift */,
+			);
+			path = "Load Feed Feature";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,6 +211,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67F3F7CE28046CE40078CFEA /* FeedLoader.swift in Sources */,
+				67F3F7CC28046CBD0078CFEA /* FeedItem.swift in Sources */,
 				67F3F7B52804664F0078CFEA /* VKFeed.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -202,6 +221,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67F3F7D028046DAF0078CFEA /* RemoteFeedLoaderTests.swift in Sources */,
 				67F3F7C3280466A00078CFEA /* VKFeedTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -397,6 +417,7 @@
 		67F3F7C7280466A00078CFEA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -418,6 +439,7 @@
 		67F3F7C8280466A00078CFEA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
