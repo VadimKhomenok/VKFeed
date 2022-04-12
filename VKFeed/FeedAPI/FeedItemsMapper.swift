@@ -10,6 +10,10 @@ import Foundation
 internal final class FeedItemsMapper {
     private struct FeedItemsWrapper: Decodable {
         var items: [Item]
+        
+        var feedItems: [FeedItem] {
+            return items.map { $0.item }
+        }
     }
 
     private struct Item: Decodable {
@@ -23,10 +27,13 @@ internal final class FeedItemsMapper {
         }
     }
     
-    internal static func map(_ data: Data, _ response: HTTPURLResponse) throws -> [FeedItem] {
-        guard response.statusCode == 200 else { throw RemoteFeedLoader.Error.invalidData }
-        
-        let wrapper = try JSONDecoder().decode(FeedItemsWrapper.self, from: data)
-        return wrapper.items.map { $0.item }
+    private static let OK_200 = 200
+
+    internal static func map(_ data: Data, from response: HTTPURLResponse) -> RemoteFeedLoader.Result {
+        guard response.statusCode == OK_200, let wrapper = try? JSONDecoder().decode(FeedItemsWrapper.self, from: data) else {
+            return .failure(.invalidData)
+        }
+         
+        return .success(wrapper.feedItems)
     }
 }
