@@ -62,6 +62,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6737809128062D260054CD20 /* Feed API */ = {
+			isa = PBXGroup;
+			children = (
+				67F3F7CF28046DAF0078CFEA /* RemoteFeedLoaderTests.swift */,
+			);
+			path = "Feed API";
+			sourceTree = "<group>";
+		};
 		67F3F7A62804664F0078CFEA = {
 			isa = PBXGroup;
 			children = (
@@ -84,7 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				67F3F7CA28046CAA0078CFEA /* Load Feed Feature */,
-				67F3F7D1280484870078CFEA /* FeedAPI */,
+				67F3F7D1280484870078CFEA /* Feed API */,
 				67F3F7B32804664F0078CFEA /* VKFeed.h */,
 				67F3F7B42804664F0078CFEA /* VKFeed.docc */,
 			);
@@ -94,8 +102,8 @@
 		67F3F7C1280466A00078CFEA /* VKFeedTests */ = {
 			isa = PBXGroup;
 			children = (
+				6737809128062D260054CD20 /* Feed API */,
 				67F3F7C2280466A00078CFEA /* VKFeedTests.swift */,
-				67F3F7CF28046DAF0078CFEA /* RemoteFeedLoaderTests.swift */,
 			);
 			path = VKFeedTests;
 			sourceTree = "<group>";
@@ -109,14 +117,14 @@
 			path = "Load Feed Feature";
 			sourceTree = "<group>";
 		};
-		67F3F7D1280484870078CFEA /* FeedAPI */ = {
+		67F3F7D1280484870078CFEA /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
 				67F3F7D22804849A0078CFEA /* HTTPClient.swift */,
 				67F3F7D4280484A50078CFEA /* RemoteFeedLoader.swift */,
 				6737808F280621600054CD20 /* FeedItemsMapper.swift */,
 			);
-			path = FeedAPI;
+			path = "Feed API";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
