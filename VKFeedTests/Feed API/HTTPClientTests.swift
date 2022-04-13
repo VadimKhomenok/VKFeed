@@ -7,6 +7,7 @@
 
 import Foundation
 import XCTest
+import VKFeed
 
 // why we need to specifically override resume() method in FakeURLSessionDataTask? Shouldn't it be inherited and be called by default in superclass?
 
@@ -17,8 +18,12 @@ class URLSessionHTTPClient {
         self.session = session
     }
     
-    func get(from url: URL, completion: @escaping () -> Void = {}) {
-        session.dataTask(with: url) { _, _, _ in }.resume()
+    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+        session.dataTask(with: url) { _, _, error in
+            if let error = error {
+                completion(.failure(error))
+            }
+        }.resume()
     }
 }
 
@@ -31,20 +36,60 @@ class URLSessionHTTPClientTests: XCTestCase {
         
         let sut = URLSessionHTTPClient(session: session)
         
-        sut.get(from: url)
+        sut.get(from: url) { result in
+            
+        }
 
         XCTAssertEqual(task.resumeCount, 1)
     }
     
-    class URLSessionSpy: URLSession {
-        private var stubbedTasks = [URL : URLSessionDataTask]()
+    func test_getFromUrl_failsOnDataTaskError() {
+        let url = URL(string: "https://api-url.com")!
+        let session = URLSessionSpy()
+        let error = NSError(domain: "An error", code: 400)
         
-        func stub(task: URLSessionDataTask, for url: URL) {
-            stubbedTasks[url] = task
+        session.stub(error: error, for: url)
+
+        let sut = URLSessionHTTPClient(session: session)
+
+        let expectation = expectation(description: "Wait for completion closure to end")
+        sut.get(from: url) { result in
+            switch result {
+            case .failure(let receivedError as NSError):
+                XCTAssertEqual(receivedError.domain, error.domain)
+                XCTAssertEqual(receivedError.code, error.code)
+            default:
+                XCTFail("Expected failure result, but received something else")
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
+    }
+
+    
+// MARK: - Helpers
+    
+    class URLSessionSpy: URLSession {
+        private var stubs = [URL : Stub]()
+        
+        struct Stub {
+            var task: URLSessionDataTask
+            var error: Error?
+        }
+        
+        func stub(task: URLSessionDataTask = FakeURLSessionDataTask(), error: Error? = nil, for url: URL) {
+            stubs[url] = Stub(task: task, error: error)
         }
         
         override func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-            return stubbedTasks[url] ?? FakeURLSessionDataTask()
+            guard let stub = stubs[url] else {
+                fatalError("No stub is available for provided URL \(url)")
+            }
+            
+            completionHandler(nil, nil, stub.error)
+            return stub.task
         }
     }
     
