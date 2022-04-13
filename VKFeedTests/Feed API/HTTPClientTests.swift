@@ -11,10 +11,18 @@ import VKFeed
 
 // why we need to specifically override resume() method in FakeURLSessionDataTask? Shouldn't it be inherited and be called by default in superclass?
 
+protocol HTTPSession {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSessionDataTask
+}
+
+protocol HTTPSessionDataTask {
+    func resume()
+}
+
 class URLSessionHTTPClient {
-    private let session: URLSession
+    private let session: HTTPSession
     
-    init(session: URLSession) {
+    init(session: HTTPSession) {
         self.session = session
     }
     
@@ -70,20 +78,20 @@ class URLSessionHTTPClientTests: XCTestCase {
 
     
 // MARK: - Helpers
-    
-    class URLSessionSpy: URLSession {
+
+    class URLSessionSpy: HTTPSession {
         private var stubs = [URL : Stub]()
         
         struct Stub {
-            var task: URLSessionDataTask
+            var task: HTTPSessionDataTask
             var error: Error?
         }
         
-        func stub(task: URLSessionDataTask = FakeURLSessionDataTask(), error: Error? = nil, for url: URL) {
+        func stub(task: HTTPSessionDataTask = FakeURLSessionDataTask(), error: Error? = nil, for url: URL) {
             stubs[url] = Stub(task: task, error: error)
         }
         
-        override func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> HTTPSessionDataTask {
             guard let stub = stubs[url] else {
                 fatalError("No stub is available for provided URL \(url)")
             }
@@ -93,14 +101,14 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
     }
     
-    class FakeURLSessionDataTask: URLSessionDataTask {
-        override func resume() {}
+    class FakeURLSessionDataTask: HTTPSessionDataTask {
+        func resume() {}
     }
     
-    class URLSessionDataTaskSpy: URLSessionDataTask {
+    class URLSessionDataTaskSpy: HTTPSessionDataTask {
         var resumeCount: Int = 0
         
-        override func resume() {
+        func resume() {
             resumeCount += 1
         }
     }
