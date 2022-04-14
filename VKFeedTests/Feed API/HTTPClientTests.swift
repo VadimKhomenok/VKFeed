@@ -11,26 +11,6 @@ import VKFeed
 
 // why we need to specifically override resume() method in FakeURLSessionDataTask? Shouldn't it be inherited and be called by default in superclass?
 
-class URLSessionHTTPClient {
-    private let session: URLSession
-    
-    init(session: URLSession = .shared) {
-        self.session = session
-    }
-    
-    struct UnspecifiedError: Error {}
-    
-    func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
-        session.dataTask(with: url) { data, response, error in
-            guard let data = data, let response = response as? HTTPURLResponse, error == nil else {
-                completion(.failure(error ?? UnspecifiedError()))
-                return
-            }
-            completion(.success(data, response))
-        }.resume()
-    }
-}
-
 class URLSessionHTTPClientTests: XCTestCase {
     override func setUp() {
         super.setUp()
@@ -83,53 +63,27 @@ class URLSessionHTTPClientTests: XCTestCase {
     func test_getFromUrl_successWithValidDataAndResponseOnRequestWithValidData() {
         let anyData = anyData()
         let httpUrlResponse = normalHTTPURLResponse()
-        URLProtocolStub.stub(data: anyData, response: httpUrlResponse, error: nil)
-        let sut = makeSUT()
-        let expectation = expectation(description: "Wait for completion to execute")
-
-        sut.get(from: anyURL()) { result in
-            switch result {
-            case let .success(data, response):
-                XCTAssertEqual(data, anyData)
-                XCTAssertEqual(response.url, httpUrlResponse.url)
-                XCTAssertEqual(response.statusCode, httpUrlResponse.statusCode)
-            default:
-                XCTFail("Expected success with data and response but received something else")
-            }
-            
-            expectation.fulfill()
-        }
+        let receivedValues = resultValuesFor(data: anyData, response: httpUrlResponse, error: nil)
         
-        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(receivedValues?.data, anyData)
+        XCTAssertEqual(receivedValues?.response.url, httpUrlResponse.url)
+        XCTAssertEqual(receivedValues?.response.statusCode, httpUrlResponse.statusCode)
     }
     
     func test_getFromUrl_successWithEmptyDataAndValidResponseOnRequestWithNilData() {
         let httpUrlResponse = normalHTTPURLResponse()
-        URLProtocolStub.stub(data: nil, response: httpUrlResponse, error: nil)
-        let sut = makeSUT()
-        let expectation = expectation(description: "Wait for completion to execute")
+        let receivedValues = resultValuesFor(data: nil, response: httpUrlResponse, error: nil)
 
-        sut.get(from: anyURL()) { result in
-            switch result {
-            case let .success(data, response):
-                let emptyData = Data()
-                XCTAssertEqual(data, emptyData)
-                XCTAssertEqual(response.url, httpUrlResponse.url)
-                XCTAssertEqual(response.statusCode, httpUrlResponse.statusCode)
-            default:
-                XCTFail("Expected success with data and response but received something else")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 1.0)
+        let emptyData = Data()
+        XCTAssertEqual(receivedValues?.data, emptyData)
+        XCTAssertEqual(receivedValues?.response.url, httpUrlResponse.url)
+        XCTAssertEqual(receivedValues?.response.statusCode, httpUrlResponse.statusCode)
     }
     
 
 // MARK: - Helpers
     
-    func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
+    func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> HTTPClient {
         let sut = URLSessionHTTPClient()
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
@@ -155,25 +109,43 @@ class URLSessionHTTPClientTests: XCTestCase {
         return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
     }
     
-    func resultErrorFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> Error? {
+    func resultFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> HTTPClientResult {
         URLProtocolStub.stub(data: data, response: response, error: error)
         let sut = makeSUT(file: file, line: line)
         let expectation = expectation(description: "Wait for completion to execute")
-        var receivedError: Error?
+        var receivedResult: HTTPClientResult!
         sut.get(from: anyURL()) { result in
-            switch result {
-            case .failure(let error):
-                receivedError = error
-            default:
-                XCTFail("Expected error but received something else", file: file, line: line)
-            }
-            
+            receivedResult = result
             expectation.fulfill()
         }
         
         wait(for: [expectation], timeout: 1.0)
         
-        return receivedError
+        return receivedResult
+    }
+    
+    func resultValuesFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> (data: Data, response: HTTPURLResponse)? {
+        let result = resultFor(data: data, response: response, error: error)
+        switch result {
+        case let .success(data, response):
+            return (data, response)
+        default:
+            XCTFail("Expected data and response but received something else", file: file, line: line)
+        }
+        
+        return nil
+    }
+    
+    func resultErrorFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> Error? {
+        let result = resultFor(data: data, response: response, error: error)
+        switch result {
+        case .failure(let error):
+            return error
+        default:
+            XCTFail("Expected error but received something else", file: file, line: line)
+        }
+        
+        return nil
     }
     
     
