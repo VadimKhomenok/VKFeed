@@ -21,12 +21,12 @@ class URLSessionHTTPClient {
     struct UnspecifiedError: Error {}
     
     func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
-        session.dataTask(with: url) { _, _, error in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                completion(.failure(UnspecifiedError()))
+        session.dataTask(with: url) { data, response, error in
+            guard let data = data, !data.isEmpty, let response = response as? HTTPURLResponse, error == nil else {
+                completion(.failure(error ?? UnspecifiedError()))
+                return
             }
+            completion(.success(data, response))
         }.resume()
     }
 }
@@ -79,8 +79,29 @@ class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: nil, response: anyNormalHTTPURLResponse(), error: anyNSError()))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyNonHTTPURLResponse(), error: anyNSError()))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyNormalHTTPURLResponse(), error: anyNSError()))
+    }
+    
+    func test_getFromUrl_successOnValidDataAndResponse() {
+        let anyData = anyData()
+        let anyHttpUrlResponse = anyNormalHTTPURLResponse()
+        URLProtocolStub.stub(data: anyData, response: anyHttpUrlResponse, error: nil)
+        let sut = makeSUT()
+        let expectation = expectation(description: "Wait for completion to execute")
+
+        sut.get(from: anyURL()) { result in
+            switch result {
+            case let .success(data, response):
+                XCTAssertEqual(data, anyData)
+                XCTAssertEqual(response.url, anyHttpUrlResponse.url)
+                XCTAssertEqual(response.statusCode, anyHttpUrlResponse.statusCode)
+            default:
+                XCTFail("Expected error but received something else")
+            }
+            
+            expectation.fulfill()
+        }
         
-//        XCTAssertNil(resultErrorFor(data: anyData(), response: normalHTTPURLResponse, error: nil))
+        wait(for: [expectation], timeout: 1.0)
     }
     
 // MARK: - Helpers
