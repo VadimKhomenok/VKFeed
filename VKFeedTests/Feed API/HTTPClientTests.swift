@@ -14,7 +14,7 @@ import VKFeed
 class URLSessionHTTPClient {
     private let session: URLSession
     
-    init(session: URLSession) {
+    init(session: URLSession = .shared) {
         self.session = session
     }
     
@@ -43,16 +43,13 @@ class URLSessionHTTPClientTests: XCTestCase {
 //    }
     
     func test_getFromUrl_failsOnDataTaskError() {
+        URLProtocolStub.startInterceptingRequests()
         let url = URL(string: "https://api-url.com")!
         let error = NSError(domain: "An error", code: 400)
-
-        let configuration = URLSessionConfiguration.default
-        configuration.protocolClasses = [URLProtocolStub.self]
-        let session = URLSession(configuration: configuration)
     
         URLProtocolStub.stub(error: error, url: url)
 
-        let sut = URLSessionHTTPClient(session: session)
+        let sut = URLSessionHTTPClient()
 
         let expectation = expectation(description: "Wait for completion closure to end")
         sut.get(from: url) { result in
@@ -68,6 +65,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 1.0)
+        URLProtocolStub.stopInterceptingRequests()
     }
 
     
@@ -86,12 +84,13 @@ class URLSessionHTTPClientTests: XCTestCase {
         
         // MARK: - Helper methods
         
-        func startInterceptingRequests() {
+        class func startInterceptingRequests() {
             URLProtocol.registerClass(URLProtocolStub.self)
         }
         
-        func stopInterceptingRequests() {
+        class func stopInterceptingRequests() {
             URLProtocol.unregisterClass(URLProtocolStub.self)
+            URLProtocolStub.stubs = [:]
         }
         
         // MARK: - Overridden methods of URLProtocol
