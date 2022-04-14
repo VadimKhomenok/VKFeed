@@ -47,7 +47,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         let url = URL(string: "https://api-url.com")!
         let error = NSError(domain: "An error", code: 400)
     
-        URLProtocolStub.stub(error: error, url: url)
+        URLProtocolStub.stub(data: nil, response: nil, error: error, url: url)
 
         let sut = URLSessionHTTPClient()
 
@@ -75,11 +75,13 @@ class URLSessionHTTPClientTests: XCTestCase {
         private static var stubs = [URL : Stub]()
         
         private struct Stub {
+            var data: Data?
+            var response: HTTPURLResponse?
             var error: Error?
         }
         
-        class func stub(error: Error, url: URL) {
-            stubs[url] = Stub(error: error)
+        class func stub(data: Data?, response: HTTPURLResponse?, error: Error?, url: URL) {
+            stubs[url] = Stub(data: data, response: response, error: error)
         }
         
         // MARK: - Helper methods
@@ -106,6 +108,14 @@ class URLSessionHTTPClientTests: XCTestCase {
         
         override func startLoading() {
             guard let url = request.url, let stub = URLProtocolStub.stubs[url] else { return }
+            
+            if let response = stub.response {
+                client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            }
+            
+            if let data = stub.data {
+                client?.urlProtocol(self, didLoad: data)
+            }
             
             if let error = stub.error {
                 client?.urlProtocol(self, didFailWithError: error)
