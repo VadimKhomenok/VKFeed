@@ -19,7 +19,6 @@ class URLSessionHTTPClient {
     }
     
     func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
-//        let url = URL(string: "https://another-api-url.com")!
         session.dataTask(with: url) { _, _, error in
             if let error = error {
                 completion(.failure(error))
@@ -29,26 +28,20 @@ class URLSessionHTTPClient {
 }
 
 class URLSessionHTTPClientTests: XCTestCase {
-//    func test_getFromUrl_resumesDataTask() {
-//        let url = URL(string: "https://api-url.com")!
-//        let task = URLSessionDataTaskSpy()
-//        session.stub(task: task, for: url)
-//
-//        let sut = URLSessionHTTPClient(session: URLSession.shared)
-//
-//        sut.get(from: url) { result in
-//
-//        }
-//
-//        XCTAssertEqual(task.resumeCount, 1)
-//    }
+    override func setUp() {
+        super.setUp()
+        
+        URLProtocolStub.startInterceptingRequests()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        
+        URLProtocolStub.stopInterceptingRequests()
+    }
     
     func test_getFromUrl_requestHasProperUrlAndMethod() {
-        URLProtocolStub.startInterceptingRequests()
-        
-        let url = URL(string: "https://api-url.com")!
-        let sut = URLSessionHTTPClient()
-        
+        let url = anyURL()
         let expectation = expectation(description: "Wait for request interception")
         
         URLProtocolStub.captureRequestClosure = { request in
@@ -58,24 +51,18 @@ class URLSessionHTTPClientTests: XCTestCase {
             expectation.fulfill()
         }
         
-        sut.get(from: url) { _ in }
+        makeSUT().get(from: url) { _ in }
         
         wait(for: [expectation], timeout: 1.0)
-        
-        URLProtocolStub.stopInterceptingRequests()
     }
     
     func test_getFromUrl_failsOnDataTaskError() {
-        URLProtocolStub.startInterceptingRequests()
-        let url = URL(string: "https://api-url.com")!
         let error = NSError(domain: "An error", code: 400)
     
         URLProtocolStub.stub(data: nil, response: nil, error: error)
 
-        let sut = URLSessionHTTPClient()
-
         let expectation = expectation(description: "Wait for completion closure to end")
-        sut.get(from: url) { result in
+        makeSUT().get(from: anyURL()) { result in
             switch result {
             case .failure(let receivedError as NSError):
                 XCTAssertEqual(receivedError.domain, error.domain)
@@ -88,11 +75,21 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 1.0)
-        URLProtocolStub.stopInterceptingRequests()
     }
 
     
 // MARK: - Helpers
+    
+    func makeSUT() -> URLSessionHTTPClient {
+        return URLSessionHTTPClient()
+    }
+    
+    func anyURL() -> URL {
+        return URL(string: "https://api-url.com")!
+    }
+    
+    
+// MARK: - Stubs
 
     class URLProtocolStub: URLProtocol {
         private static var stub: Stub?
