@@ -61,16 +61,26 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromUrl_failsOnDataTaskError() {
-        let error = NSError(domain: "An error", code: 400)
+        let error = anyNSError()
         let receivedError = resultErrorFor(data: nil, response: nil, error: error)
         
         XCTAssertEqual((receivedError as NSError?)?.domain, error.domain)
         XCTAssertEqual((receivedError as NSError?)?.code, error.code)
     }
 
-    func test_getFromUrl_failsOnAllNils() {
-        let receivedError = resultErrorFor(data: nil, response: nil, error: nil)
-        XCTAssertNotNil(receivedError)
+    func test_getFromUrl_failsOnAllInvalidCombinationsOfResults() {
+        XCTAssertNotNil(resultErrorFor(data: nil, response: nil, error: nil))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyNonHTTPURLResponse(), error: nil))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyNormalHTTPURLResponse(), error: nil))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: nil, error: nil))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyNonHTTPURLResponse(), error: nil))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: nil, error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyNonHTTPURLResponse(), error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: nil, response: anyNormalHTTPURLResponse(), error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyNonHTTPURLResponse(), error: anyNSError()))
+        XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyNormalHTTPURLResponse(), error: anyNSError()))
+        
+//        XCTAssertNil(resultErrorFor(data: anyData(), response: normalHTTPURLResponse, error: nil))
     }
     
 // MARK: - Helpers
@@ -85,7 +95,23 @@ class URLSessionHTTPClientTests: XCTestCase {
         return URL(string: "https://api-url.com")!
     }
     
-    func resultErrorFor(data: Data?, response: HTTPURLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> Error? {
+    func anyData() -> Data {
+        return Data("any data".utf8)
+    }
+    
+    func anyNSError() -> NSError {
+        return NSError(domain: "An error", code: 400)
+    }
+    
+    func anyNonHTTPURLResponse() -> URLResponse {
+        return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+    }
+    
+    func anyNormalHTTPURLResponse() -> HTTPURLResponse {
+        return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
+    }
+    
+    func resultErrorFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> Error? {
         URLProtocolStub.stub(data: data, response: response, error: error)
         let sut = makeSUT(file: file, line: line)
         let expectation = expectation(description: "Wait for completion to execute")
@@ -115,11 +141,11 @@ class URLSessionHTTPClientTests: XCTestCase {
         
         private struct Stub {
             var data: Data?
-            var response: HTTPURLResponse?
+            var response: URLResponse?
             var error: Error?
         }
         
-        class func stub(data: Data?, response: HTTPURLResponse?, error: Error?) {
+        class func stub(data: Data?, response: URLResponse?, error: Error?) {
             stub = Stub(data: data, response: response, error: error)
         }
         
