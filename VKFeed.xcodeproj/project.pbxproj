@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		67378090280621600054CD20 /* FeedItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6737808F280621600054CD20 /* FeedItemsMapper.swift */; };
 		67378093280700DB0054CD20 /* HTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67378092280700DB0054CD20 /* HTTPClientTests.swift */; };
+		67B4BBAC2808DA64006CD939 /* VKFeedAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B4BBAB2808DA64006CD939 /* VKFeedAPIEndToEndTests.swift */; };
+		67B4BBAD2808DA64006CD939 /* VKFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F3F7B02804664F0078CFEA /* VKFeed.framework */; };
 		67BF84F828085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BF84F728085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift */; };
 		67E8CBAB280897E800A48903 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E8CBAA280897E800A48903 /* URLSessionHTTPClient.swift */; };
 		67F3F7B52804664F0078CFEA /* VKFeed.docc in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7B42804664F0078CFEA /* VKFeed.docc */; };
@@ -23,6 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		67B4BBAE2808DA64006CD939 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 67F3F7A72804664F0078CFEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 67F3F7AF2804664F0078CFEA;
+			remoteInfo = VKFeed;
+		};
 		67F3F7C5280466A00078CFEA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 67F3F7A72804664F0078CFEA /* Project object */;
@@ -35,6 +44,8 @@
 /* Begin PBXFileReference section */
 		6737808F280621600054CD20 /* FeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
 		67378092280700DB0054CD20 /* HTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientTests.swift; sourceTree = "<group>"; };
+		67B4BBA92808DA64006CD939 /* VKFeedAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		67B4BBAB2808DA64006CD939 /* VKFeedAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedAPIEndToEndTests.swift; sourceTree = "<group>"; };
 		67BF84F728085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeaksHelper.swift"; sourceTree = "<group>"; };
 		67E8CBAA280897E800A48903 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		67F3F7B02804664F0078CFEA /* VKFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VKFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +61,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		67B4BBA62808DA63006CD939 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67B4BBAD2808DA64006CD939 /* VKFeed.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		67F3F7AD2804664F0078CFEA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -78,6 +97,14 @@
 			path = "Feed API";
 			sourceTree = "<group>";
 		};
+		67B4BBAA2808DA64006CD939 /* VKFeedAPIEndToEndTests */ = {
+			isa = PBXGroup;
+			children = (
+				67B4BBAB2808DA64006CD939 /* VKFeedAPIEndToEndTests.swift */,
+			);
+			path = VKFeedAPIEndToEndTests;
+			sourceTree = "<group>";
+		};
 		67BF84F928085EF100CFC10E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +118,7 @@
 			children = (
 				67F3F7B22804664F0078CFEA /* VKFeed */,
 				67F3F7C1280466A00078CFEA /* VKFeedTests */,
+				67B4BBAA2808DA64006CD939 /* VKFeedAPIEndToEndTests */,
 				67F3F7B12804664F0078CFEA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,6 +128,7 @@
 			children = (
 				67F3F7B02804664F0078CFEA /* VKFeed.framework */,
 				67F3F7C0280466A00078CFEA /* VKFeedTests.xctest */,
+				67B4BBA92808DA64006CD939 /* VKFeedAPIEndToEndTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -158,6 +187,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		67B4BBA82808DA63006CD939 /* VKFeedAPIEndToEndTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 67B4BBB22808DA64006CD939 /* Build configuration list for PBXNativeTarget "VKFeedAPIEndToEndTests" */;
+			buildPhases = (
+				67B4BBA52808DA63006CD939 /* Sources */,
+				67B4BBA62808DA63006CD939 /* Frameworks */,
+				67B4BBA72808DA63006CD939 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67B4BBAF2808DA64006CD939 /* PBXTargetDependency */,
+			);
+			name = VKFeedAPIEndToEndTests;
+			productName = VKFeedAPIEndToEndTests;
+			productReference = 67B4BBA92808DA64006CD939 /* VKFeedAPIEndToEndTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		67F3F7AF2804664F0078CFEA /* VKFeed */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 67F3F7B92804664F0078CFEA /* Build configuration list for PBXNativeTarget "VKFeed" */;
@@ -204,6 +251,9 @@
 				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
+					67B4BBA82808DA63006CD939 = {
+						CreatedOnToolsVersion = 13.1;
+					};
 					67F3F7AF2804664F0078CFEA = {
 						CreatedOnToolsVersion = 13.1;
 					};
@@ -227,11 +277,19 @@
 			targets = (
 				67F3F7AF2804664F0078CFEA /* VKFeed */,
 				67F3F7BF280466A00078CFEA /* VKFeedTests */,
+				67B4BBA82808DA63006CD939 /* VKFeedAPIEndToEndTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		67B4BBA72808DA63006CD939 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		67F3F7AE2804664F0078CFEA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -249,6 +307,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		67B4BBA52808DA63006CD939 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67B4BBAC2808DA64006CD939 /* VKFeedAPIEndToEndTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		67F3F7AC2804664F0078CFEA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -277,6 +343,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		67B4BBAF2808DA64006CD939 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 67F3F7AF2804664F0078CFEA /* VKFeed */;
+			targetProxy = 67B4BBAE2808DA64006CD939 /* PBXContainerItemProxy */;
+		};
 		67F3F7C6280466A00078CFEA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 67F3F7AF2804664F0078CFEA /* VKFeed */;
@@ -285,6 +356,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		67B4BBB02808DA64006CD939 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z9F52A55VD;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VK.VKFeedAPIEndToEndTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		67B4BBB12808DA64006CD939 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z9F52A55VD;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = VK.VKFeedAPIEndToEndTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		67F3F7B72804664F0078CFEA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -509,6 +622,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		67B4BBB22808DA64006CD939 /* Build configuration list for PBXNativeTarget "VKFeedAPIEndToEndTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67B4BBB02808DA64006CD939 /* Debug */,
+				67B4BBB12808DA64006CD939 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		67F3F7AA2804664F0078CFEA /* Build configuration list for PBXProject "VKFeed" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
