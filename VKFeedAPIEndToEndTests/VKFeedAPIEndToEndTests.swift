@@ -8,38 +8,48 @@
 import XCTest
 import VKFeed
 
+#warning("In tutorial he adds questionmark to cases of optional result - f.e. 'case let .success(items)?' or 'case let .failure(error)?' - I'm not sure if it is necessary, seems to work in the same way in both scenarios")
+
 class VKFeedAPIEndToEndTests: XCTestCase {
     func test_getFeedItems_matchesFixedData() {
+        switch getFeedResult() {
+        case let .success(items):
+            XCTAssertEqual(items.count, 8)
+            XCTAssertEqual(items[0], expectedFeedItem(at: 0))
+            XCTAssertEqual(items[1], expectedFeedItem(at: 1))
+            XCTAssertEqual(items[2], expectedFeedItem(at: 2))
+            XCTAssertEqual(items[3], expectedFeedItem(at: 3))
+            XCTAssertEqual(items[4], expectedFeedItem(at: 4))
+            XCTAssertEqual(items[5], expectedFeedItem(at: 5))
+            XCTAssertEqual(items[6], expectedFeedItem(at: 6))
+            XCTAssertEqual(items[7], expectedFeedItem(at: 7))
+        case let .failure(error):
+            XCTFail("Expected feed items but received failure with \(error)")
+        default:
+            XCTFail("Expected feed items but no result received")
+        }
+    }
+    
+// MARK: - Helpers
+    
+    private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> FeedLoaderResult? {
         let url = URL(string: "https://essentialdeveloper.com/feed-case-study/test-api/feed")!
         let client = URLSessionHTTPClient()
         let sut = RemoteFeedLoader(url: url, client: client)
+        trackForMemoryLeaks(client, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         
-        var receivedItems: [FeedItem]?
+        var receivedResult: FeedLoaderResult?
         let expectation = expectation(description: "Wait for completion to finish")
         sut.load { result in
-            switch result {
-            case let .success(items):
-                receivedItems = items
-            case let .failure(error):
-                XCTFail("Expected feed items but received failure with \(error)")
-            }
+            receivedResult = result
             expectation.fulfill()
         }
         
         wait(for: [expectation], timeout: 5.0)
         
-        XCTAssertEqual(receivedItems?.count, 8)
-        XCTAssertEqual(receivedItems?[0], expectedFeedItem(at: 0))
-        XCTAssertEqual(receivedItems?[1], expectedFeedItem(at: 1))
-        XCTAssertEqual(receivedItems?[2], expectedFeedItem(at: 2))
-        XCTAssertEqual(receivedItems?[3], expectedFeedItem(at: 3))
-        XCTAssertEqual(receivedItems?[4], expectedFeedItem(at: 4))
-        XCTAssertEqual(receivedItems?[5], expectedFeedItem(at: 5))
-        XCTAssertEqual(receivedItems?[6], expectedFeedItem(at: 6))
-        XCTAssertEqual(receivedItems?[7], expectedFeedItem(at: 7))
+        return receivedResult
     }
-    
-// MARK: - Helpers
     
     private func expectedFeedItem(at index: Int) -> FeedItem {
         return FeedItem(id: id(at: index), description: description(at: index), location: location(at: index), imageUrl: imageURL(at: index))
