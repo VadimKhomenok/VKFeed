@@ -28,9 +28,9 @@
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "67F3F7BF280466A00078CFEA"
-               BuildableName = "VKFeedTests.xctest"
-               BlueprintName = "VKFeedTests"
+               BlueprintIdentifier = "67B4BBA82808DA63006CD939"
+               BuildableName = "VKFeedAPIEndToEndTests.xctest"
+               BlueprintName = "VKFeedAPIEndToEndTests"
                ReferencedContainer = "container:VKFeed.xcodeproj">
             </BuildableReference>
          </TestableReference>

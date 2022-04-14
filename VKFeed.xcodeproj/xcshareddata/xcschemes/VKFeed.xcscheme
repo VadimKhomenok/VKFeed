@@ -5,32 +5,36 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "67F3F7AF2804664F0078CFEA"
+               BuildableName = "VKFeed.framework"
+               BlueprintName = "VKFeed"
+               ReferencedContainer = "container:VKFeed.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
-      <CodeCoverageTargets>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "67F3F7AF2804664F0078CFEA"
-            BuildableName = "VKFeed.framework"
-            BlueprintName = "VKFeed"
-            ReferencedContainer = "container:VKFeed.xcodeproj">
-         </BuildableReference>
-      </CodeCoverageTargets>
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO"
-            testExecutionOrdering = "random">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "67F3F7BF280466A00078CFEA"
-               BuildableName = "VKFeedTests.xctest"
-               BlueprintName = "VKFeedTests"
+               BlueprintIdentifier = "67B4BBA82808DA63006CD939"
+               BuildableName = "VKFeedAPIEndToEndTests.xctest"
+               BlueprintName = "VKFeedAPIEndToEndTests"
                ReferencedContainer = "container:VKFeed.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -53,6 +57,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "67F3F7AF2804664F0078CFEA"
+            BuildableName = "VKFeed.framework"
+            BlueprintName = "VKFeed"
+            ReferencedContainer = "container:VKFeed.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
