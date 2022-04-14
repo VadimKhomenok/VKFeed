@@ -87,10 +87,10 @@ class URLSessionHTTPClientTests: XCTestCase {
     
     func resultErrorFor(data: Data?, response: HTTPURLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> Error? {
         URLProtocolStub.stub(data: data, response: response, error: error)
-        
-        var receivedError: Error?
+        let sut = makeSUT(file: file, line: line)
         let expectation = expectation(description: "Wait for completion to execute")
-        makeSUT().get(from: anyURL()) { result in
+        var receivedError: Error?
+        sut.get(from: anyURL()) { result in
             switch result {
             case .failure(let error):
                 receivedError = error
