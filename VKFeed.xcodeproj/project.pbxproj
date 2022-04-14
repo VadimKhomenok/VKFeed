@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		67378090280621600054CD20 /* FeedItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6737808F280621600054CD20 /* FeedItemsMapper.swift */; };
 		67378093280700DB0054CD20 /* HTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67378092280700DB0054CD20 /* HTTPClientTests.swift */; };
+		67BF84F828085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BF84F728085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift */; };
 		67F3F7B52804664F0078CFEA /* VKFeed.docc in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7B42804664F0078CFEA /* VKFeed.docc */; };
 		67F3F7B62804664F0078CFEA /* VKFeed.h in Headers */ = {isa = PBXBuildFile; fileRef = 67F3F7B32804664F0078CFEA /* VKFeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		67F3F7C3280466A00078CFEA /* VKFeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7C2280466A00078CFEA /* VKFeedTests.swift */; };
@@ -33,6 +34,7 @@
 /* Begin PBXFileReference section */
 		6737808F280621600054CD20 /* FeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
 		67378092280700DB0054CD20 /* HTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientTests.swift; sourceTree = "<group>"; };
+		67BF84F728085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeaksHelper.swift"; sourceTree = "<group>"; };
 		67F3F7B02804664F0078CFEA /* VKFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VKFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F3F7B32804664F0078CFEA /* VKFeed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VKFeed.h; sourceTree = "<group>"; };
 		67F3F7B42804664F0078CFEA /* VKFeed.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = VKFeed.docc; sourceTree = "<group>"; };
@@ -67,10 +69,19 @@
 		6737809128062D260054CD20 /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
+				67BF84F928085EF100CFC10E /* Helpers */,
 				67F3F7CF28046DAF0078CFEA /* RemoteFeedLoaderTests.swift */,
 				67378092280700DB0054CD20 /* HTTPClientTests.swift */,
 			);
 			path = "Feed API";
+			sourceTree = "<group>";
+		};
+		67BF84F928085EF100CFC10E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				67BF84F728085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		67F3F7A62804664F0078CFEA = {
@@ -252,6 +263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67BF84F828085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift in Sources */,
 				67F3F7D028046DAF0078CFEA /* RemoteFeedLoaderTests.swift in Sources */,
 				67F3F7C3280466A00078CFEA /* VKFeedTests.swift in Sources */,
 				67378093280700DB0054CD20 /* HTTPClientTests.swift in Sources */,
