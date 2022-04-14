@@ -44,7 +44,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         let url = anyURL()
         let expectation = expectation(description: "Wait for request interception")
         
-        URLProtocolStub.captureRequestClosure = { request in
+        URLProtocolStub.observeRequest() { request in
             XCTAssertEqual(request.url, url)
             XCTAssertEqual(request.httpMethod, "GET")
             
@@ -95,7 +95,7 @@ class URLSessionHTTPClientTests: XCTestCase {
 
     class URLProtocolStub: URLProtocol {
         private static var stub: Stub?
-        static var captureRequestClosure: ((URLRequest) -> Void)?
+        private static var requestObserver: ((URLRequest) -> Void)?
         
         private struct Stub {
             var data: Data?
@@ -107,6 +107,11 @@ class URLSessionHTTPClientTests: XCTestCase {
             stub = Stub(data: data, response: response, error: error)
         }
         
+        class func observeRequest(_ observer: @escaping (URLRequest) -> Void) {
+            requestObserver = observer
+        }
+        
+        
         // MARK: - Helper methods
         
         class func startInterceptingRequests() {
@@ -116,12 +121,13 @@ class URLSessionHTTPClientTests: XCTestCase {
         class func stopInterceptingRequests() {
             URLProtocol.unregisterClass(URLProtocolStub.self)
             URLProtocolStub.stub = nil
+            URLProtocolStub.requestObserver = nil
         }
         
         // MARK: - Overridden methods of URLProtocol
         
         override class func canInit(with request: URLRequest) -> Bool {
-            captureRequestClosure?(request)
+            requestObserver?(request)
             return true
         }
         
