@@ -39,7 +39,7 @@ class URLSessionHTTPClientTests: XCTestCase {
             exp2.fulfill()
         }
         
-        wait(for: [expectation, exp2], timeout: 5.0)
+        wait(for: [expectation, exp2], timeout: 1.0)
     }
     
     func test_getFromUrl_failsOnDataTaskError() {
@@ -92,7 +92,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func anyURL() -> URL {
-        return URL(string: "http://any-url.com")!//"https://api-url.com")!
+        return URL(string: "https://api-url.com")!
     }
     
     func anyData() -> Data {
@@ -121,7 +121,7 @@ class URLSessionHTTPClientTests: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 2.0)
+        wait(for: [expectation], timeout: 1.0)
         
         return receivedResult
     }
