@@ -31,13 +31,15 @@ class URLSessionHTTPClientTests: XCTestCase {
         URLProtocolStub.observeRequest() { request in
             XCTAssertEqual(request.url, url)
             XCTAssertEqual(request.httpMethod, "GET")
-            
             expectation.fulfill()
         }
         
-        makeSUT().get(from: url) { _ in }
+        let exp2 = self.expectation(description: "Wait for request completion")
+        makeSUT().get(from: url) { _ in
+            exp2.fulfill()
+        }
         
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [expectation, exp2], timeout: 5.0)
     }
     
     func test_getFromUrl_failsOnDataTaskError() {
@@ -90,7 +92,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func anyURL() -> URL {
-        return URL(string: "https://api-url.com")!
+        return URL(string: "http://any-url.com")!//"https://api-url.com")!
     }
     
     func anyData() -> Data {
@@ -119,7 +121,7 @@ class URLSessionHTTPClientTests: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [expectation], timeout: 2.0)
         
         return receivedResult
     }
@@ -194,17 +196,15 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         override func startLoading() {
-            guard let stub = URLProtocolStub.stub else { return }
-            
-            if let response = stub.response {
-                client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-            }
-            
-            if let data = stub.data {
+            if let data = URLProtocolStub.stub?.data {
                 client?.urlProtocol(self, didLoad: data)
             }
             
-            if let error = stub.error {
+            if let response = URLProtocolStub.stub?.response {
+                client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            }
+            
+            if let error = URLProtocolStub.stub?.error {
                 client?.urlProtocol(self, didFailWithError: error)
             }
             
