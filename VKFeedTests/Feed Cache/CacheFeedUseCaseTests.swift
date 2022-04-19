@@ -151,7 +151,7 @@ class CacheFeedUseCaseTests: XCTestCase {
         let items = [makeUniqueItem(), makeUniqueItem()]
         let expectation = expectation(description: "Wait for the completion to execute")
         sut.save(items: items) { capturedError in
-            XCTAssertEqual(capturedError as NSError?, error)
+            XCTAssertEqual(capturedError as NSError?, error, file: file, line: line)
             expectation.fulfill()
         }
         
