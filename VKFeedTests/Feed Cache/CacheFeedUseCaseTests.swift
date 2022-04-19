@@ -10,9 +10,14 @@ import VKFeed
 
 class FeedStore {
     var deleteCallsCount = 0
+    var insertCallsCount = 0
     
     func deleteCache() {
         deleteCallsCount += 1
+    }
+    
+    func completeDeletion(with error: Error, at index: Int) {
+
     }
 }
 
@@ -30,15 +35,13 @@ class LocalFeedLoader {
 
 class CacheFeedUseCaseTests: XCTestCase {
     func test_init_doesNotDeleteCacheOnCreation() {
-        let store = FeedStore()
-        let _ = LocalFeedLoader(store: store)
+        let (_, store) = makeSUT()
         
         XCTAssertEqual(store.deleteCallsCount, 0)
     }
     
     func test_save_triggersCacheDeletion() {
-        let store = FeedStore()
-        let sut = LocalFeedLoader(store: store)
+        let (sut, store) = makeSUT()
         
         let items = [makeUniqueItem(), makeUniqueItem()]
         sut.save(items: items)
@@ -46,7 +49,26 @@ class CacheFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(store.deleteCallsCount, 1)
     }
     
+    func test_save_notInsertingItemsOnCacheDeletionError() {
+        let (sut, store) = makeSUT()
+        
+        let items = [makeUniqueItem(), makeUniqueItem()]
+        sut.save(items: items)
+        store.completeDeletion(with: anyNSError(), at: 0)
+        
+        XCTAssertEqual(store.insertCallsCount, 0)
+    }
+    
     // MARK: - Helpers
+    
+    func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStore) {
+        let store = FeedStore()
+        let sut = LocalFeedLoader(store: store)
+        trackForMemoryLeaks(store, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        
+        return (sut, store)
+    }
     
     func makeUniqueItem() -> FeedItem {
         return FeedItem(id: UUID(), description: nil, location: nil, imageUrl: anyURL())
