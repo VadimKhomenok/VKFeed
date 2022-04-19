@@ -26,11 +26,16 @@ class LocalFeedLoader {
     }
     
     func save(items: [FeedItem], completion: @escaping (Error?) -> Void) {
-        store.deleteCache() { [unowned self] error in
-            if error == nil {
-                self.store.insert(items: items, timestamp: self.currentDate, completion: completion)
+        store.deleteCache() { [weak self] deletionError in
+            guard let self = self else { return }
+            
+            if let deletionError = deletionError {
+                completion(deletionError)
             } else {
-                completion(error)
+                self.store.insert(items: items, timestamp: self.currentDate, completion: { [weak self] insertionError in
+                    guard let _ = self else { return }
+                    completion(insertionError)
+                })
             }
         }
     }
@@ -102,6 +107,37 @@ class CacheFeedUseCaseTests: XCTestCase {
         }
     }
     
+    func test_save_doesNotDeliverDeletionErrorAfterDeallocation() {
+        var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
+        let deletionError = anyNSError()
+        
+        var capturedResults: [Error?] = []
+        sut?.save(items: [makeUniqueItem()]) { error in
+            capturedResults.append(error)
+        }
+        
+        sut = nil
+        store.completeDeletion(with: deletionError)
+        
+        XCTAssertTrue(capturedResults.isEmpty)
+    }
+    
+    func test_save_doesNotDeliverInsertionErrorAfterDeallocation() {
+        var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
+        let insertionError = anyNSError()
+        
+        var capturedResults: [Error?] = []
+        sut?.save(items: [makeUniqueItem()]) { error in
+            capturedResults.append(error)
+        }
+        
+        store.completeDeletionWithSuccess()
+        sut = nil
+        store.completeInsertion(with: insertionError)
+        
+        XCTAssertTrue(capturedResults.isEmpty)
+    }
+    
     
     // MARK: - Helpers
     
@@ -140,6 +176,7 @@ class CacheFeedUseCaseTests: XCTestCase {
     }
     
     private class FeedStoreSpy: FeedStore {
+        
         enum ReceivedMessages: Equatable {
             case insert([FeedItem], Date)
             case deleteCachedFeed
