@@ -16,7 +16,7 @@ class FeedStore {
     }
 }
 
-class CacheFeedLoader {
+class LocalFeedLoader {
     private var store: FeedStore
     
     init(store: FeedStore = FeedStore()) {
@@ -29,18 +29,18 @@ class CacheFeedLoader {
 }
 
 class CacheFeedUseCaseTests: XCTestCase {
-    func test_deleteCache_notCalledOnInit() {
+    func test_init_doesNotDeleteCacheOnCreation() {
         let store = FeedStore()
-        let _ = CacheFeedLoader(store: store)
+        let _ = LocalFeedLoader(store: store)
         
         XCTAssertEqual(store.deleteCallsCount, 0)
     }
     
-    func test_saveCache_triggersDeleteOnStore() {
+    func test_save_triggersCacheDeletion() {
         let store = FeedStore()
-        let sut = CacheFeedLoader(store: store)
+        let sut = LocalFeedLoader(store: store)
         
-        let items = [makeUniqueFeedItem(), makeUniqueFeedItem()]
+        let items = [makeUniqueItem(), makeUniqueItem()]
         sut.save(items: items)
         
         XCTAssertEqual(store.deleteCallsCount, 1)
@@ -48,7 +48,7 @@ class CacheFeedUseCaseTests: XCTestCase {
     
     // MARK: - Helpers
     
-    func makeUniqueFeedItem() -> FeedItem {
+    func makeUniqueItem() -> FeedItem {
         return FeedItem(id: UUID(), description: nil, location: nil, imageUrl: anyURL())
     }
     
