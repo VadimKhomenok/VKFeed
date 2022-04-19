@@ -138,7 +138,7 @@ class CacheFeedUseCaseTests: XCTestCase {
     
     // MARK: - Helpers
     
-    func makeSUT(currentDate: Date = Date(), file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStore) {
+    private func makeSUT(currentDate: Date = Date(), file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStore) {
         let store = FeedStore()
         let sut = LocalFeedLoader(store: store, currentDate: currentDate)
         trackForMemoryLeaks(store, file: file, line: line)
@@ -147,7 +147,7 @@ class CacheFeedUseCaseTests: XCTestCase {
         return (sut, store)
     }
     
-    func expect(sut: LocalFeedLoader, toCompleteWithError error: NSError?, onAction action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(sut: LocalFeedLoader, toCompleteWithError error: NSError?, onAction action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let items = [makeUniqueItem(), makeUniqueItem()]
         let expectation = expectation(description: "Wait for the completion to execute")
         sut.save(items: items) { capturedError in
@@ -160,15 +160,15 @@ class CacheFeedUseCaseTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
     
-    func makeUniqueItem() -> FeedItem {
+    private func makeUniqueItem() -> FeedItem {
         return FeedItem(id: UUID(), description: nil, location: nil, imageUrl: anyURL())
     }
     
-    func anyURL() -> URL {
+    private func anyURL() -> URL {
         return URL(string: "https://api-url.com")!
     }
     
-    func anyNSError() -> NSError {
+    private func anyNSError() -> NSError {
         return NSError(domain: "An error", code: 400)
     }
 }
