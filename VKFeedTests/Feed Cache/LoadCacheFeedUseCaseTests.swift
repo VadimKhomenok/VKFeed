@@ -58,11 +58,32 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(retrievedFeed?.count, 0)
     }
 
+    func test_load_deliversFeedOnRetrieveCacheWithinValidExpirePeriod() {
+        let fixedCurrentDate = Date()
+        let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
+        let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
+        
+        var retrievedFeed: [FeedImage]?
+        sut.load { result in
+            switch result {
+            case let .success(feed):
+                retrievedFeed = feed
+            default:
+                XCTFail("Expected empty feed, received failure instead \(result)")
+            }
+        }
+        
+        let feed = makeUniqueImageFeed()
+        store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDaysOldTimestamp)
+        
+        XCTAssertEqual(retrievedFeed, feed.models)
+    }
+
     // MARK: - Helpers
     
-    private func makeSUT(currentDate: Date = Date(), file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
+    private func makeSUT(fixedCurrentDate: Date = Date(), file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
         let store = FeedStoreSpy()
-        let sut = LocalFeedLoader(store: store, currentDate: currentDate)
+        let sut = LocalFeedLoader(store: store, currentDate: fixedCurrentDate)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         
@@ -85,5 +106,16 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
     
     private func anyNSError() -> NSError {
         return NSError(domain: "An error", code: 400)
+    }
+}
+
+extension Date {
+    func adding(days: Int) -> Date {
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.date(byAdding: .day, value: days, to: self)!
+    }
+    
+    func adding(seconds: TimeInterval) -> Date {
+        return self + seconds
     }
 }
