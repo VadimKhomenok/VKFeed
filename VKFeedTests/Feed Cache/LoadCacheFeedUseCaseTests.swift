@@ -49,6 +49,29 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
             store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDaysOldTimestamp)
         }
     }
+    
+    func test_load_deliversEmptyOnRetrieveCacheWithSevenDaysOldTimestamp() {
+        let fixedCurrentDate = Date()
+        let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
+        let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
+
+        let feed = makeUniqueImageFeed()
+        expect(sut: sut, toCompleteWithResult: .success([])) {
+            store.completeRetrieval(with: feed.local, timestamp: sevenDaysOldTimestamp)
+        }
+    }
+    
+    func test_load_deliversEmptyOnRetrieveCacheWithMoreThanSevenDaysOldTimestamp() {
+        let fixedCurrentDate = Date()
+        let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
+        let moreThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+
+        let feed = makeUniqueImageFeed()
+        expect(sut: sut, toCompleteWithResult: .success([])) {
+            store.completeRetrieval(with: feed.local, timestamp: moreThanSevenDaysOldTimestamp)
+        }
+    }
+
 
     // MARK: - Helpers
     
@@ -61,16 +84,16 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         return (sut, store)
     }
     
-    private func expect(sut: LocalFeedLoader, toCompleteWithResult expectedResult: FeedLoaderResult, onAction action: () -> Void) {
+    private func expect(sut: LocalFeedLoader, toCompleteWithResult expectedResult: FeedLoaderResult, onAction action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let expectation = expectation(description: "Wait for the completion to execute")
         sut.load { result in
             switch (result, expectedResult) {
             case let (.success(feed), .success(expectedFeed)):
-                XCTAssertEqual(feed, expectedFeed)
+                XCTAssertEqual(feed, expectedFeed, file: file, line: line)
             case let (.failure(error), .failure(expectedError)):
-                XCTAssertEqual(error as NSError?, expectedError as NSError?)
+                XCTAssertEqual(error as NSError?, expectedError as NSError?, file: file, line: line)
             default:
-                XCTFail("Expected empty feed, received failure instead \(result)")
+                XCTFail("Expected empty feed, received failure instead \(result)", file: file, line: line)
             }
             expectation.fulfill()
         }
