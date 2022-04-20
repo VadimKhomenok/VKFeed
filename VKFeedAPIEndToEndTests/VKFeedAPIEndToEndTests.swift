@@ -8,25 +8,25 @@
 import XCTest
 import VKFeed
 
-#warning("In tutorial he adds questionmark to cases of optional result - f.e. 'case let .success(items)?' or 'case let .failure(error)?' - I'm not sure if it is necessary, seems to work in the same way in both scenarios")
+#warning("In tutorial he adds questionmark to cases of optional result - f.e. 'case let .success(imageFeed)?' or 'case let .failure(error)?' - I'm not sure if it is necessary, seems to work in the same way in both scenarios")
 
 class VKFeedAPIEndToEndTests: XCTestCase {
-    func test_getFeedItems_matchesFixedData() {
+    func test_getFeedImages_matchesFixedData() {
         switch getFeedResult() {
-        case let .success(items):
-            XCTAssertEqual(items.count, 8)
-            XCTAssertEqual(items[0], expectedFeedItem(at: 0))
-            XCTAssertEqual(items[1], expectedFeedItem(at: 1))
-            XCTAssertEqual(items[2], expectedFeedItem(at: 2))
-            XCTAssertEqual(items[3], expectedFeedItem(at: 3))
-            XCTAssertEqual(items[4], expectedFeedItem(at: 4))
-            XCTAssertEqual(items[5], expectedFeedItem(at: 5))
-            XCTAssertEqual(items[6], expectedFeedItem(at: 6))
-            XCTAssertEqual(items[7], expectedFeedItem(at: 7))
+        case let .success(imageFeed):
+            XCTAssertEqual(imageFeed.count, 8)
+            XCTAssertEqual(imageFeed[0], expectedFeedImage(at: 0))
+            XCTAssertEqual(imageFeed[1], expectedFeedImage(at: 1))
+            XCTAssertEqual(imageFeed[2], expectedFeedImage(at: 2))
+            XCTAssertEqual(imageFeed[3], expectedFeedImage(at: 3))
+            XCTAssertEqual(imageFeed[4], expectedFeedImage(at: 4))
+            XCTAssertEqual(imageFeed[5], expectedFeedImage(at: 5))
+            XCTAssertEqual(imageFeed[6], expectedFeedImage(at: 6))
+            XCTAssertEqual(imageFeed[7], expectedFeedImage(at: 7))
         case let .failure(error):
-            XCTFail("Expected feed items but received failure with \(error)")
+            XCTFail("Expected feed images but received failure with \(error)")
         default:
-            XCTFail("Expected feed items but no result received")
+            XCTFail("Expected feed images but no result received")
         }
     }
     
@@ -51,8 +51,8 @@ class VKFeedAPIEndToEndTests: XCTestCase {
         return receivedResult
     }
     
-    private func expectedFeedItem(at index: Int) -> FeedItem {
-        return FeedItem(id: id(at: index), description: description(at: index), location: location(at: index), imageUrl: imageURL(at: index))
+    private func expectedFeedImage(at index: Int) -> FeedImage {
+        return FeedImage(id: id(at: index), description: description(at: index), location: location(at: index), url: imageURL(at: index))
     }
     
     private func id(at index: Int) -> UUID {
