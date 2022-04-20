@@ -14,17 +14,3 @@ public protocol FeedStore {
     func insert(items: [LocalFeedItem], timestamp: Date, completion: @escaping InsertionCompletion)
     func deleteCache(_ completion: @escaping DeletionCompletion)
 }
-
-public struct LocalFeedItem: Equatable {
-    public var id: UUID
-    public var description: String?
-    public var location: String?
-    public var imageUrl: URL
-    
-    public init(id: UUID, description: String? = nil, location: String? = nil, imageUrl: URL) {
-        self.id = id
-        self.description = description
-        self.location = location
-        self.imageUrl = imageUrl
-    }
-}
