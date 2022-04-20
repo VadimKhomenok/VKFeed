@@ -53,12 +53,11 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
             }
         }
         
-        store.completeRetrievalWithSuccess()
+        store.completeRetrievalWithEmptyCache()
         
         XCTAssertEqual(retrievedFeed?.count, 0)
     }
 
-    
     // MARK: - Helpers
     
     private func makeSUT(currentDate: Date = Date(), file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
