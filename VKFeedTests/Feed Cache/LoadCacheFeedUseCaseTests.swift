@@ -18,8 +18,21 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
     func test_load_sendsRetrieveMessage() {
         let (sut, store) = makeSUT()
         
-        sut.load()
+        sut.load { _ in }
         XCTAssertEqual(store.messages, [.retrieve])
+    }
+    
+    func test_load_deliversErrorOnRetrieveError() {
+        let (sut, store) = makeSUT()
+        let retrieveError = anyNSError()
+        
+        var retrievedError: Error?
+        sut.load { error in
+            retrievedError = error
+        }
+        
+        store.completeRetrieval(with: retrieveError)
+        XCTAssertEqual(retrievedError as NSError?, retrieveError)
     }
     
     // MARK: - Helpers
@@ -31,5 +44,9 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut, store)
+    }
+    
+    private func anyNSError() -> NSError {
+        return NSError(domain: "An error", code: 400)
     }
 }
