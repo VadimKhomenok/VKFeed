@@ -26,6 +26,7 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let retrieveError = anyNSError()
         
+        let expectation = expectation(description: "Wait for the completion to execute")
         var retrievedError: Error?
         sut.load { result in
             switch result {
@@ -34,15 +35,20 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
             default:
                 XCTFail("Expected error, but retrieved success \(result)")
             }
+            expectation.fulfill()
         }
         
         store.completeRetrieval(with: retrieveError)
+        
+        wait(for: [expectation], timeout: 1.0)
+        
         XCTAssertEqual(retrievedError as NSError?, retrieveError)
     }
     
     func test_load_deliversEmptyFeedOnRetrieveEmptyCache() {
         let (sut, store) = makeSUT()
 
+        let expectation = expectation(description: "Wait for the completion to execute")
         var retrievedFeed: [FeedImage]?
         sut.load { result in
             switch result {
@@ -51,9 +57,13 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
             default:
                 XCTFail("Expected empty feed, received failure instead \(result)")
             }
+            
+            expectation.fulfill()
         }
         
         store.completeRetrievalWithEmptyCache()
+        
+        wait(for: [expectation], timeout: 1.0)
         
         XCTAssertEqual(retrievedFeed?.count, 0)
     }
@@ -63,6 +73,7 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
         
+        let expectation = expectation(description: "Wait for the completion to execute")
         var retrievedFeed: [FeedImage]?
         sut.load { result in
             switch result {
@@ -71,10 +82,13 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
             default:
                 XCTFail("Expected empty feed, received failure instead \(result)")
             }
+            expectation.fulfill()
         }
         
         let feed = makeUniqueImageFeed()
         store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDaysOldTimestamp)
+        
+        wait(for: [expectation], timeout: 1.0)
         
         XCTAssertEqual(retrievedFeed, feed.models)
     }
