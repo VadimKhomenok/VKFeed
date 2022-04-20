@@ -27,8 +27,13 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         let retrieveError = anyNSError()
         
         var retrievedError: Error?
-        sut.load { error in
-            retrievedError = error
+        sut.load { result in
+            switch result {
+            case let .failure(error):
+                retrievedError = error
+            default:
+                XCTFail("Expected error, but retrieved success \(result)")
+            }
         }
         
         store.completeRetrieval(with: retrieveError)
@@ -38,10 +43,13 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
     func test_load_deliversEmptyFeedOnRetrieveEmptyCache() {
         let (sut, store) = makeSUT()
 
-        var retrievedFeed: [LocalFeedImage]?
-        sut.load { error in
-            if error == nil {
-                retrievedFeed = []
+        var retrievedFeed: [FeedImage]?
+        sut.load { result in
+            switch result {
+            case let .success(feed):
+                retrievedFeed = feed
+            default:
+                XCTFail("Expected empty feed, received failure instead \(result)")
             }
         }
         
@@ -49,6 +57,7 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         
         XCTAssertEqual(retrievedFeed?.count, 0)
     }
+
     
     // MARK: - Helpers
     
@@ -59,6 +68,20 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut, store)
+    }
+    
+    private func makeUniqueImage() -> FeedImage {
+        return FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())
+    }
+    
+    private func makeUniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
+        let feed = [makeUniqueImage(), makeUniqueImage()]
+        let localFeed = feed.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
+        return (feed, localFeed)
+    }
+    
+    private func anyURL() -> URL {
+        return URL(string: "https://api-url.com")!
     }
     
     private func anyNSError() -> NSError {
