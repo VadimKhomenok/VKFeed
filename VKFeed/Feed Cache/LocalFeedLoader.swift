@@ -52,12 +52,11 @@ public class LocalFeedLoader {
     }
     
     private func validate(_ timestamp: Date) -> Bool {
-        let currentDate = Date()
-        guard let sevenDaysOldTimestamp = Calendar(identifier: .gregorian).date(byAdding: .day, value: -7, to: currentDate) else {
+        guard let maxCacheAge = Calendar(identifier: .gregorian).date(byAdding: .day, value: 7, to: timestamp) else {
             return false
         }
         
-        return timestamp > sevenDaysOldTimestamp
+        return currentDate < maxCacheAge
     }
 }
 
