@@ -26,71 +26,28 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let retrieveError = anyNSError()
         
-        let expectation = expectation(description: "Wait for the completion to execute")
-        var retrievedError: Error?
-        sut.load { result in
-            switch result {
-            case let .failure(error):
-                retrievedError = error
-            default:
-                XCTFail("Expected error, but retrieved success \(result)")
-            }
-            expectation.fulfill()
+        expect(sut: sut, toCompleteWithResult: .failure(retrieveError)) {
+            store.completeRetrieval(with: retrieveError)
         }
-        
-        store.completeRetrieval(with: retrieveError)
-        
-        wait(for: [expectation], timeout: 1.0)
-        
-        XCTAssertEqual(retrievedError as NSError?, retrieveError)
     }
     
     func test_load_deliversEmptyFeedOnRetrieveEmptyCache() {
         let (sut, store) = makeSUT()
-
-        let expectation = expectation(description: "Wait for the completion to execute")
-        var retrievedFeed: [FeedImage]?
-        sut.load { result in
-            switch result {
-            case let .success(feed):
-                retrievedFeed = feed
-            default:
-                XCTFail("Expected empty feed, received failure instead \(result)")
-            }
-            
-            expectation.fulfill()
+        
+        expect(sut: sut, toCompleteWithResult: .success([])) {
+            store.completeRetrievalWithEmptyCache()
         }
-        
-        store.completeRetrievalWithEmptyCache()
-        
-        wait(for: [expectation], timeout: 1.0)
-        
-        XCTAssertEqual(retrievedFeed?.count, 0)
     }
 
     func test_load_deliversFeedOnRetrieveCacheWithinValidExpirePeriod() {
         let fixedCurrentDate = Date()
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
-        
-        let expectation = expectation(description: "Wait for the completion to execute")
-        var retrievedFeed: [FeedImage]?
-        sut.load { result in
-            switch result {
-            case let .success(feed):
-                retrievedFeed = feed
-            default:
-                XCTFail("Expected empty feed, received failure instead \(result)")
-            }
-            expectation.fulfill()
-        }
-        
+
         let feed = makeUniqueImageFeed()
-        store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDaysOldTimestamp)
-        
-        wait(for: [expectation], timeout: 1.0)
-        
-        XCTAssertEqual(retrievedFeed, feed.models)
+        expect(sut: sut, toCompleteWithResult: .success(feed.models)) {
+            store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDaysOldTimestamp)
+        }
     }
 
     // MARK: - Helpers
@@ -102,6 +59,25 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut, store)
+    }
+    
+    private func expect(sut: LocalFeedLoader, toCompleteWithResult expectedResult: FeedLoaderResult, onAction action: () -> Void) {
+        let expectation = expectation(description: "Wait for the completion to execute")
+        sut.load { result in
+            switch (result, expectedResult) {
+            case let (.success(feed), .success(expectedFeed)):
+                XCTAssertEqual(feed, expectedFeed)
+            case let (.failure(error), .failure(expectedError)):
+                XCTAssertEqual(error as NSError?, expectedError as NSError?)
+            default:
+                XCTFail("Expected empty feed, received failure instead \(result)")
+            }
+            expectation.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [expectation], timeout: 1.0)
     }
     
     private func makeUniqueImage() -> FeedImage {
