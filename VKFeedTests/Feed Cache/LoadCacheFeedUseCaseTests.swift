@@ -127,6 +127,20 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(store.messages, [.retrieve, .delete])
     }
     
+    func test_load_doesNotDeliverResultOnDeallocation() {
+        var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT(fixedCurrentDate: Date())
+        
+        var retrievedResult = [LocalFeedLoader.LoadResult]()
+        sut?.load { result in
+            retrievedResult.append(result)
+        }
+        
+        sut = nil
+
+        store.completeRetrievalWithEmptyCache()
+        
+        XCTAssertTrue(retrievedResult.isEmpty)
+    }
 
     // MARK: - Helpers
     
