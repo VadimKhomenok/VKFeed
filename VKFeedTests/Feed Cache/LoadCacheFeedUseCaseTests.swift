@@ -39,7 +39,7 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         }
     }
 
-    func test_load_deliversFeedOnRetrieveCacheWithinValidExpirePeriod() {
+    func test_load_deliversFeedOnRetrieveCacheWithLessThanSevenDaysOldCache() {
         let fixedCurrentDate = Date()
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let lessThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: 1)
@@ -50,7 +50,7 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         }
     }
     
-    func test_load_deliversEmptyOnRetrieveCacheWithSevenDaysOldTimestamp() {
+    func test_load_deliversEmptyOnRetrieveCacheWithSevenDaysOldCache() {
         let fixedCurrentDate = Date()
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
@@ -61,7 +61,7 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         }
     }
     
-    func test_load_deliversEmptyOnRetrieveCacheWithMoreThanSevenDaysOldTimestamp() {
+    func test_load_deliversEmptyOnRetrieveCacheWithMoreThanSevenDaysOldCache() {
         let fixedCurrentDate = Date()
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let moreThanSevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
