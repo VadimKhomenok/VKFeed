@@ -36,7 +36,7 @@ public class LocalFeedLoader {
     }
 }
 
-extension Array where Element == FeedItem {
+private extension Array where Element == FeedItem {
     func toLocal() -> [LocalFeedItem] {
         map { LocalFeedItem(id: $0.id, description: $0.description, location: $0.location, imageUrl: $0.imageUrl) }
     }
