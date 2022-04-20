@@ -10,6 +10,7 @@ import VKFeed
 class FeedStoreSpy: FeedStore {
     enum ReceivedMessages: Equatable {
         case insert([LocalFeedImage], Date)
+        case retrieve
         case deleteCachedFeed
     }
     
@@ -21,6 +22,10 @@ class FeedStoreSpy: FeedStore {
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
         messages.append(.insert(feed, timestamp))
         insertionCompletions.append(completion)
+    }
+    
+    func retrieve() {
+        messages.append(.retrieve)
     }
     
     func deleteCache(_ completion: @escaping DeletionCompletion) {
