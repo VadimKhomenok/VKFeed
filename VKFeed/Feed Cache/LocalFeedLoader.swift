@@ -44,7 +44,6 @@ public class LocalFeedLoader {
                 completion(.success([]))
             case let .failure(error):
                 completion(.failure(error))
-                self.store.deleteCache { _ in }
             }
         }
     }
