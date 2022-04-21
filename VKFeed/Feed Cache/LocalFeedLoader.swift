@@ -65,7 +65,7 @@ private extension Array where Element == FeedImage {
 
 // MARK: - Local Feed Loader Load
 
-extension LocalFeedLoader {
+extension LocalFeedLoader: FeedLoader {
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
             guard let self = self else { return }
