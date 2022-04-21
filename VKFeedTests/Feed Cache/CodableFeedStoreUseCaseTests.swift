@@ -33,4 +33,24 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
     }
+    
+    func test_retrieveTwice_deliversEmptyOnEmptyCache() {
+        let sut = CodableFeedStore()
+        
+        let expectation = expectation(description: "Wait for the completion to execute")
+        sut.retrieve() { result in
+            sut.retrieve { result in
+                switch result {
+                case .empty:
+                    break
+                default:
+                    XCTFail("Expected empty, but received \(result)")
+                }
+                
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
+    }
 }
