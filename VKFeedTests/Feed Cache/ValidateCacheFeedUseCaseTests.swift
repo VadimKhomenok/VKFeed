@@ -45,7 +45,7 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(store.messages, [.retrieve, .delete])
     }
     
-    func test_load_noSideEffectsOnRetrieveWithMoreThanSevenDaysAgeCache() {
+    func test_validateCache_deletesCacheOnRetrieveWithMoreThanSevenDaysAgeCache() {
         let fixedCurrentDate = Date()
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
