@@ -33,6 +33,30 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(store.messages, [.retrieve, .delete])
     }
     
+    func test_validateCache_deletesCacheWithSevenDaysAge() {
+        let fixedCurrentDate = Date()
+        let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
+        let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7)
+
+        sut.validateCache()
+        let feed = makeUniqueImageFeed()
+        store.completeRetrieval(with: feed.local, timestamp: sevenDaysOldTimestamp)
+        
+        XCTAssertEqual(store.messages, [.retrieve, .delete])
+    }
+    
+    func test_load_noSideEffectsOnRetrieveWithMoreThanSevenDaysAgeCache() {
+        let fixedCurrentDate = Date()
+        let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
+        let sevenDaysOldTimestamp = fixedCurrentDate.adding(days: -7).adding(seconds: -1)
+
+        sut.validateCache()
+        let feed = makeUniqueImageFeed()
+        store.completeRetrieval(with: feed.local, timestamp: sevenDaysOldTimestamp)
+        
+        XCTAssertEqual(store.messages, [.retrieve, .delete])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(fixedCurrentDate: Date = Date(), file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalFeedLoader, store: FeedStoreSpy) {
@@ -44,7 +68,21 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
         return (sut, store)
     }
     
+    private func makeUniqueImage() -> FeedImage {
+        return FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())
+    }
+    
+    private func makeUniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
+        let feed = [makeUniqueImage(), makeUniqueImage()]
+        let localFeed = feed.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
+        return (feed, localFeed)
+    }
+    
     private func anyNSError() -> NSError {
         return NSError(domain: "An error", code: 400)
+    }
+    
+    private func anyURL() -> URL {
+        return URL(string: "https://api-url.com")!
     }
 }
