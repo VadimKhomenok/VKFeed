@@ -19,6 +19,23 @@ public class LocalFeedLoader {
         self.currentDate = currentDate
     }
     
+    private var maxCacheAgeInDays: Int {
+        return 7
+    }
+    
+    private func validate(_ timestamp: Date) -> Bool {
+        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else {
+            return false
+        }
+        
+        return currentDate < maxCacheAge
+    }
+}
+ 
+
+// MARK: - Local Feed Loader Save
+
+extension LocalFeedLoader {
     public func save(_ feed: [FeedImage], completion: @escaping (Error?) -> Void) {
         store.deleteCache() { [weak self] deletionError in
             guard let self = self else { return }
@@ -31,6 +48,23 @@ public class LocalFeedLoader {
         }
     }
     
+    private func cache(_ feed: [FeedImage], completion: @escaping (Error?) -> Void) {
+        store.insert(feed.toLocal(), timestamp: self.currentDate, completion: { [weak self] error in
+            guard self != nil else { return }
+            completion(error)
+        })
+    }
+}
+
+private extension Array where Element == FeedImage {
+    func toLocal() -> [LocalFeedImage] {
+        map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
+    }
+}
+
+// MARK: - Local Feed Loader Load
+
+extension LocalFeedLoader {
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
             guard let self = self else { return }
@@ -44,7 +78,18 @@ public class LocalFeedLoader {
             }
         }
     }
-    
+}
+
+private extension Array where Element == LocalFeedImage {
+    func toModel() -> [FeedImage] {
+        map { FeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
+    }
+}
+
+
+// MARK: - Local Feed Loader Validation
+
+extension LocalFeedLoader {
     public func validateCache() {
         store.retrieve { [weak self] result in
             guard let self = self else { return }
@@ -57,36 +102,5 @@ public class LocalFeedLoader {
                 break
             }
         }
-    }
-    
-    private func cache(_ feed: [FeedImage], completion: @escaping (Error?) -> Void) {
-        store.insert(feed.toLocal(), timestamp: self.currentDate, completion: { [weak self] error in
-            guard self != nil else { return }
-            completion(error)
-        })
-    }
-    
-    private var maxCacheAgeInDays: Int {
-        return 7
-    }
-    
-    private func validate(_ timestamp: Date) -> Bool {
-        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else {
-            return false
-        }
-        
-        return currentDate < maxCacheAge
-    }
-}
-
-private extension Array where Element == FeedImage {
-    func toLocal() -> [LocalFeedImage] {
-        map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
-    }
-}
-
-private extension Array where Element == LocalFeedImage {
-    func toModel() -> [FeedImage] {
-        map { FeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
     }
 }
