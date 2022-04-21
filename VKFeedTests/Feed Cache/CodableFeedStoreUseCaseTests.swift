@@ -17,7 +17,7 @@ class CodableFeedStore {
 
 class CodableFeedStoreUseCaseTests: XCTestCase {
     func test_retrieve_deliversEmptyOnEmptyCache() {
-        let sut = CodableFeedStore()
+        let sut = makeSUT()
         
         let expectation = expectation(description: "Wait for the completion to execute")
         sut.retrieve() { result in
@@ -35,7 +35,7 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     }
     
     func test_retrieve_noSideEffectsOnEmptyCache() {
-        let sut = CodableFeedStore()
+        let sut = makeSUT()
         
         let expectation = expectation(description: "Wait for the completion to execute")
         sut.retrieve() { firstResult in
@@ -52,5 +52,13 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 1.0)
+    }
+    
+    // MARK: - Helpers
+    
+    private func makeSUT() -> CodableFeedStore {
+        let sut = CodableFeedStore()
+        trackForMemoryLeaks(sut)
+        return sut
     }
 }
