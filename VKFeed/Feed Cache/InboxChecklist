@@ -1,0 +1,18 @@
+
+1) Retrieve:
+    - delivers no data from empty cache
+    - delivers data from non-empty cache
+    - delivers the same data from non-empty cache when retrieved twice
+    - delivers error (if applicable, f.e. disk read error/invalid data)
+
+2) Insert:
+    - puts data to empty cache
+    - overwrite old non-empty cache with new data
+    - error (if applicable, f.e. disk write error/no write permission)
+
+3) Delete
+    - do nothing on empty cache
+    - delete data in non-empty cache
+    - error (if applicable, f.e. no write permission)
+    
+4) Side-effects must run serially to prevent race conditions
