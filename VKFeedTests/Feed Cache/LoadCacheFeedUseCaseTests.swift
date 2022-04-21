@@ -9,7 +9,7 @@ import XCTest
 import VKFeed
 
 class LoadCacheFeedUseCaseTests: XCTestCase {
-    func test_init_doesNotLoadOnCreation() {
+    func test_init_doesNotMessageStoreOnCreation() {
         let (_, store) = makeSUT()
         
         XCTAssertEqual(store.messages.count, 0)
