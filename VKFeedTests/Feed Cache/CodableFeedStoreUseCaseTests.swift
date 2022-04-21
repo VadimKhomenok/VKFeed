@@ -10,8 +10,30 @@ import VKFeed
 
 class CodableFeedStore {
     private struct Cache: Codable {
-        var feed: [LocalFeedImage]
+        var feed: [CodableFeedImage]
         var timestamp: Date
+        
+        var localFeed: [LocalFeedImage] {
+            feed.map { $0.local }
+        }
+    }
+    
+    private struct CodableFeedImage: Codable {
+        private var id: UUID
+        private var description: String?
+        private var location: String?
+        private var url: URL
+        
+        init(_ image: LocalFeedImage) {
+            self.id = image.id
+            self.description = image.description
+            self.location = image.location
+            self.url = image.url
+        }
+        
+        var local: LocalFeedImage {
+            LocalFeedImage(id: id, description: description, location: location, url: url)
+        }
     }
 
     private var cachedFeedPathURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("image-feed.store")
@@ -23,11 +45,12 @@ class CodableFeedStore {
         }
 
         let cache = try! JSONDecoder().decode(Cache.self, from: cacheData)
-        completion(.found(feed: cache.feed, timestamp: cache.timestamp))
+        completion(.found(feed: cache.localFeed, timestamp: cache.timestamp))
     }
     
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
-        let data = try! JSONEncoder().encode(Cache(feed: feed, timestamp: timestamp))
+        let cache = Cache(feed: feed.map(CodableFeedImage.init), timestamp: timestamp)
+        let data = try! JSONEncoder().encode(cache)
         try! data.write(to: cachedFeedPathURL)
         completion(nil)
     }
