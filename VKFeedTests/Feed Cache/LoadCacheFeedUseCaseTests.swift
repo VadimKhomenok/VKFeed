@@ -171,33 +171,4 @@ class LoadCacheFeedUseCaseTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
     }
-    
-    private func makeUniqueImage() -> FeedImage {
-        return FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())
-    }
-    
-    private func makeUniqueImageFeed() -> (models: [FeedImage], local: [LocalFeedImage]) {
-        let feed = [makeUniqueImage(), makeUniqueImage()]
-        let localFeed = feed.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.url) }
-        return (feed, localFeed)
-    }
-    
-    private func anyURL() -> URL {
-        return URL(string: "https://api-url.com")!
-    }
-    
-    private func anyNSError() -> NSError {
-        return NSError(domain: "An error", code: 400)
-    }
-}
-
-extension Date {
-    func adding(days: Int) -> Date {
-        let calendar = Calendar(identifier: .gregorian)
-        return calendar.date(byAdding: .day, value: days, to: self)!
-    }
-    
-    func adding(seconds: TimeInterval) -> Date {
-        return self + seconds
-    }
 }
