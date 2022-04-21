@@ -51,10 +51,10 @@ As a user I want my feed to load automatically at application startup
 #### Data:
 - Max. cache age - 7 days old.
 
-#### Primary couse (happy path):
+#### Primary course (happy path):
 1. Execute 'Load Feed Images' with provided data.
-2. System validates for cache age.
-3. System fetches data from cache.
+2. System retrieves data from cache.
+3. System validates for cache age.
 4. System creates Feed Images from cache.
 5. System delivers objects to screen.
 
@@ -62,8 +62,7 @@ As a user I want my feed to load automatically at application startup
 1. System delivers error.
 
 #### Max. age expired - error course (sad path):
-1. System deletes cache.
-2. System delivers error.
+1. System delivers error.
 
 #### Load cache failed - error course (sad path):
 1. System delivers error.
@@ -94,3 +93,22 @@ As a user I want my feed to load automatically at application startup
 
 #### Delete failed - error course (sad path):
 1. System delivers error.
+
+
+### Validate Feed (Cache) Use Case:
+
+### Data:
+- Max. cache age - 7 days
+
+#### Primary course (happy path):
+1. Execute 'Validate Feed Images Cache' with provided data.
+2. System retrieves data from cache.
+3. System validates for cache age.
+
+#### Retrieve error - error course (sad path):
+1. System deletes cache.
+2. System delivers error.
+
+#### Max. age expired - error course (sad path):
+1. System deletes cache.
+2. System delivers error.
