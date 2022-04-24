@@ -139,11 +139,40 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     func test_delete_deliversErrorWhenDeletionFailed() {
         let deniedAccessStoreURL = cachesDirectory()
         let sut = makeSUT(storeURL: deniedAccessStoreURL)
-        
+
         let deletionError = delete(sut)
         XCTAssertNotNil(deletionError, "Expected delete to fail with error")
-        
+
         expect(sut, toRetrieve: .empty)
+    }
+    
+    func test_storeSideEffects_runSerially() {
+        let sut = makeSUT()
+        let feed = makeUniqueImageFeed().local
+        let timestamp = Date()
+        
+        var completedOperationsInOrder = [XCTestExpectation]()
+        let op1 = expectation(description: "Wait for insert to complete")
+        sut.insert(feed, timestamp: timestamp) { _ in
+            completedOperationsInOrder.append(op1)
+            op1.fulfill()
+        }
+        
+        let op2 = expectation(description: "Wait for delete to complete")
+        sut.deleteCache() { _ in
+            completedOperationsInOrder.append(op2)
+            op2.fulfill()
+        }
+        
+        let op3 = expectation(description: "Wait for insert to complete")
+        sut.insert(feed, timestamp: timestamp) { _ in
+            completedOperationsInOrder.append(op3)
+            op3.fulfill()
+        }
+        
+        wait(for: [op1, op2, op3], timeout: 2.0)
+        
+        XCTAssertEqual(completedOperationsInOrder, [op1, op2, op3], "Expected side-effect operations to run serially, but operations finished in the wrong order")
     }
     
     
