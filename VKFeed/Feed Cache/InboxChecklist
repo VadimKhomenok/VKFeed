@@ -4,8 +4,8 @@
     ✅ delivers no data from empty cache when retrieve twice
     ✅ delivers data from non-empty cache
     ✅ delivers the same data from non-empty cache when retrieved twice
-    - delivers error (if applicable, f.e. disk read error/invalid data)
-    - delivers the same error twice
+    ✅ delivers error (if applicable, f.e. disk read error/invalid data)
+    ✅ delivers the same error twice
 
 2) Insert:
     ✅ puts data to empty cache
