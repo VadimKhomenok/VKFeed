@@ -13,8 +13,8 @@
     ✅ error (if applicable, f.e. disk write error/no write permission)
 
 3) Delete
-    - do nothing on empty cache
-    - delete data in non-empty cache
-    - error (if applicable, f.e. no write permission)
+    ✅ do nothing on empty cache
+    ✅ delete data in non-empty cache
+    ✅ error (if applicable, f.e. no write permission)
     
 4) Side-effects must run serially to prevent race conditions
