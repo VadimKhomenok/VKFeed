@@ -8,7 +8,7 @@
 import XCTest
 import VKFeed
 
-class CodableFeedStore {
+class CodableFeedStore: FeedStore {
     private struct Cache: Codable {
         var feed: [CodableFeedImage]
         var timestamp: Date
@@ -42,7 +42,7 @@ class CodableFeedStore {
         self.storeURL = storeURL
     }
     
-    func retrieve(completion: @escaping FeedStore.RetrievalCompletion) {
+    func retrieve(completion: @escaping RetrievalCompletion) {
         guard let cacheData = try? Data(contentsOf: storeURL) else {
             completion(.empty)
             return
@@ -56,7 +56,7 @@ class CodableFeedStore {
         }
     }
     
-    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
+    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
         do {
             let cache = Cache(feed: feed.map(CodableFeedImage.init), timestamp: timestamp)
             let data = try JSONEncoder().encode(cache)
@@ -67,7 +67,7 @@ class CodableFeedStore {
         }
     }
     
-    func delete(_ completion: @escaping FeedStore.DeletionCompletion) {
+    func deleteCache(_ completion: @escaping DeletionCompletion) {
         guard FileManager.default.fileExists(atPath: storeURL.path) else {
             completion(nil)
             return
@@ -249,7 +249,7 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         let expectation = expectation(description: "Wait for the deletion to complete")
         
         var deletionError: Error?
-        sut.delete { error in
+        sut.deleteCache { error in
             deletionError = error
             expectation.fulfill()
         }
