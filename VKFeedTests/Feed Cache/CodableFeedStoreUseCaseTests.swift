@@ -57,10 +57,14 @@ class CodableFeedStore {
     }
     
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
-        let cache = Cache(feed: feed.map(CodableFeedImage.init), timestamp: timestamp)
-        let data = try! JSONEncoder().encode(cache)
-        try! data.write(to: storeURL)
-        completion(nil)
+        do {
+            let cache = Cache(feed: feed.map(CodableFeedImage.init), timestamp: timestamp)
+            let data = try JSONEncoder().encode(cache)
+            try data.write(to: storeURL)
+            completion(nil)
+        } catch {
+            completion(error)
+        }
     }
 }
 
@@ -142,20 +146,33 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     
     func test_insert_overridesPreviouslyInsertedCacheValues() {
         let sut = makeSUT()
-        let firstFeed = makeUniqueImageFeed()
+        let firstFeed = makeUniqueImageFeed().local
         let firstTimestamp = Date()
 
-        let firstInsertError = insert((feed: firstFeed.local, timestamp: firstTimestamp), to: sut)
+        let firstInsertError = insert((feed: firstFeed, timestamp: firstTimestamp), to: sut)
         XCTAssertNil(firstInsertError, "Expected to insert cache successfully")
         
-        let latestFeed = makeUniqueImageFeed()
+        let latestFeed = makeUniqueImageFeed().local
         let latestTimestamp = Date()
         
-        let secondInsertError = insert((feed: latestFeed.local, timestamp: latestTimestamp), to: sut)
+        let secondInsertError = insert((feed: latestFeed, timestamp: latestTimestamp), to: sut)
         XCTAssertNil(secondInsertError, "Expected to override cache successfully")
         
-        expect(sut, toRetrieve: .found(feed: latestFeed.local, timestamp: latestTimestamp))
+        expect(sut, toRetrieve: .found(feed: latestFeed, timestamp: latestTimestamp))
     }
+    
+    func test_insert_deliversErrorOnInsertionFailureAndValuesAreNotSavedInCache() {
+        let invalidStoreURL = URL(string: "invalid://store-url")!
+        let sut = makeSUT(storeURL: invalidStoreURL)
+        let feed = makeUniqueImageFeed().local
+        let timestamp = Date()
+        
+        let insertionError = insert((feed, timestamp), to: sut)
+        XCTAssertNotNil(insertionError, "Expected an error, received no error")
+        
+        expect(sut, toRetrieve: .empty)
+    }
+    
     
     // MARK: - Helpers
     
