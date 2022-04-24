@@ -88,52 +88,27 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     func test_insert_deliversNoErrorOnEmptyCache() {
         let sut = makeSUT()
         let feed = makeUniqueImageFeed()
-        let fixedCurrentDate = Date()
+        let timestamp = Date()
         
-        let expectation = expectation(description: "Wait for the insertion to execute")
-        sut.insert(feed.local, timestamp: fixedCurrentDate) { error in
-            if let error = error {
-                XCTFail("Expected no errors, but received error instead \(error)")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 1.0)
+        insert((feed.local, timestamp), to: sut)
     }
     
     func test_retrieve_deliversDataOnNonEmptyCache() {
         let sut = makeSUT()
         let feed = makeUniqueImageFeed()
-        let fixedCurrentDate = Date()
+        let timestamp = Date()
         
-        let expectation = expectation(description: "Wait for the insertion to execute")
-        
-        sut.insert(feed.local, timestamp: fixedCurrentDate) { error in
-            XCTAssertNil(error, "Expected to insert feed without errors")
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: 1.0)
-        
-        expect(sut, toRetrieve: .found(feed: feed.local, timestamp: fixedCurrentDate))
+        insert((feed.local, timestamp), to: sut)
+        expect(sut, toRetrieve: .found(feed: feed.local, timestamp: timestamp))
     }
     
     func test_retrieve_noSideEffectsOnNonEmptyCache() {
         let sut = makeSUT()
         let feed = makeUniqueImageFeed()
-        let fixedCurrentDate = Date()
+        let timestamp = Date()
         
-        let expectation = expectation(description: "Wait for the insertion to execute")
-        
-        sut.insert(feed.local, timestamp: fixedCurrentDate) { error in
-            XCTAssertNil(error, "Expected to insert feed without errors")
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: 1.0)
-        
-        expect(sut, toRetrieveTwice: .found(feed: feed.local, timestamp: fixedCurrentDate))
+        insert((feed.local, timestamp), to: sut)
+        expect(sut, toRetrieveTwice: .found(feed: feed.local, timestamp: timestamp))
     }
     
     
@@ -144,6 +119,20 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
+    }
+    
+    private func insert(_ cache: (feed: [LocalFeedImage], timestamp: Date), to sut: CodableFeedStore, file: StaticString = #filePath, line: UInt = #line) {
+        let expectation = expectation(description: "Wait for the insertion to execute")
+        
+        sut.insert(cache.feed, timestamp: cache.timestamp) { error in
+            if let error = error {
+                XCTFail("Expected no errors, but received error instead \(error)", file: file, line: line)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
     }
     
     private func expect(_ sut: CodableFeedStore, toRetrieveTwice expectedResult: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
