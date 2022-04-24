@@ -190,13 +190,8 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     func test_delete_noDeliveryOnEmptyCache() {
         let sut = makeSUT()
         
-        let expectation = expectation(description: "Wait for the deletion to complete")
-        sut.delete { error in
-            XCTAssertNil(error, "Expected to finish with no errors")
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 0.5)
+        let deletionError = delete(sut)
+        XCTAssertNil(deletionError, "Expected to finish with no errors")
         
         expect(sut, toRetrieve: .empty)
     }
@@ -209,13 +204,8 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         let insertionError = insert((feed: feed, timestamp: timestamp), to: sut)
         XCTAssertNil(insertionError, "Expected to insert without errors")
         
-        let expectation = expectation(description: "Wait for the deletion to complete")
-        sut.delete { error in
-            XCTAssertNil(error, "Expected to finish with no errors")
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 0.5)
+        let deletionError = delete(sut)
+        XCTAssertNil(deletionError, "Expected to finish with no errors")
         
         expect(sut, toRetrieve: .empty)
     }
@@ -243,6 +233,20 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
         
         return insertionError
+    }
+    
+    private func delete(_ sut: CodableFeedStore, file: StaticString = #filePath, line: UInt = #line) -> Error? {
+        let expectation = expectation(description: "Wait for the deletion to complete")
+        
+        var deletionError: Error?
+        sut.delete { error in
+            deletionError = error
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 0.5)
+        
+        return deletionError
     }
     
     private func expect(_ sut: CodableFeedStore, toRetrieveTwice expectedResult: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
