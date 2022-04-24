@@ -82,8 +82,7 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     func test_retrieve_noSideEffectsOnEmptyCache() {
         let sut = makeSUT()
         
-        expect(sut, toRetrieve: .empty)
-        expect(sut, toRetrieve: .empty)
+        expect(sut, toRetrieveTwice: .empty)
     }
     
     func test_insert_deliversNoErrorOnEmptyCache() {
@@ -91,7 +90,7 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         let feed = makeUniqueImageFeed()
         let fixedCurrentDate = Date()
         
-        let expectation = expectation(description: "Wait for the completion to execute")
+        let expectation = expectation(description: "Wait for the insertion to execute")
         sut.insert(feed.local, timestamp: fixedCurrentDate) { error in
             if let error = error {
                 XCTFail("Expected no errors, but received error instead \(error)")
@@ -108,7 +107,7 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         let feed = makeUniqueImageFeed()
         let fixedCurrentDate = Date()
         
-        let expectation = expectation(description: "Wait for the completion to execute")
+        let expectation = expectation(description: "Wait for the insertion to execute")
         
         sut.insert(feed.local, timestamp: fixedCurrentDate) { error in
             XCTAssertNil(error, "Expected to insert feed without errors")
@@ -125,7 +124,7 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         let feed = makeUniqueImageFeed()
         let fixedCurrentDate = Date()
         
-        let expectation = expectation(description: "Wait for the completion to execute")
+        let expectation = expectation(description: "Wait for the insertion to execute")
         
         sut.insert(feed.local, timestamp: fixedCurrentDate) { error in
             XCTAssertNil(error, "Expected to insert feed without errors")
@@ -134,8 +133,7 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1.0)
         
-        expect(sut, toRetrieve: .found(feed: feed.local, timestamp: fixedCurrentDate))
-        expect(sut, toRetrieve: .found(feed: feed.local, timestamp: fixedCurrentDate))
+        expect(sut, toRetrieveTwice: .found(feed: feed.local, timestamp: fixedCurrentDate))
     }
     
     
@@ -146,6 +144,11 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
+    }
+    
+    private func expect(_ sut: CodableFeedStore, toRetrieveTwice expectedResult: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
+        expect(sut, toRetrieve: expectedResult)
+        expect(sut, toRetrieve: expectedResult)
     }
     
     private func expect(_ sut: CodableFeedStore, toRetrieve expectedResult: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
