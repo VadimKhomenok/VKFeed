@@ -76,14 +76,14 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     func test_retrieve_deliversEmptyOnEmptyCache() {
         let sut = makeSUT()
         
-        expect(sut, toCompleteWithResult: .empty)
+        expect(sut, toRetrieve: .empty)
     }
     
     func test_retrieve_noSideEffectsOnEmptyCache() {
         let sut = makeSUT()
         
-        expect(sut, toCompleteWithResult: .empty)
-        expect(sut, toCompleteWithResult: .empty)
+        expect(sut, toRetrieve: .empty)
+        expect(sut, toRetrieve: .empty)
     }
     
     func test_insert_deliversNoErrorOnEmptyCache() {
@@ -117,7 +117,7 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1.0)
         
-        expect(sut, toCompleteWithResult: .found(feed: feed.local, timestamp: fixedCurrentDate))
+        expect(sut, toRetrieve: .found(feed: feed.local, timestamp: fixedCurrentDate))
     }
     
     func test_retrieve_noSideEffectsOnNonEmptyCache() {
@@ -134,8 +134,8 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1.0)
         
-        expect(sut, toCompleteWithResult: .found(feed: feed.local, timestamp: fixedCurrentDate))
-        expect(sut, toCompleteWithResult: .found(feed: feed.local, timestamp: fixedCurrentDate))
+        expect(sut, toRetrieve: .found(feed: feed.local, timestamp: fixedCurrentDate))
+        expect(sut, toRetrieve: .found(feed: feed.local, timestamp: fixedCurrentDate))
     }
     
     
@@ -148,17 +148,19 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         return sut
     }
     
-    private func expect(_ sut: CodableFeedStore, toCompleteWithResult expectedResult: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: CodableFeedStore, toRetrieve expectedResult: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
         let expectation = expectation(description: "Wait for the completion to execute")
         sut.retrieve() { result in
             switch (result, expectedResult) {
             case let (.found(feed, timestamp), .found(expectedFeed, expectedTimestamp)):
-                XCTAssertEqual(feed, expectedFeed)
-                XCTAssertEqual(timestamp, expectedTimestamp)
+                XCTAssertEqual(feed, expectedFeed, file: file, line: line)
+                XCTAssertEqual(timestamp, expectedTimestamp, file: file, line: line)
+                
             case (.empty, .empty):
                 break
+                
             default:
-                XCTFail("Expected \(expectedResult), received \(result)")
+                XCTFail("Expected \(expectedResult), received \(result)", file: file, line: line)
             }
             
             expectation.fulfill()
