@@ -9,8 +9,8 @@
 
 2) Insert:
     ✅ puts data to empty cache
-    - overwrite old non-empty cache with new data
-    - error (if applicable, f.e. disk write error/no write permission)
+    ✅ overwrite old non-empty cache with new data
+    ✅ error (if applicable, f.e. disk write error/no write permission)
 
 3) Delete
     - do nothing on empty cache
