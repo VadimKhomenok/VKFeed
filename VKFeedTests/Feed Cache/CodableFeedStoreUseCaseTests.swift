@@ -116,10 +116,11 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     }
     
     func test_retrieve_deliversErrorWhenInvalidDataInNonEmptyCache() {
-        let sut = makeSUT()
+        let storeURL = testSpecificStoreURL()
+        let sut = makeSUT(storeURL: storeURL)
         let error = anyNSError()
         
-        try! Data("Invalid data".utf8).write(to: testSpecificStoreURL())
+        try! Data("Invalid data".utf8).write(to: storeURL)
         
         expect(sut, toRetrieve: .failure(error))
     }
@@ -127,8 +128,8 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CodableFeedStore {
-        let sut = CodableFeedStore(storeURL: testSpecificStoreURL())
+    private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> CodableFeedStore {
+        let sut = CodableFeedStore(storeURL: storeURL ?? testSpecificStoreURL())
         
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
