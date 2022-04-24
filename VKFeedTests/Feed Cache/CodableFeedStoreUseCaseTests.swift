@@ -76,39 +76,14 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
     func test_retrieve_deliversEmptyOnEmptyCache() {
         let sut = makeSUT()
         
-        let expectation = expectation(description: "Wait for the completion to execute")
-        sut.retrieve() { result in
-            switch result {
-            case .empty:
-                break
-            default:
-                XCTFail("Expected empty, but received \(result)")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 1.0)
+        expect(sut, toCompleteWithResult: .empty)
     }
     
     func test_retrieve_noSideEffectsOnEmptyCache() {
         let sut = makeSUT()
         
-        let expectation = expectation(description: "Wait for the completion to execute")
-        sut.retrieve() { firstResult in
-            sut.retrieve { secondResult in
-                switch (firstResult, secondResult) {
-                case (.empty, .empty):
-                    break
-                default:
-                    XCTFail("Expected empty, but received \(firstResult) and \(secondResult)")
-                }
-                
-                expectation.fulfill()
-            }
-        }
-        
-        wait(for: [expectation], timeout: 1.0)
+        expect(sut, toCompleteWithResult: .empty)
+        expect(sut, toCompleteWithResult: .empty)
     }
     
     func test_insert_deliversNoErrorOnEmptyCache() {
@@ -137,21 +112,12 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         
         sut.insert(feed.local, timestamp: fixedCurrentDate) { error in
             XCTAssertNil(error, "Expected to insert feed without errors")
-            
-            sut.retrieve() { result in
-                switch result {
-                case let .found(receivedFeed, receivedTimestamp):
-                    XCTAssertEqual(receivedFeed, feed.local)
-                    XCTAssertEqual(receivedTimestamp, fixedCurrentDate)
-                default:
-                    XCTFail("Expected to found feed, but received \(result)")
-                }
-                
-                expectation.fulfill()
-            }
+            expectation.fulfill()
         }
 
         wait(for: [expectation], timeout: 1.0)
+        
+        expect(sut, toCompleteWithResult: .found(feed: feed.local, timestamp: fixedCurrentDate))
     }
     
     func test_retrieve_noSideEffectsOnNonEmptyCache() {
@@ -163,26 +129,13 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         
         sut.insert(feed.local, timestamp: fixedCurrentDate) { error in
             XCTAssertNil(error, "Expected to insert feed without errors")
-            
-            sut.retrieve() { firstResult in
-                sut.retrieve { secondResult in
-                    switch (firstResult, secondResult) {
-                    case let (.found(firstFeed, firstTimestamp), .found(secondFeed, secondTimestamp)):
-                        XCTAssertEqual(firstFeed, feed.local)
-                        XCTAssertEqual(firstTimestamp, fixedCurrentDate)
-                        
-                        XCTAssertEqual(secondFeed, feed.local)
-                        XCTAssertEqual(secondTimestamp, fixedCurrentDate)
-                    default:
-                        XCTFail("Expected to found feed, but received \(firstResult) and \(secondResult)")
-                    }
-                    
-                    expectation.fulfill()
-                }
-            }
+            expectation.fulfill()
         }
 
         wait(for: [expectation], timeout: 1.0)
+        
+        expect(sut, toCompleteWithResult: .found(feed: feed.local, timestamp: fixedCurrentDate))
+        expect(sut, toCompleteWithResult: .found(feed: feed.local, timestamp: fixedCurrentDate))
     }
     
     
@@ -193,6 +146,25 @@ class CodableFeedStoreUseCaseTests: XCTestCase {
         
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
+    }
+    
+    private func expect(_ sut: CodableFeedStore, toCompleteWithResult expectedResult: RetrieveCachedFeedResult, file: StaticString = #filePath, line: UInt = #line) {
+        let expectation = expectation(description: "Wait for the completion to execute")
+        sut.retrieve() { result in
+            switch (result, expectedResult) {
+            case let (.found(feed, timestamp), .found(expectedFeed, expectedTimestamp)):
+                XCTAssertEqual(feed, expectedFeed)
+                XCTAssertEqual(timestamp, expectedTimestamp)
+            case (.empty, .empty):
+                break
+            default:
+                XCTFail("Expected \(expectedResult), received \(result)")
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
     }
     
     private func testSpecificStoreURL() -> URL {
