@@ -17,7 +17,7 @@ protocol FeedStoreSpecs {
     func test_insert_deliversNoErrorWhenOverrideNonEmptyCache()
     func test_insert_overridesNonEmptyCache()
     
-    func test_delete_noErrorsOnEmptyCache()
+    func test_delete_noErrorOnEmptyCache()
     func test_delete_noSideEffectsOnEmptyCache()
     func test_delete_noErrorOnNonEmptyCache()
     func test_delete_emptyCacheAfterDeleteCachedData()
