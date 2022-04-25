@@ -43,6 +43,7 @@
 		67F9BB642816B3CB00B606BA /* XCTestCase+FailableDeleteFeedStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F9BB632816B3CB00B606BA /* XCTestCase+FailableDeleteFeedStoreSpecs.swift */; };
 		67F9BB692816C2AC00B606BA /* CoreDataFeedStoreUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F9BB682816C2AC00B606BA /* CoreDataFeedStoreUseCaseTests.swift */; };
 		67F9BB6C2816C59000B606BA /* FeedStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 67F9BB6A2816C59000B606BA /* FeedStore.xcdatamodeld */; };
+		67F9BB782816D10000B606BA /* CoreDataFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F9BB772816D10000B606BA /* CoreDataFeedStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,7 @@
 		67F9BB632816B3CB00B606BA /* XCTestCase+FailableDeleteFeedStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+FailableDeleteFeedStoreSpecs.swift"; sourceTree = "<group>"; };
 		67F9BB682816C2AC00B606BA /* CoreDataFeedStoreUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedStoreUseCaseTests.swift; sourceTree = "<group>"; };
 		67F9BB6B2816C59000B606BA /* FeedStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore.xcdatamodel; sourceTree = "<group>"; };
+		67F9BB772816D10000B606BA /* CoreDataFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +186,7 @@
 				67E8A6D928119382004B20F2 /* InboxChecklist */,
 				67E8A6D728117C75004B20F2 /* FeedCachePolicy.swift */,
 				673B45DC2815F6D100B4859D /* CodableFeedStore.swift */,
+				67F9BB772816D10000B606BA /* CoreDataFeedStore.swift */,
 				67E8E80C280F66200057A38E /* LocalFeedLoader.swift */,
 				67E8E80F280F66460057A38E /* FeedStore.swift */,
 				67E8E81328100E910057A38E /* LocalFeedImage.swift */,
@@ -416,6 +419,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67F9BB782816D10000B606BA /* CoreDataFeedStore.swift in Sources */,
 				67E8E81428100E910057A38E /* LocalFeedImage.swift in Sources */,
 				67E8E810280F66460057A38E /* FeedStore.swift in Sources */,
 				67E8CBAB280897E800A48903 /* URLSessionHTTPClient.swift in Sources */,

@@ -8,20 +8,6 @@
 import XCTest
 import VKFeed
 
-class CoreDataFeedStore: FeedStore {
-    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-        
-    }
-    
-    func retrieve(completion: @escaping RetrievalCompletion) {
-        completion(.empty)
-    }
-    
-    func deleteCache(_ completion: @escaping DeletionCompletion) {
-        
-    }
-}
-
 class CoreDataFeedStoreUseCaseTests: XCTestCase, FeedStoreSpecs {
     func test_retrieve_deliversEmptyOnEmptyCache() {
         let sut = CoreDataFeedStore()
