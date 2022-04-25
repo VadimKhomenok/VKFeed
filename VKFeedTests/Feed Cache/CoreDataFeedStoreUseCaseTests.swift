@@ -20,7 +20,8 @@ class CoreDataFeedStoreUseCaseTests: XCTestCase, FeedStoreSpecs {
     }
     
     func test_retrieve_deliversDataOnNonEmptyCache() {
-        
+        let sut = makeSUT()
+        assertsThatRetrieveDeliversDataOnNonEmptyCache(on: sut)
     }
     
     func test_retrieve_noSideEffectsOnNonEmptyCache() {
