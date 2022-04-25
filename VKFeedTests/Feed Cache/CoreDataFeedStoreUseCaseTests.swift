@@ -11,35 +11,44 @@ import VKFeed
 class CoreDataFeedStoreUseCaseTests: XCTestCase, FeedStoreSpecs {
     func test_retrieve_deliversEmptyOnEmptyCache() {
         let sut = makeSUT()
+        
         assertsThatRetrieveDeliversEmptyOnEmptyCache(on: sut)
     }
     
     func test_retrieve_noSideEffectsOnEmptyCache() {
         let sut = makeSUT()
+        
         asstertsThatRetrieveDoesNotCauseSideEffectsOnEmptyCache(on: sut)
     }
     
     func test_retrieve_deliversDataOnNonEmptyCache() {
         let sut = makeSUT()
+        
         assertsThatRetrieveDeliversDataOnNonEmptyCache(on: sut)
     }
     
     func test_retrieve_noSideEffectsOnNonEmptyCache() {
         let sut = makeSUT()
+        
         assertsThatRetrieveHasNoSideEffectsOnNonEmptyCache(on: sut)
     }
     
     func test_insert_deliversNoErrorOnEmptyCache() {
         let sut = makeSUT()
+        
         assertsThatInsertDeliversNoErrorOnEmptyCache(on: sut)
     }
     
     func test_insert_deliversNoErrorWhenOverrideNonEmptyCache() {
+        let sut = makeSUT()
         
+        assertThatInsertDeliversNoErrorWhenOverrideNonEmptyCache(on: sut)
     }
     
     func test_insert_overridesNonEmptyCache() {
+        let sut = makeSUT()
         
+        assertsThatInsertOverridesNonEmptyCache(on: sut)
     }
     
     func test_delete_noErrorOnEmptyCache() {
