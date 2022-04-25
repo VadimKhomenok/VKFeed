@@ -50,9 +50,11 @@ private extension NSManagedObjectModel {
 
 public final class CoreDataFeedStore: FeedStore {
     private let persistentContainer: NSPersistentContainer
+    private let context: NSManagedObjectContext
     
     public init(bundle: Bundle = .main) throws {
         self.persistentContainer = try NSPersistentContainer.load(name: "FeedStore", bundle: bundle)
+        self.context = persistentContainer.newBackgroundContext()
     }
     
     public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
