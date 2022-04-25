@@ -10,12 +10,12 @@ import VKFeed
 
 class CoreDataFeedStoreUseCaseTests: XCTestCase, FeedStoreSpecs {
     func test_retrieve_deliversEmptyOnEmptyCache() {
-        let sut = CoreDataFeedStore()
+        let sut = makeSUT()
         assertsThatRetrieveDeliversEmptyOnEmptyCache(on: sut)
     }
     
     func test_retrieve_noSideEffectsOnEmptyCache() {
-        let sut = CoreDataFeedStore()
+        let sut = makeSUT()
         asstertsThatRetrieveDoesNotCauseSideEffectsOnEmptyCache(on: sut)
     }
     
@@ -28,7 +28,7 @@ class CoreDataFeedStoreUseCaseTests: XCTestCase, FeedStoreSpecs {
     }
     
     func test_insert_deliversNoErrorOnEmptyCache() {
-        let sut = CoreDataFeedStore()
+        let sut = makeSUT()
         assertsThatInsertDeliversNoErrorOnEmptyCache(on: sut)
     }
     
@@ -58,5 +58,15 @@ class CoreDataFeedStoreUseCaseTests: XCTestCase, FeedStoreSpecs {
     
     func test_storeSideEffects_runSerially() {
         
+    }
+    
+    // MARK: - Helpers
+    
+    private func makeSUT() -> FeedStore {
+        let storeBundle = Bundle(for: CoreDataFeedStore.self)
+        let sut = try! CoreDataFeedStore(bundle: storeBundle)
+        trackForMemoryLeaks(sut)
+        
+        return sut
     }
 }
