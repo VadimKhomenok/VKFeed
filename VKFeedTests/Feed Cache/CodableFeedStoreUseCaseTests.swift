@@ -120,20 +120,17 @@ class CodableFeedStoreUseCaseTests: XCTestCase, FailableFeedStoreSpecs {
     }
     
     func test_delete_deliversErrorWhenDeletionFailed() {
-//        let deniedAccessStoreURL = cachesDirectory()
-//        let sut = makeSUT(storeURL: deniedAccessStoreURL)
-//
-//        let deletionError = delete(sut)
-//        XCTAssertNotNil(deletionError, "Expected delete to fail with error")
+        let deniedAccessStoreURL = cachesDirectory()
+        let sut = makeSUT(storeURL: deniedAccessStoreURL)
+
+        assertsThatDeleteDeliversErrorWhenDeletionFailed(on: sut)
     }
     
     func test_delete_noSideEffectsOnDeletionFailed() {
-//        let deniedAccessStoreURL = cachesDirectory()
-//        let sut = makeSUT(storeURL: deniedAccessStoreURL)
-//
-//        delete(sut)
-//
-//        expect(sut, toRetrieve: .empty)
+        let deniedAccessStoreURL = cachesDirectory()
+        let sut = makeSUT(storeURL: deniedAccessStoreURL)
+
+        assertsThatDeleteHasNoSideEffectsOnDeletionFailed(on: sut)
     }
     
     func test_storeSideEffects_runSerially() {
