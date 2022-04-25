@@ -8,7 +8,7 @@
 import VKFeed
 import XCTest
 
-extension FeedStoreSpecs where Self: XCTestCase {
+extension FailableRetrieveFeedStoreSpecs where Self: XCTestCase {
     func assertsThatRetrieveDeliversErrorWhenInvalidDataInNonEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         let error = anyNSError()
 
