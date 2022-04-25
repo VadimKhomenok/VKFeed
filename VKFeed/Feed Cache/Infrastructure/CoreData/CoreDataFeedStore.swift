@@ -8,50 +8,9 @@
 import CoreData
 import Foundation
 
-@objc(ManagedCache)
-class ManagedCache: NSManagedObject {
-    @NSManaged var feed: NSOrderedSet
-    @NSManaged var timestamp: Date
-    
-    var localFeed: [LocalFeedImage] {
-        return feed.compactMap { ($0 as? ManagedFeedImage)?.local }
-    }
-    
-    static func newUniqueInstance(in context: NSManagedObjectContext) throws -> ManagedCache {
-        try find(in: context).map(context.delete)
-        return ManagedCache(context: context)
-    }
-    
-    static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
-        let request = NSFetchRequest<Self>(entityName: Self.entity().name!)
-        request.returnsObjectsAsFaults = false
-        return try context.fetch(request).first
-    }
-}
 
-@objc(ManagedFeedImage)
-class ManagedFeedImage: NSManagedObject {
-    @NSManaged var id: UUID
-    @NSManaged var imageDescription: String?
-    @NSManaged var location: String?
-    @NSManaged var url: URL
-    @NSManaged var cache: ManagedCache
-    
-    static func images(from localImages: [LocalFeedImage], in context: NSManagedObjectContext) -> NSOrderedSet {
-        return NSOrderedSet(array: localImages.map { local -> ManagedFeedImage in
-            let managedFeedImage = ManagedFeedImage(context: context)
-            managedFeedImage.id = local.id
-            managedFeedImage.imageDescription = local.description
-            managedFeedImage.location = local.location
-            managedFeedImage.url = local.url
-            return managedFeedImage
-        })
-    }
-    
-    var local: LocalFeedImage {
-        LocalFeedImage(id: self.id, description: self.imageDescription, location: self.location, url: self.url)
-    }
-}
+
+
 
 public final class CoreDataFeedStore: FeedStore {
     private let persistentContainer: NSPersistentContainer
