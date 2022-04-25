@@ -91,7 +91,7 @@ extension FeedStoreSpecs where Self: XCTestCase {
         XCTAssertNil(deletionError, "Expected to finish with no errors", file: file, line: line)
     }
     
-    func assertsThatDeleteOnNonEmptyCacheHasNoSideEffects(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
+    func assertThatDeleteEmptiesPreviouslyInsertedCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         let feed = makeUniqueImageFeed().local
         let timestamp = Date()
         
