@@ -9,15 +9,15 @@ import VKFeed
 import XCTest
 
 extension FeedStoreSpecs where Self: XCTestCase {
-    func assertsThatRetrieveDeliversErrorWhenInvalidDataInNonEmptyCache(on sut: FeedStore) {
+    func assertsThatRetrieveDeliversErrorWhenInvalidDataInNonEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         let error = anyNSError()
 
-        expect(sut, toRetrieve: .failure(error))
+        expect(sut, toRetrieve: .failure(error), file: file, line: line)
     }
     
-    func assertsThatRetrieveHasNoSideEffectsOnInvalidDataInNonEmptyCache(on sut: FeedStore) {
+    func assertsThatRetrieveHasNoSideEffectsOnInvalidDataInNonEmptyCache(on sut: FeedStore, file: StaticString = #filePath, line: UInt = #line) {
         let error = anyNSError()
         
-        expect(sut, toRetrieveTwice: .failure(error))
+        expect(sut, toRetrieveTwice: .failure(error), file: file, line: line)
     }
 }
