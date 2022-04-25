@@ -36,6 +36,7 @@
 		67F3F7D028046DAF0078CFEA /* LoadFeedFromRemoteUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7CF28046DAF0078CFEA /* LoadFeedFromRemoteUseCaseTests.swift */; };
 		67F3F7D32804849A0078CFEA /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7D22804849A0078CFEA /* HTTPClient.swift */; };
 		67F3F7D5280484A50078CFEA /* RemoteFeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F3F7D4280484A50078CFEA /* RemoteFeedLoader.swift */; };
+		67F9BB5C2816A68500B606BA /* FeedStoreSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F9BB5B2816A68500B606BA /* FeedStoreSpecs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		67F3F7CF28046DAF0078CFEA /* LoadFeedFromRemoteUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFeedFromRemoteUseCaseTests.swift; sourceTree = "<group>"; };
 		67F3F7D22804849A0078CFEA /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		67F3F7D4280484A50078CFEA /* RemoteFeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedLoader.swift; sourceTree = "<group>"; };
+		67F9BB5B2816A68500B606BA /* FeedStoreSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreSpecs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 				67CF6F4C2810493C001F40DB /* LoadCacheFeedUseCaseTests.swift */,
 				67E8A6CE281160A1004B20F2 /* ValidateCacheFeedUseCaseTests.swift */,
 				67E8A6DB2811A8EB004B20F2 /* CodableFeedStoreUseCaseTests.swift */,
+				67F9BB5B2816A68500B606BA /* FeedStoreSpecs.swift */,
 			);
 			path = "Feed Cache";
 			sourceTree = "<group>";
@@ -416,6 +419,7 @@
 				67A87F1D280F0DA9008717AC /* CacheFeedUseCaseTests.swift in Sources */,
 				67E8A6DC2811A8EB004B20F2 /* CodableFeedStoreUseCaseTests.swift in Sources */,
 				67378093280700DB0054CD20 /* HTTPClientTests.swift in Sources */,
+				67F9BB5C2816A68500B606BA /* FeedStoreSpecs.swift in Sources */,
 				67E8A6CF281160A1004B20F2 /* ValidateCacheFeedUseCaseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

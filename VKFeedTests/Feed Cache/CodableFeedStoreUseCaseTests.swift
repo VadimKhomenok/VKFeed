@@ -8,7 +8,7 @@
 import XCTest
 import VKFeed
 
-class CodableFeedStoreUseCaseTests: XCTestCase {
+class CodableFeedStoreUseCaseTests: XCTestCase, FailableFeedStoreSpecs {
     override func setUp() {
         super.setUp()
         
