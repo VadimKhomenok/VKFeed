@@ -25,23 +25,23 @@ class VKFeedCacheIntegrationTests: XCTestCase {
     func test_load_deliversNoItemsOnEmptyCache() {
         let sut = makeSUT()
         
-        expect(sut, toLoadWithResult: .success([]))
+        expect(sut, toLoad: [])
     }
     
     func test_load_deliversItemsSavedOnSeparateInstances() {
         let sutForSave = makeSUT()
-        let feed = makeUniqueImageFeed()
+        let sutForLoad = makeSUT()
+        let feed = makeUniqueImageFeed().models
         
         let saveExpectation = expectation(description: "Wait for save to complete")
-        sutForSave.save(feed.models) { error in
+        sutForSave.save(feed) { error in
             XCTAssertNil(error, "Expected to save without errors")
             saveExpectation.fulfill()
         }
         
         wait(for: [saveExpectation], timeout: 1.0)
         
-        let sutForLoad = makeSUT()
-        expect(sutForLoad, toLoadWithResult: .success(feed.models))
+        expect(sutForLoad, toLoad: feed)
     }
     
     // MARK: - Helpers
@@ -56,18 +56,15 @@ class VKFeedCacheIntegrationTests: XCTestCase {
         return sut
     }
     
-    private func expect(_ sut: LocalFeedLoader, toLoadWithResult expectedResult: LocalFeedLoader.LoadResult, file: StaticString = #file, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedLoader, toLoad expectedFeed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         let expectation = expectation(description: "Wait for load to complete")
         sut.load { result in
-            switch (result, expectedResult) {
-            case let (.success(feed), .success(expectedFeed)):
+            switch result {
+            case let .success(feed):
                 XCTAssertEqual(feed, expectedFeed, file: file, line: line)
                 
-            case let (.failure(error), .failure(expectedError)):
-                XCTAssertEqual(error as NSError?, expectedError as NSError?, file: file, line: line)
-                
-            default:
-                XCTFail("Expected \(expectedResult), received \(result) instead", file: file, line: line)
+            case let .failure(error):
+                XCTFail("Expected success with feed, received failure with \(error) instead", file: file, line: line)
             }
             
             expectation.fulfill()
