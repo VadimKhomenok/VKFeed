@@ -51,22 +51,9 @@ class VKFeedCacheIntegrationTests: XCTestCase {
         let firstFeed = makeUniqueImageFeed().models
         let latestFeed = makeUniqueImageFeed().models
         
-        let firstSaveExpectation = expectation(description: "Wait for first save to complete")
-        firstSaveSut.save(firstFeed) { error in
-            XCTAssertNil(error, "Expected to save without errors")
-            firstSaveExpectation.fulfill()
-        }
-        
-        wait(for: [firstSaveExpectation], timeout: 1.0)
-        
-        let secondSaveExpectation = expectation(description: "Wait for save to complete")
-        secondSaveSut.save(latestFeed) { error in
-            XCTAssertNil(error, "Expected to save without errors")
-            secondSaveExpectation.fulfill()
-        }
-        
-        wait(for: [secondSaveExpectation], timeout: 1.0)
-        
+        save(firstFeed, with: firstSaveSut)
+        save(latestFeed, with: secondSaveSut)
+
         expect(sutForLoad, toLoad: latestFeed)
     }
     
@@ -81,6 +68,16 @@ class VKFeedCacheIntegrationTests: XCTestCase {
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
+    }
+    
+    private func save(_ feed: [FeedImage], with sut: LocalFeedLoader, file: StaticString = #file, line: UInt = #line) {
+        let expectation = expectation(description: "Wait for save to complete")
+        sut.save(feed) { error in
+            XCTAssertNil(error, "Expected to save without errors", file: file, line: line)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
     }
     
     private func expect(_ sut: LocalFeedLoader, toLoad expectedFeed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
