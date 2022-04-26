@@ -44,6 +44,33 @@ class VKFeedCacheIntegrationTests: XCTestCase {
         expect(sutForLoad, toLoad: feed)
     }
     
+    func test_save_overridesCacheSavedOnSeparateInstances() {
+        let firstSaveSut = makeSUT()
+        let secondSaveSut = makeSUT()
+        let sutForLoad = makeSUT()
+        let firstFeed = makeUniqueImageFeed().models
+        let latestFeed = makeUniqueImageFeed().models
+        
+        let firstSaveExpectation = expectation(description: "Wait for first save to complete")
+        firstSaveSut.save(firstFeed) { error in
+            XCTAssertNil(error, "Expected to save without errors")
+            firstSaveExpectation.fulfill()
+        }
+        
+        wait(for: [firstSaveExpectation], timeout: 1.0)
+        
+        let secondSaveExpectation = expectation(description: "Wait for save to complete")
+        secondSaveSut.save(latestFeed) { error in
+            XCTAssertNil(error, "Expected to save without errors")
+            secondSaveExpectation.fulfill()
+        }
+        
+        wait(for: [secondSaveExpectation], timeout: 1.0)
+        
+        expect(sutForLoad, toLoad: latestFeed)
+    }
+    
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> LocalFeedLoader {
