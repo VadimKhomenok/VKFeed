@@ -9,12 +9,29 @@ import CoreData
 import Foundation
 
 public final class CoreDataFeedStore: FeedStore {
+
+    private static let modelName = "FeedStore"
+    private static let model = NSManagedObjectModel.with(name: modelName, in: Bundle(for: CoreDataFeedStore.self))
+    
     private let persistentContainer: NSPersistentContainer
     private let context: NSManagedObjectContext
     
+    enum PersistentStoreError: Error {
+        case modelDoesNotExist
+        case loadFailed(error: Error)
+    }
+    
     public init(storeURL: URL, bundle: Bundle = .main) throws {
-        self.persistentContainer = try NSPersistentContainer.load(name: "FeedStore", storeURL: storeURL, bundle: bundle)
-        self.context = persistentContainer.newBackgroundContext()
+        guard let model = CoreDataFeedStore.model else {
+            throw PersistentStoreError.modelDoesNotExist
+        }
+        
+        do {
+            self.persistentContainer = try NSPersistentContainer.load(name: CoreDataFeedStore.modelName, model: model, storeURL: storeURL)
+            self.context = persistentContainer.newBackgroundContext()
+        } catch {
+            throw PersistentStoreError.loadFailed(error: error)
+        }
     }
     
     public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {

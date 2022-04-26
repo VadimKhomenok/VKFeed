@@ -25,7 +25,7 @@ class VKFeedCacheIntegrationTests: XCTestCase {
     func test_load_deliversNoItemsOnEmptyCache() {
         let sut = makeSUT()
         
-        let expectation = expectation(description: "Wait for the load to complete")
+        let expectation = expectation(description: "Wait for load to complete")
         sut.load { result in
             switch result {
             case let .success(feed):
@@ -40,6 +40,33 @@ class VKFeedCacheIntegrationTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
     
+    func test_load_deliversItemsSavedOnSeparateInstances() {
+        let firstSut = makeSUT()
+        let feed = makeUniqueImageFeed()
+        
+        let exp1 = expectation(description: "Wait for save to complete")
+        firstSut.save(feed.models) { error in
+            XCTAssertNil(error, "Expected to save without errors")
+            exp1.fulfill()
+        }
+        
+        wait(for: [exp1], timeout: 1.0)
+        
+        let secondSut = makeSUT()
+        let exp2 = expectation(description: "Wait for save to complete")
+        secondSut.load { result in
+            switch result {
+            case let .success(cachedFeed):
+                XCTAssertEqual(cachedFeed, feed.models)
+            case let .failure(error):
+                XCTFail("Expected success with feed items, received \(error) instead")
+            }
+            
+            exp2.fulfill()
+        }
+        
+        wait(for: [exp2], timeout: 1.0)
+    }
     
     // MARK: - Helpers
     
