@@ -25,47 +25,23 @@ class VKFeedCacheIntegrationTests: XCTestCase {
     func test_load_deliversNoItemsOnEmptyCache() {
         let sut = makeSUT()
         
-        let expectation = expectation(description: "Wait for load to complete")
-        sut.load { result in
-            switch result {
-            case let .success(feed):
-                XCTAssertTrue(feed.isEmpty)
-            default:
-                XCTFail("Expected success with no items, received \(result) instead")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 1.0)
+        expect(sut, toLoadWithResult: .success([]))
     }
     
     func test_load_deliversItemsSavedOnSeparateInstances() {
-        let firstSut = makeSUT()
+        let sutForSave = makeSUT()
         let feed = makeUniqueImageFeed()
         
-        let exp1 = expectation(description: "Wait for save to complete")
-        firstSut.save(feed.models) { error in
+        let saveExpectation = expectation(description: "Wait for save to complete")
+        sutForSave.save(feed.models) { error in
             XCTAssertNil(error, "Expected to save without errors")
-            exp1.fulfill()
+            saveExpectation.fulfill()
         }
         
-        wait(for: [exp1], timeout: 1.0)
+        wait(for: [saveExpectation], timeout: 1.0)
         
-        let secondSut = makeSUT()
-        let exp2 = expectation(description: "Wait for save to complete")
-        secondSut.load { result in
-            switch result {
-            case let .success(cachedFeed):
-                XCTAssertEqual(cachedFeed, feed.models)
-            case let .failure(error):
-                XCTFail("Expected success with feed items, received \(error) instead")
-            }
-            
-            exp2.fulfill()
-        }
-        
-        wait(for: [exp2], timeout: 1.0)
+        let sutForLoad = makeSUT()
+        expect(sutForLoad, toLoadWithResult: .success(feed.models))
     }
     
     // MARK: - Helpers
@@ -78,6 +54,26 @@ class VKFeedCacheIntegrationTests: XCTestCase {
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
+    }
+    
+    private func expect(_ sut: LocalFeedLoader, toLoadWithResult expectedResult: LocalFeedLoader.LoadResult, file: StaticString = #file, line: UInt = #line) {
+        let expectation = expectation(description: "Wait for load to complete")
+        sut.load { result in
+            switch (result, expectedResult) {
+            case let (.success(feed), .success(expectedFeed)):
+                XCTAssertEqual(feed, expectedFeed, file: file, line: line)
+                
+            case let (.failure(error), .failure(expectedError)):
+                XCTAssertEqual(error as NSError?, expectedError as NSError?, file: file, line: line)
+                
+            default:
+                XCTFail("Expected \(expectedResult), received \(result) instead", file: file, line: line)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
     }
     
     private func cachesDirectory() -> URL {
