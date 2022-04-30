@@ -12,7 +12,7 @@ public class LocalFeedLoader {
     private var currentDate: Date
 
     public typealias SaveResult = Error?
-    public typealias LoadResult = FeedLoaderResult
+    public typealias LoadResult = FeedLoader.Result
     
     public init(store: FeedStore, currentDate: Date) {
         self.store = store
