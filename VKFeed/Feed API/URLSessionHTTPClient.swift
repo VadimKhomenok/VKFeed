@@ -16,13 +16,13 @@ public class URLSessionHTTPClient: HTTPClient {
     
     private struct UnspecifiedError: Error {}
     
-    public func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
         session.dataTask(with: url) { data, response, error in
             guard let data = data, let response = response as? HTTPURLResponse, error == nil else {
                 completion(.failure(error ?? UnspecifiedError()))
                 return
             }
-            completion(.success(data, response))
+            completion(.success((data, response)))
         }.resume()
     }
 }
