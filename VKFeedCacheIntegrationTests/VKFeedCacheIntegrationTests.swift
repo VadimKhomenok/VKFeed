@@ -33,13 +33,7 @@ class VKFeedCacheIntegrationTests: XCTestCase {
         let sutForLoad = makeSUT()
         let feed = makeUniqueImageFeed().models
         
-        let saveExpectation = expectation(description: "Wait for save to complete")
-        sutForSave.save(feed) { error in
-            XCTAssertNil(error, "Expected to save without errors")
-            saveExpectation.fulfill()
-        }
-        
-        wait(for: [saveExpectation], timeout: 1.0)
+        save(feed, with: sutForSave)
         
         expect(sutForLoad, toLoad: feed)
     }
@@ -72,8 +66,11 @@ class VKFeedCacheIntegrationTests: XCTestCase {
     
     private func save(_ feed: [FeedImage], with sut: LocalFeedLoader, file: StaticString = #file, line: UInt = #line) {
         let expectation = expectation(description: "Wait for save to complete")
-        sut.save(feed) { error in
-            XCTAssertNil(error, "Expected to save without errors", file: file, line: line)
+        sut.save(feed) { result in
+            if case let Result.failure(error) = result {
+                XCTAssertNil(error, "Expected to save without errors", file: file, line: line)
+            }
+            
             expectation.fulfill()
         }
         

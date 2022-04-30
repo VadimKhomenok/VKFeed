@@ -11,7 +11,7 @@ public class LocalFeedLoader {
     private var store: FeedStore
     private var currentDate: Date
 
-    public typealias SaveResult = Error?
+    public typealias SaveResult = Result<Void, Error>
     public typealias LoadResult = FeedLoader.Result
     
     public init(store: FeedStore, currentDate: Date) {
@@ -25,21 +25,22 @@ public class LocalFeedLoader {
 
 extension LocalFeedLoader {
     public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        store.deleteCache() { [weak self] deletionError in
+        store.deleteCache() { [weak self] deletionResult in
             guard let self = self else { return }
             
-            if let deletionError = deletionError {
-                completion(deletionError)
-            } else {
+            switch deletionResult {
+            case .success(_):
                 self.cache(feed, completion: completion)
+            case let .failure(error):
+                completion(.failure(error))
             }
         }
     }
     
     private func cache(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        store.insert(feed.toLocal(), timestamp: self.currentDate, completion: { [weak self] error in
+        store.insert(feed.toLocal(), timestamp: self.currentDate, completion: { [weak self] insertionResult in
             guard self != nil else { return }
-            completion(error)
+            completion(insertionResult)
         })
     }
 }
