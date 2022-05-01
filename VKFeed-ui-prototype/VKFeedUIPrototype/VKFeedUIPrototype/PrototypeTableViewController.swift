@@ -14,11 +14,16 @@ struct FeedImageViewModel {
 }
 
 class PrototypeTableViewController: UITableViewController {
+    private let feed = FeedImageViewModel.prototypeFeed
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+        feed.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "FeedImageCell") ?? UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FeedImageCell") as! FeedImageTableViewCell
+        let model = feed[indexPath.row]
+        cell.setup(with: model)
+        return cell
     }
 }
