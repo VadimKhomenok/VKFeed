@@ -13,6 +13,7 @@
 		67F6BDB9281F32C3004EB491 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67F6BDB8281F32C3004EB491 /* Assets.xcassets */; };
 		67F6BDBC281F32C3004EB491 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67F6BDBA281F32C3004EB491 /* LaunchScreen.storyboard */; };
 		67F6BDC4281F347E004EB491 /* PrototypeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F6BDC3281F347D004EB491 /* PrototypeTableViewController.swift */; };
+		67F6BDC6281F3C2F004EB491 /* FeedImageViewModel+PrototypeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F6BDC5281F3C2F004EB491 /* FeedImageViewModel+PrototypeData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		67F6BDBB281F32C3004EB491 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		67F6BDBD281F32C3004EB491 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67F6BDC3281F347D004EB491 /* PrototypeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeTableViewController.swift; sourceTree = "<group>"; };
+		67F6BDC5281F3C2F004EB491 /* FeedImageViewModel+PrototypeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedImageViewModel+PrototypeData.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			children = (
 				67F6BDAF281F32C1004EB491 /* AppDelegate.swift */,
 				67F6BDB1281F32C1004EB491 /* SceneDelegate.swift */,
+				67F6BDC5281F3C2F004EB491 /* FeedImageViewModel+PrototypeData.swift */,
 				67F6BDC3281F347D004EB491 /* PrototypeTableViewController.swift */,
 				67F6BDB5281F32C1004EB491 /* Main.storyboard */,
 				67F6BDB8281F32C3004EB491 /* Assets.xcassets */,
@@ -141,6 +144,7 @@
 				67F6BDB0281F32C1004EB491 /* AppDelegate.swift in Sources */,
 				67F6BDB2281F32C1004EB491 /* SceneDelegate.swift in Sources */,
 				67F6BDC4281F347E004EB491 /* PrototypeTableViewController.swift in Sources */,
+				67F6BDC6281F3C2F004EB491 /* FeedImageViewModel+PrototypeData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
