@@ -103,8 +103,8 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="descriptionImageView" destination="jnC-Vg-Vby" id="4O1-zn-LJU"/>
                                     <outlet property="descriptionLabel" destination="Cu9-3T-e2g" id="7fj-ZJ-GBa"/>
+                                    <outlet property="feedImageView" destination="jnC-Vg-Vby" id="Ptf-Jq-DKr"/>
                                     <outlet property="locationContainer" destination="36a-Ka-YkR" id="cU3-CJ-4bJ"/>
                                     <outlet property="locationLabel" destination="jgh-X6-vQK" id="dRY-d9-GcS"/>
                                 </connections>

@@ -23,7 +23,21 @@ class PrototypeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FeedImageCell") as! FeedImageTableViewCell
         let model = feed[indexPath.row]
-        cell.setup(with: model)
+        cell.configure(with: model)
         return cell
+    }
+    
+}
+
+extension FeedImageTableViewCell {
+    func configure(with model: FeedImageViewModel) {
+        locationLabel.text = model.location
+        locationContainer.isHidden = model.location == nil
+        
+        descriptionLabel.text = model.description
+        descriptionLabel.isHidden = model.description == nil
+    
+        let image = UIImage(named: model.imageName)
+        fadeIn(image)
     }
 }
