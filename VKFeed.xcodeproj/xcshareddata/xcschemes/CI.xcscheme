@@ -61,6 +61,17 @@
                ReferencedContainer = "container:VKFeed.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "67F9BB8528173E1000B606BA"
+               BuildableName = "VKFeedCacheIntegrationTests.xctest"
+               BlueprintName = "VKFeedCacheIntegrationTests"
+               ReferencedContainer = "container:VKFeed.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

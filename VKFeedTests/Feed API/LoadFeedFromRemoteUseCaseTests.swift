@@ -113,17 +113,15 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         return .failure(error)
     }
     
-    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageUrl: URL) -> (FeedItem, [String : Any]) {
-        let item = FeedItem(id: id, description: description, location: location, imageUrl: imageUrl)
+    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageUrl: URL) -> (FeedImage, [String : Any]) {
+        let item = FeedImage(id: id, description: description, location: location, url: imageUrl)
         
         let itemJson = [
             "id" : item.id.uuidString,
             "description" : item.description,
             "location" : item.location,
-            "image" : item.imageUrl.absoluteString
-        ].reduce(into: [String : Any]()) { (acc, element) in
-            if let value = element.value { acc[element.key] = value }
-        }
+            "image" : item.url.absoluteString
+        ].compactMapValues { $0 }
         
         return (item, itemJson)
     }
@@ -162,9 +160,9 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
             messages.map { $0.url }
         }
         
-        var messages = [(url: URL, completion: (HTTPClientResult) -> Void)]()
+        var messages = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
         
-        func get(from url: URL, completion: @escaping (HTTPClientResult) -> Void) {
+        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
             messages.append((url: url, completion: completion))
         }
         
@@ -175,7 +173,7 @@ class LoadFeedFromRemoteUseCaseTests: XCTestCase {
         func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
             let response = HTTPURLResponse(url: requestedURLs[index], statusCode: code, httpVersion: nil, headerFields: nil)!
             
-            messages[index].completion(.success(data, response))
+            messages[index].completion(.success((data, response)))
         }
     }
 }

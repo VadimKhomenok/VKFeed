@@ -88,16 +88,8 @@ class URLSessionHTTPClientTests: XCTestCase {
         return sut
     }
     
-    func anyURL() -> URL {
-        return URL(string: "https://api-url.com")!
-    }
-    
     func anyData() -> Data {
         return Data("any data".utf8)
-    }
-    
-    func anyNSError() -> NSError {
-        return NSError(domain: "An error", code: 400)
     }
     
     func anyNonHTTPURLResponse() -> URLResponse {
@@ -108,11 +100,11 @@ class URLSessionHTTPClientTests: XCTestCase {
         return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
     }
     
-    func resultFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> HTTPClientResult {
+    func resultFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> HTTPClient.Result {
         URLProtocolStub.stub(data: data, response: response, error: error)
         let sut = makeSUT(file: file, line: line)
         let expectation = expectation(description: "Wait for completion to execute")
-        var receivedResult: HTTPClientResult!
+        var receivedResult: HTTPClient.Result!
         sut.get(from: anyURL()) { result in
             receivedResult = result
             expectation.fulfill()
@@ -126,7 +118,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     func resultValuesFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> (data: Data, response: HTTPURLResponse)? {
         let result = resultFor(data: data, response: response, error: error)
         switch result {
-        case let .success(data, response):
+        case let .success((data, response)):
             return (data, response)
         default:
             XCTFail("Expected data and response but received something else", file: file, line: line)
