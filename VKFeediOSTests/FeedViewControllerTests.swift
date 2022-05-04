@@ -8,30 +8,7 @@
 import XCTest
 import UIKit
 import VKFeed
-
-final class FeedViewController: UITableViewController {
-    private var loader: FeedLoader?
-    
-    convenience init(loader: FeedLoader) {
-        self.init()
-        self.loader = loader
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refresh()
-    }
-    
-    @objc func refresh() {
-        refreshControl?.beginRefreshing()
-        loader?.load(completion: { [weak self] _ in
-            self?.refreshControl?.endRefreshing()
-        })
-    }
-}
+import VKFeediOS
 
 final class FeedViewControllerTests: XCTestCase {
     func test_loadFeedActions_requestFeedFromLoader() {
