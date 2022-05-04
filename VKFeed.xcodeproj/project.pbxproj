@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6727989D282323A100924F82 /* FeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6727989C282323A100924F82 /* FeedViewControllerTests.swift */; };
 		67378090280621600054CD20 /* FeedItemsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6737808F280621600054CD20 /* FeedItemsMapper.swift */; };
 		67378093280700DB0054CD20 /* HTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67378092280700DB0054CD20 /* HTTPClientTests.swift */; };
 		673B45DD2815F6D100B4859D /* CodableFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B45DC2815F6D100B4859D /* CodableFeedStore.swift */; };
@@ -88,6 +89,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6727989C282323A100924F82 /* FeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewControllerTests.swift; sourceTree = "<group>"; };
 		6737808F280621600054CD20 /* FeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
 		67378092280700DB0054CD20 /* HTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientTests.swift; sourceTree = "<group>"; };
 		673B45DC2815F6D100B4859D /* CodableFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFeedStore.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 		67F6BDDB281F4964004EB491 /* VKFeediOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				6727989C282323A100924F82 /* FeedViewControllerTests.swift */,
 			);
 			path = VKFeediOSTests;
 			sourceTree = "<group>";
@@ -535,6 +538,7 @@
 					};
 					67F6BDD6281F4964004EB491 = {
 						CreatedOnToolsVersion = 13.3.1;
+						LastSwiftMigration = 1330;
 					};
 					67F9BB8528173E1000B606BA = {
 						CreatedOnToolsVersion = 13.3.1;
@@ -680,6 +684,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6727989D282323A100924F82 /* FeedViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1051,16 +1056,23 @@
 		67F6BDE3281F4964004EB491 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Z9F52A55VD;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = VK.VKFeediOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1069,11 +1081,17 @@
 		67F6BDE4281F4964004EB491 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Z9F52A55VD;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = VK.VKFeediOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
