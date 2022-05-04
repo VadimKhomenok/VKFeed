@@ -9,7 +9,7 @@ import XCTest
 import UIKit
 import VKFeed
 
-final class FeedViewController: UIViewController {
+final class FeedViewController: UITableViewController {
     private var loader: FeedLoader?
     
     convenience init(loader: FeedLoader) {
@@ -20,9 +20,14 @@ final class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loader?.load(completion: { result in
-            
-        })
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refresh()
+    }
+    
+    @objc func refresh() {
+        loader?.load(completion: { _ in })
     }
 }
 
@@ -38,6 +43,18 @@ final class FeedViewControllerTests: XCTestCase {
         sut.loadViewIfNeeded()
         
         XCTAssertEqual(loader.loadCallCount, 1)
+    }
+    
+    func test_pullToRefresh_loadFeed() {
+        let (loader, sut) = makeSUT()
+        sut.loadViewIfNeeded()
+        
+        sut.refreshControl?.allTargets.forEach { target in
+            sut.refreshControl?.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { (target as NSObject).perform(Selector($0))
+            }
+        }
+        
+        XCTAssertEqual(loader.loadCallCount, 2)
     }
     
     
