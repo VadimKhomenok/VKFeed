@@ -43,7 +43,12 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertTrue(sut.isShowingLoadingIndicator(), "Expected loading indicator once user initiates a reload")
         
         loader.completeFeedLoading(at: 1)
-        XCTAssertFalse(sut.isShowingLoadingIndicator(), "Expected no loading indicator once user initiated loading is completed")
+        XCTAssertFalse(sut.isShowingLoadingIndicator(), "Expected no loading indicator once user initiated loading is completed with success")
+        
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeFeedLoading(with: anyNSError(), at: 2)
+        
+        XCTAssertFalse(sut.isShowingLoadingIndicator(), "Expected no loading indicator after loading is completed with error")
     }
 
     func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
@@ -114,7 +119,7 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(cell.descriptionIsVisible, shouldDescriptionBeVisible, "Expected `descriptionIsVisible` to be \(shouldDescriptionBeVisible) for cell at index (\(index))", file: file, line: line)
     }
     
-    private func makeImage(description: String?, location: String?, url: URL = URL(string: "https://api-url.com")!) -> FeedImage {
+    private func makeImage(description: String? = nil, location: String? = nil, url: URL = URL(string: "https://api-url.com")!) -> FeedImage {
         FeedImage(id: UUID(), description: description, location: location, url: url)
     }
 
