@@ -12,4 +12,5 @@ public final class FeedImageCell: UITableViewCell {
     public let locationLabel = UILabel()
     public let locationContainer = UIView()
     public let feedImageContainer = UIView()
+    public let feedImageView = UIImageView()
 }

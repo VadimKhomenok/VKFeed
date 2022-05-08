@@ -134,6 +134,28 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view1?.isShowingImageLoadingIndicator, false, "Expected second view to hide loading indicator when second image load is completed")
     }
     
+    func test_feedImageView_rendersImageLoadedFromURL() {
+        let (loader, sut) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(feed: [makeImage(), makeImage()], at: 0)
+        
+        let view0 = sut.simulateFeedImageViewVisible(at: 0)
+        let view1 = sut.simulateFeedImageViewVisible(at: 1)
+        XCTAssertEqual(view0?.renderedImage, .none, "Expected first image not to be rendered until load is completed")
+        XCTAssertEqual(view1?.renderedImage, .none, "Expected second image not to be rendered until load is completed")
+        
+        let imageData0 = UIImage.makeTinyImage(color: .red).pngData()!
+        loader.completeImageLoading(with: imageData0, at: 0)
+        XCTAssertEqual(view0?.renderedImage, imageData0, "Expected image for first view once first image loading completes successfully")
+        XCTAssertEqual(view1?.renderedImage, .none, "Expected no image state change for second view once first image loading completes successfully")
+        
+//        let imageData1 = UIImage.makeTinyImage(color: .blue).pngData()!
+//        loader.completeImageLoading(with: imageData1, at: 1)
+//        XCTAssertEqual(view0?.renderedImage, imageData0, "Expected no image state change for first view once second image loading completes successfully")
+//        XCTAssertEqual(view1?.renderedImage, imageData1, "Expected image for second view once second image loading completes successfully")
+    }
+    
     
     // MARK: - Helpers
     
@@ -249,6 +271,10 @@ private extension FeedImageCell {
     var isShowingImageLoadingIndicator: Bool {
         return feedImageContainer.isShimmering
     }
+    
+    var renderedImage: Data? {
+        return feedImageView.image?.pngData()
+    }
 }
 
 private extension FeedViewController {
@@ -295,5 +321,18 @@ private extension UIRefreshControl {
             self.actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { (target as NSObject).perform(Selector($0))
             }
         }
+    }
+}
+
+private extension UIImage {
+    static func makeTinyImage(color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(color.cgColor)
+        context.fill(rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img!
     }
 }
