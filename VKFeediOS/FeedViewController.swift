@@ -11,6 +11,8 @@ import VKFeed
 final public class FeedViewController: UITableViewController {
     private var loader: FeedLoader?
     
+    private var tableModel = [FeedImage]()
+    
     public convenience init(loader: FeedLoader) {
         self.init()
         self.loader = loader
@@ -26,8 +28,26 @@ final public class FeedViewController: UITableViewController {
     
     @objc func refresh() {
         refreshControl?.beginRefreshing()
-        loader?.load(completion: { [weak self] _ in
+        loader?.load(completion: { [weak self] result in
+            self?.tableModel = (try? result.get()) ?? []
+            self?.tableView.reloadData()
             self?.refreshControl?.endRefreshing()
         })
+    }
+    
+    // MARK: - UITableView Data Source
+    
+    override public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tableModel.count
+    }
+    
+    override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = FeedImageCell()
+        let model = tableModel[indexPath.row]
+        cell.descriptionLabel.text = model.description
+        cell.locationLabel.text = model.location
+        cell.locationContainer.isHidden = (model.location == nil)
+        cell.descriptionLabel.isHidden = (model.description == nil)
+        return cell
     }
 }
