@@ -188,7 +188,7 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view?.isShowingRetryButton, false, "Expected view to not show retry button when image loading just started")
         
         let invalidImageData = Data("Invalid image data".utf8)
-        loader.completeImageLoading(with: invalidImageData, at: 1)
+        loader.completeImageLoading(with: invalidImageData, at: 0)
         XCTAssertEqual(view?.isShowingRetryButton, true, "Expected view to show retry button when image loading is succeeded but with invalid data")
     }
     
