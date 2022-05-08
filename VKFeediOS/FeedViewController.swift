@@ -22,11 +22,11 @@ final public class FeedViewController: UITableViewController {
         super.viewDidLoad()
         
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refresh()
+        refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+        load()
     }
     
-    @objc func refresh() {
+    @objc func load() {
         refreshControl?.beginRefreshing()
         loader?.load(completion: { [weak self] result in
             switch result {
