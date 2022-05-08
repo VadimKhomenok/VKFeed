@@ -329,8 +329,8 @@
 		67F6BDCF281F4964004EB491 /* VKFeediOS */ = {
 			isa = PBXGroup;
 			children = (
-				672798A32823402F00924F82 /* FeedViewController.swift */,
 				67A5F4302827ED270044191A /* FeedImageCell.swift */,
+				672798A32823402F00924F82 /* FeedViewController.swift */,
 				67F6BDD1281F4964004EB491 /* VKFeediOS.docc */,
 			);
 			path = VKFeediOS;

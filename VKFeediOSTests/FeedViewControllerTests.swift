@@ -11,6 +11,10 @@ import VKFeed
 import VKFeediOS
 
 final class FeedViewControllerTests: XCTestCase {
+    override func setUp() {
+        continueAfterFailure = false
+    }
+    
     func test_loadFeedActions_requestFeedFromLoader() {
         let (loader, sut) = makeSUT()
         
@@ -44,20 +48,33 @@ final class FeedViewControllerTests: XCTestCase {
 
     func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
         let (loader, sut) = makeSUT()
-        let image1 = makeImage(description: "a description", location: "a location")
-        let image2 = makeImage(description: "another description", location: nil)
-        let image3 = makeImage(description: nil, location: "another location")
-        let image4 = makeImage(description: nil, location: nil)
+        let image0 = makeImage(description: "a description", location: "a location")
+        let image1 = makeImage(description: "another description", location: nil)
+        let image2 = makeImage(description: nil, location: "another location")
+        let image3 = makeImage(description: nil, location: nil)
 
         sut.loadViewIfNeeded()
         assert(sut: sut, rendered: [])
         
-        loader.completeFeedLoading(feed: [image1], at: 0)
-        assert(sut: sut, rendered: [image1])
+        loader.completeFeedLoading(feed: [image0], at: 0)
+        assert(sut: sut, rendered: [image0])
         
         sut.simulateUserInitiatedFeedReload()
-        loader.completeFeedLoading(feed: [image1, image2, image3, image4], at: 1)
-        assert(sut: sut, rendered: [image1, image2, image3, image4])
+        loader.completeFeedLoading(feed: [image0, image1, image2, image3], at: 1)
+        assert(sut: sut, rendered: [image0, image1, image2, image3])
+    }
+    
+    func test_loadFeedCompletionWithError_doesNotAlterCurrentRenderedFeed() {
+        let (loader, sut) = makeSUT()
+        let image0 = makeImage(description: "a description", location: "a location")
+        
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(feed: [image0], at: 0)
+        assert(sut: sut, rendered: [image0])
+        
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeFeedLoading(with: anyNSError(), at: 1)
+        assert(sut: sut, rendered: [image0])
     }
     
     
@@ -114,6 +131,10 @@ final class FeedViewControllerTests: XCTestCase {
         
         func completeFeedLoading(feed: [FeedImage] = [], at index: Int) {
             completions[index](.success(feed))
+        }
+        
+        func completeFeedLoading(with error: Error, at index: Int) {
+            completions[index](.failure(error))
         }
     }
 }
