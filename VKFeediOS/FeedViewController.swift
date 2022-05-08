@@ -10,6 +10,7 @@ import VKFeed
 
 public protocol FeedImageDataLoader {
     func loadImageData(from url: URL)
+    func cancelLoadImageData(from url: URL)
 }
 
 final public class FeedViewController: UITableViewController {
@@ -61,5 +62,10 @@ final public class FeedViewController: UITableViewController {
         imageLoader?.loadImageData(from: model.url)
         
         return cell
+    }
+    
+    override public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let url = tableModel[indexPath.row].url
+        imageLoader?.cancelLoadImageData(from: url)
     }
 }
