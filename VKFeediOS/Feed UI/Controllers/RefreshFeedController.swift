@@ -8,12 +8,12 @@
 import VKFeed
 import UIKit
 
-public class FeedRefreshController: NSObject {
+final class FeedRefreshViewController: NSObject {
     private let feedLoader: FeedLoader
     
-    lazy var refreshControl: UIRefreshControl = {
+    private(set) lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(load), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return refreshControl
     }()
     
@@ -23,7 +23,7 @@ public class FeedRefreshController: NSObject {
         self.feedLoader = feedLoader
     }
     
-    @objc func load() {
+    @objc func refresh() {
         refreshControl.beginRefreshing()
         feedLoader.load(completion: { [weak self] result in
             if let feed = try? result.get() {

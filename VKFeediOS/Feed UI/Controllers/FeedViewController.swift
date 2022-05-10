@@ -10,16 +10,18 @@ import VKFeed
 
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var imageLoader: FeedImageDataLoader?
-    private var feedRefreshController: FeedRefreshController?
+    private var feedRefreshController: FeedRefreshViewController?
     
-    private var tableModel = [FeedImage]()
+    private var tableModel = [FeedImage]() {
+        didSet { self.tableView.reloadData() }
+    }
     
     private var cellControllers = [IndexPath: FeedImageCellController]()
     
     public convenience init(loader: FeedLoader, imageLoader: FeedImageDataLoader) {
         self.init()
         self.imageLoader = imageLoader
-        self.feedRefreshController = FeedRefreshController(feedLoader: loader)
+        self.feedRefreshController = FeedRefreshViewController(feedLoader: loader)
     }
     
     public override func viewDidLoad() {
@@ -28,14 +30,12 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
         refreshControl = feedRefreshController?.refreshControl
         feedRefreshController?.refreshComplete = { [weak self] feed in
             self?.tableModel = feed
-            self?.tableView.reloadData()
         }
         
         tableView.prefetchDataSource = self
         
-        feedRefreshController?.load()
+        feedRefreshController?.refresh()
     }
-    
     
     // MARK: - UITableView Data Source Prefetch
     
