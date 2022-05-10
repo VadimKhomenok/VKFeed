@@ -12,26 +12,22 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     private var imageLoader: FeedImageDataLoader?
     private var feedRefreshController: FeedRefreshViewController?
     
-    private var tableModel = [FeedImage]() {
+    var tableModel = [FeedImage]() {
         didSet { self.tableView.reloadData() }
     }
     
     private var cellControllers = [IndexPath: FeedImageCellController]()
     
-    public convenience init(loader: FeedLoader, imageLoader: FeedImageDataLoader) {
+    convenience init(imageLoader: FeedImageDataLoader, refreshController: FeedRefreshViewController) {
         self.init()
         self.imageLoader = imageLoader
-        self.feedRefreshController = FeedRefreshViewController(feedLoader: loader)
+        self.feedRefreshController = refreshController
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
         refreshControl = feedRefreshController?.refreshControl
-        feedRefreshController?.refreshComplete = { [weak self] feed in
-            self?.tableModel = feed
-        }
-        
         tableView.prefetchDataSource = self
         
         feedRefreshController?.refresh()
