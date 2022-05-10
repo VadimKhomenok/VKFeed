@@ -8,39 +8,60 @@
 import UIKit
 import VKFeed
 
+public class FeedRefreshController: NSObject {
+    private let feedLoader: FeedLoader
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(load), for: .valueChanged)
+        return refreshControl
+    }()
+    
+    var refreshComplete: (([FeedImage]) -> Void)?
+    
+    init(feedLoader: FeedLoader) {
+        self.feedLoader = feedLoader
+    }
+    
+    @objc func load() {
+        refreshControl.beginRefreshing()
+        feedLoader.load(completion: { [weak self] result in
+            if let feed = try? result.get() {
+                self?.refreshComplete?(feed)
+            }
+                
+            self?.refreshControl.endRefreshing()
+        })
+    }
+}
+
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
-    private var feedLoader: FeedLoader?
     private var imageLoader: FeedImageDataLoader?
+    private var feedRefreshController: FeedRefreshController?
     
     private var tableModel = [FeedImage]()
     private var tasks = [IndexPath: FeedImageDataLoaderTask]()
     
     public convenience init(loader: FeedLoader, imageLoader: FeedImageDataLoader) {
         self.init()
-        self.feedLoader = loader
         self.imageLoader = imageLoader
+        self.feedRefreshController = FeedRefreshController(feedLoader: loader)
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(load), for: .valueChanged)
+        refreshControl = feedRefreshController?.refreshControl
+        feedRefreshController?.refreshComplete = { [weak self] feed in
+            self?.tableModel = feed
+            self?.tableView.reloadData()
+        }
+        
         tableView.prefetchDataSource = self
-        load()
+        
+        feedRefreshController?.load()
     }
     
-    @objc func load() {
-        refreshControl?.beginRefreshing()
-        feedLoader?.load(completion: { [weak self] result in
-            if let feed = try? result.get() {
-                self?.tableModel = feed
-                self?.tableView.reloadData()
-            }
-                
-            self?.refreshControl?.endRefreshing()
-        })
-    }
     
     // MARK: - UITableView Data Source Prefetch
     
