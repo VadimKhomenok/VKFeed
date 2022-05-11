@@ -428,12 +428,3 @@ private extension FeedViewController {
         return tableView.numberOfRows(inSection: feedImagesSection)
     }
 }
-
-private extension UIButton {
-    func simulateTap() {
-        allTargets.forEach { target in
-            self.actions(forTarget: target, forControlEvent: .touchUpInside)?.forEach { (target as NSObject).perform(Selector($0))
-            }
-        }
-    }
-}
