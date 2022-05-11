@@ -8,7 +8,7 @@
 import UIKit
 import VKFeed
 
-final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
+public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var feedRefreshController: FeedRefreshViewController?
     
     var tableModel = [FeedImageCellController]() {
