@@ -5,6 +5,7 @@
 //  Created by Vadim Khomenok on 11.05.22.
 //
 
+import VKFeed
 import Foundation
 
 public final class FeedUIComposer {
