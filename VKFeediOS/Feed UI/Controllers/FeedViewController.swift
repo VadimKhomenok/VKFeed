@@ -9,18 +9,14 @@ import UIKit
 import VKFeed
 
 final public class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
-    private var imageLoader: FeedImageDataLoader?
     private var feedRefreshController: FeedRefreshViewController?
     
-    var tableModel = [FeedImage]() {
+    var tableModel = [FeedImageCellController]() {
         didSet { self.tableView.reloadData() }
     }
     
-    private var cellControllers = [IndexPath: FeedImageCellController]()
-    
-    convenience init(imageLoader: FeedImageDataLoader, refreshController: FeedRefreshViewController) {
+    convenience init(refreshController: FeedRefreshViewController) {
         self.init()
-        self.imageLoader = imageLoader
         self.feedRefreshController = refreshController
     }
     
@@ -42,7 +38,7 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(removeCellController(forRowAt:))
+        indexPaths.forEach(cancelCellControllerLoad(forRowAt:))
     }
     
     // MARK: - UITableView Data Source
@@ -56,18 +52,15 @@ final public class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     override public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        removeCellController(forRowAt: indexPath)
+        cancelCellControllerLoad(forRowAt: indexPath)
     }
     
     private func cellController(for indexPath: IndexPath) -> FeedImageCellController {
-        let cellModel = tableModel[indexPath.row]
-        let cellViewController = FeedImageCellController(model: cellModel, imageLoader: imageLoader!)
-        cellControllers[indexPath] = cellViewController
-        return cellViewController
+        return tableModel[indexPath.row]
     }
     
-    private func removeCellController(forRowAt indexPath: IndexPath) {
-        cellControllers[indexPath] = nil
+    private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
+        cellController(for: indexPath).cancelLoad()
     }
 }
 
