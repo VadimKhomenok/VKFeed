@@ -342,38 +342,3 @@ final class FeedViewControllerTests: XCTestCase {
         }
     }
 }
-
-private extension FeedImageCell {
-    var descriptionText: String? {
-        return descriptionLabel.text
-    }
-    
-    var locationText: String? {
-        return locationLabel.text
-    }
-    
-    var locationIsVisible: Bool {
-        return !locationContainer.isHidden
-    }
-    
-    var descriptionIsVisible: Bool {
-        return !descriptionLabel.isHidden
-    }
-    
-    var isShowingImageLoadingIndicator: Bool {
-        return feedImageContainer.isShimmering
-    }
-    
-    var renderedImage: Data? {
-        return feedImageView.image?.pngData()
-    }
-    
-    var isShowingRetryButton: Bool {
-        return !retryButton.isHidden
-    }
-    
-    func simulateFeedImageViewRetry() {
-        retryButton.simulateTap()
-    }
-}
-
