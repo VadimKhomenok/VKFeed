@@ -9,27 +9,25 @@ import VKFeed
 
 class FeedViewModel {
     
+    typealias Observer<T> = (T) -> Void
+    
     private let feedLoader: FeedLoader
     
     init(feedLoader: FeedLoader) {
         self.feedLoader = feedLoader
     }
     
-    var onFeedLoad: (([FeedImage]) -> Void)?
-    var onChangeState: ((FeedViewModel) -> Void)?
-    
-    var isLoading: Bool = false {
-        didSet { onChangeState?(self) }
-    }
+    var onFeedLoad: Observer<[FeedImage]>?
+    var onLoadingStateChanged: Observer<Bool>?
     
     func loadFeed() {
-        isLoading = true
+        onLoadingStateChanged?(true)
         feedLoader.load(completion: { [weak self] result in
             if let feed = try? result.get() {
                 self?.onFeedLoad?(feed)
             }
             
-            self?.isLoading = false
+            self?.onLoadingStateChanged?(false)
         })
     }
 }
