@@ -5,32 +5,30 @@
 //  Created by Vadim Khomenok on 11.05.22.
 //
 
-import VKFeed
 import UIKit
 
 final class FeedRefreshViewController: NSObject {
-    private let feedLoader: FeedLoader
+    private var feedViewModel: FeedViewModel?
     
-    private(set) lazy var refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        return refreshControl
-    }()
+    private(set) lazy var refreshControl = binded(UIRefreshControl())
     
-    var refreshComplete: (([FeedImage]) -> Void)?
-    
-    init(feedLoader: FeedLoader) {
-        self.feedLoader = feedLoader
+    init(feedViewModel: FeedViewModel) {
+        self.feedViewModel = feedViewModel
     }
     
     @objc func refresh() {
-        refreshControl.beginRefreshing()
-        feedLoader.load(completion: { [weak self] result in
-            if let feed = try? result.get() {
-                self?.refreshComplete?(feed)
+        feedViewModel?.loadFeed()
+    }
+    
+    private func binded(_ view: UIRefreshControl) -> UIRefreshControl {
+        self.feedViewModel?.onChangeState = { model in
+            if model.isLoading {
+                view.beginRefreshing()
+            } else {
+                view.endRefreshing()
             }
-                
-            self?.refreshControl.endRefreshing()
-        })
+        }
+        view.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return view
     }
 }
