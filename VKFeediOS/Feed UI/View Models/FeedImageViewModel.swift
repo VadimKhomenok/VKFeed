@@ -6,9 +6,8 @@
 //
 
 import VKFeed
-import UIKit
 
-final class FeedImageViewModel {
+final class FeedImageViewModel<Image> {
     
     typealias Observer<T> = (T) -> Void
     
@@ -16,18 +15,20 @@ final class FeedImageViewModel {
     private let imageLoader: FeedImageDataLoader
     private var task: FeedImageDataLoaderTask?
     
-    var onImageLoad: Observer<UIImage>?
+    var onImageLoad: Observer<Image>?
     var onImageLoadingStateChange: Observer<Bool>?
     var onShouldRetryImageLoadStateChange: Observer<Bool>?
+    var imageTransformer: (Data) -> Image?
     
     var description: String? { feedModel.description }
     var location: String? { feedModel.location }
     var isLocationHidden: Bool { feedModel.location == nil }
     var isDescriptionHidden: Bool { feedModel.description == nil }
     
-    init(imageLoader: FeedImageDataLoader, feedModel: FeedImage) {
+    init(imageLoader: FeedImageDataLoader, feedModel: FeedImage, imageTransformer: @escaping (Data) -> Image?) {
         self.imageLoader = imageLoader
         self.feedModel = feedModel
+        self.imageTransformer = imageTransformer
     }
     
     func loadImage() {
@@ -39,7 +40,7 @@ final class FeedImageViewModel {
     }
     
     private func handle(_ result: FeedImageDataLoader.Result) {
-        if let image = (try? result.get()).flatMap(UIImage.init) {
+        if let image = (try? result.get()).flatMap(imageTransformer) {
             self.onImageLoad?(image)
         } else {
             self.onShouldRetryImageLoadStateChange?(true)

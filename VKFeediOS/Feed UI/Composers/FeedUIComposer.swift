@@ -7,6 +7,7 @@
 
 import VKFeed
 import Foundation
+import UIKit
 
 public final class FeedUIComposer {
     private init() {}
@@ -23,7 +24,7 @@ public final class FeedUIComposer {
     private static func adaptFeedToCellControllers(forwardingTo controller: FeedViewController, loader: FeedImageDataLoader) -> ([FeedImage]) -> Void {
         return { [weak controller] feed in
             controller?.tableModel = feed.map { model in
-                FeedImageCellController(feedImageViewModel: FeedImageViewModel(imageLoader: loader, feedModel: model))
+                FeedImageCellController(feedImageViewModel: FeedImageViewModel(imageLoader: loader, feedModel: model, imageTransformer: UIImage.init))
             }
         }
     }

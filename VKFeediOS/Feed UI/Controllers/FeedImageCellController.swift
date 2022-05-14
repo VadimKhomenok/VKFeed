@@ -9,9 +9,9 @@ import VKFeed
 import UIKit
 
 final class FeedImageCellController {
-    private let feedImageViewModel: FeedImageViewModel
+    private let feedImageViewModel: FeedImageViewModel<UIImage>
     
-    init(feedImageViewModel: FeedImageViewModel) {
+    init(feedImageViewModel: FeedImageViewModel<UIImage>) {
         self.feedImageViewModel = feedImageViewModel
     }
 
