@@ -8,7 +8,7 @@
 import UIKit
 
 final class FeedRefreshViewController: NSObject {
-    private var feedViewModel: FeedViewModel?
+    private var feedViewModel: FeedViewModel
     
     private(set) lazy var refreshControl = binded(UIRefreshControl())
     
@@ -17,11 +17,11 @@ final class FeedRefreshViewController: NSObject {
     }
     
     @objc func refresh() {
-        feedViewModel?.loadFeed()
+        feedViewModel.loadFeed()
     }
     
     private func binded(_ view: UIRefreshControl) -> UIRefreshControl {
-        self.feedViewModel?.onLoadingStateChanged = { [weak view] isLoading in
+        feedViewModel.onLoadingStateChanged = { [weak view] isLoading in
             if isLoading {
                 view?.beginRefreshing()
             } else {

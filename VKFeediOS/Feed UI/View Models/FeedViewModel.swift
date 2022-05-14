@@ -7,7 +7,7 @@
 
 import VKFeed
 
-class FeedViewModel {
+final class FeedViewModel {
     
     typealias Observer<T> = (T) -> Void
     
