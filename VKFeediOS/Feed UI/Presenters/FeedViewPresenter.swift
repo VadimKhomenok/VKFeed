@@ -23,7 +23,7 @@ final class FeedViewPresenter {
     
     private let feedLoader: FeedLoader
     
-    weak var feedLoadingView: (AnyObject & FeedLoadingView)?
+    var feedLoadingView: FeedLoadingView?
     var feedView: FeedView?
     
     init(feedLoader: FeedLoader){
