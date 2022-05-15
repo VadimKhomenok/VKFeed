@@ -26,7 +26,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="580" id="JUp-in-e1I" customClass="FeedImageTableViewCell" customModule="VKFeedUIPrototype" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="580" id="JUp-in-e1I" customClass="FeedImageCell" customModule="VKFeediOS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="60.5" width="414" height="580"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JUp-in-e1I" id="F7M-qX-DTB">
@@ -66,13 +66,16 @@
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </imageView>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oR-8Y-6KS">
+                                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oR-8Y-6KS">
                                                             <rect key="frame" x="0.0" y="0.0" width="354" height="354"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" title="↻">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="retryButtonTapped" destination="JUp-in-e1I" eventType="touchUpInside" id="d64-ms-Txz"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemGray4Color"/>
@@ -114,6 +117,14 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="lXy-tj-AMe" secondAttribute="trailing" constant="10" id="xjz-GJ-E9L"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="BAF-1Y-eWJ" id="E0J-hP-Gmh"/>
+                                    <outlet property="feedImageContainer" destination="4Gx-nZ-bW3" id="xD0-Yh-04g"/>
+                                    <outlet property="feedImageView" destination="NoD-AX-jjn" id="vil-CG-GAA"/>
+                                    <outlet property="locationContainer" destination="48u-mX-7Ke" id="Kcc-70-M2E"/>
+                                    <outlet property="locationLabel" destination="Akb-ai-TYf" id="k3Q-Tb-p9V"/>
+                                    <outlet property="retryButton" destination="4oR-8Y-6KS" id="nLZ-1m-4R0"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
