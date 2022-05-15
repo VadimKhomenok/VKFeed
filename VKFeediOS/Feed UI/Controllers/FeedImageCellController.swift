@@ -9,48 +9,45 @@ import VKFeed
 import UIKit
 
 final class FeedImageCellController {
-    private let model: FeedImage
-    private let imageLoader: FeedImageDataLoader
-    private var task: FeedImageDataLoaderTask?
+    private let feedImageViewModel: FeedImageViewModel<UIImage>
     
-    init(model: FeedImage, imageLoader: FeedImageDataLoader) {
-        self.model = model
-        self.imageLoader = imageLoader
+    init(feedImageViewModel: FeedImageViewModel<UIImage>) {
+        self.feedImageViewModel = feedImageViewModel
     }
-    
-    func view() -> UITableViewCell {
-        let cell = FeedImageCell()
-        cell.descriptionLabel.text = model.description
-        cell.locationLabel.text = model.location
-        cell.locationContainer.isHidden = (model.location == nil)
-        cell.descriptionLabel.isHidden = (model.description == nil)
-        cell.feedImageView.image = nil
-        cell.retryButton.isHidden = true
-        cell.feedImageContainer.startShimmering()
-        
-        let loadImage = { [weak self, weak cell] in
-            guard let self = self else { return }
-            
-            self.task = self.imageLoader.loadImageData(from: self.model.url, completion: { [weak cell] result in
-                let data = try? result.get()
-                let image = data.map(UIImage.init) ?? nil
-                cell?.feedImageView.image = image
-                cell?.retryButton.isHidden = (image != nil)
-                cell?.feedImageContainer.stopShimmering()
-            })
-        }
-        
-        cell.onRetry = loadImage
-        loadImage()
 
+    func view() -> UITableViewCell {
+        let cell = binded(FeedImageCell())
+        feedImageViewModel.loadImage()
         return cell
     }
     
+    private func binded(_ view: FeedImageCell) -> FeedImageCell {
+        view.descriptionLabel.text = feedImageViewModel.description
+        view.locationLabel.text = feedImageViewModel.location
+        view.locationContainer.isHidden = feedImageViewModel.isLocationHidden
+        view.descriptionLabel.isHidden = feedImageViewModel.isDescriptionHidden
+        view.onRetry = feedImageViewModel.loadImage
+        
+        feedImageViewModel.onImageLoad = { [weak view] loadedImage in
+            view?.feedImageView.image = loadedImage
+        }
+        
+        feedImageViewModel.onImageLoadingStateChange = { [weak view] isLoading in
+            view?.feedImageContainer.isShimmering = isLoading
+        }
+        
+        feedImageViewModel.onShouldRetryImageLoadStateChange = { [weak view] shouldRetry in
+            view?.retryButton.isHidden = !shouldRetry
+        }
+        
+        return view
+    }
+    
     func preload() {
-        task = imageLoader.loadImageData(from: model.url) { _ in }
+        feedImageViewModel.loadImage()
     }
     
     func cancelLoad() {
-        task?.cancel()
+        feedImageViewModel.cancelLoad()
     }
 }
