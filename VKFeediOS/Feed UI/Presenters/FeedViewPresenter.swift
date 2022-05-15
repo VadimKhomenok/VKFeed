@@ -9,7 +9,7 @@ import Foundation
 
 import VKFeed
 
-protocol FeedLoadingView: AnyObject {
+protocol FeedLoadingView {
     func display(isLoading: Bool)
 }
 
@@ -23,7 +23,7 @@ final class FeedViewPresenter {
     
     private let feedLoader: FeedLoader
     
-    weak var feedLoadingView: FeedLoadingView?
+    weak var feedLoadingView: (AnyObject & FeedLoadingView)?
     var feedView: FeedView?
     
     init(feedLoader: FeedLoader){
