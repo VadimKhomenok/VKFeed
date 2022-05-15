@@ -7,8 +7,13 @@
 
 import UIKit
 
-public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
-    @IBOutlet var feedRefreshController: FeedRefreshViewController?
+protocol FeedViewControllerDelegate: AnyObject {
+    func didRequestFeedRefresh()
+}
+
+public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView {
+    
+    var delegate: FeedViewControllerDelegate?
     
     var tableModel = [FeedImageCellController]() {
         didSet { self.tableView.reloadData() }
@@ -19,7 +24,19 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
         
         tableView.prefetchDataSource = self
         
-        feedRefreshController?.refresh()
+        refresh()
+    }
+    
+    @IBAction func refresh() {
+        delegate?.didRequestFeedRefresh()
+    }
+    
+    func display(_ viewModel: FeedLoadingViewModel) {
+        if viewModel.isLoading {
+            refreshControl?.beginRefreshing()
+        } else {
+            refreshControl?.endRefreshing()
+        }
     }
     
     // MARK: - UITableView Data Source Prefetch
