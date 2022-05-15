@@ -36,6 +36,44 @@ extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
     }
 }
 
+private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, Image>: FeedImageCellControllerDelegate where View.Image == Image {
+    var presenter: FeedImagePresenter<View, Image>?
+    
+    private let model: FeedImage
+    private let imageLoader: FeedImageDataLoader
+    private var task: FeedImageDataLoaderTask?
+    
+    init(model: FeedImage, loader: FeedImageDataLoader) {
+        self.model = model
+        self.imageLoader = loader
+    }
+    
+    func didRequestImage() {
+        presenter?.didStartLoadingImageData(for: model)
+        
+        let model = self.model
+        task = imageLoader.loadImageData(from: model.url) { [weak self] result in
+            switch result {
+            case let .success(data):
+                self?.presenter?.didFinishLoadingImageData(with: data, for: model)
+                
+            case let .failure(error):
+                self?.presenter?.didFinishLoadingImageData(with: error, for: model)
+            }
+        }
+    }
+    
+    func didCancelImageRequest() {
+        task?.cancel()
+    }
+}
+
+extension WeakRefVirtualProxy: FeedImageView where T: FeedImageView, T.Image == UIImage {
+    func display(_ viewModel: FeedImageViewData<UIImage>) {
+        object?.display(viewModel)
+    }
+}
+
 final class FeedViewAdapter: FeedView {
     private weak var controller: FeedViewController?
     private let loader: FeedImageDataLoader
@@ -47,7 +85,14 @@ final class FeedViewAdapter: FeedView {
     
     func display(_ viewModel: FeedViewModel) {
         controller?.tableModel = viewModel.feed.map { model in
-            FeedImageCellController(feedImageViewModel: FeedImageViewModel(imageLoader: loader, feedModel: model, imageTransformer: UIImage.init))
+            let adapter = FeedImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<FeedImageCellController>, UIImage>(model: model, loader: loader)
+            let view = FeedImageCellController(delegate: adapter)
+            
+            adapter.presenter = FeedImagePresenter(
+                view: WeakRefVirtualProxy(object: view),
+                imageTransformer: UIImage.init)
+            
+            return view
         }
     }
 }
