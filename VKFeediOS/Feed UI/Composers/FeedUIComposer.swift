@@ -13,11 +13,12 @@ public final class FeedUIComposer {
     private init() {}
     
     public static func feedComposedWith(imageLoader: FeedImageDataLoader, feedLoader: FeedLoader) -> FeedViewController {
-        let feedViewPresenter = FeedViewPresenter(feedLoader: feedLoader)
-        let refreshController = FeedRefreshViewController(loadFeed: feedViewPresenter.loadFeed)
+        let presenter = FeedViewPresenter()
+        let presentationAdapter = FeedLoaderPresentationAdapter(presenter: presenter, feedLoader: feedLoader)
+        let refreshController = FeedRefreshViewController(loadFeed: presentationAdapter.loadFeed)
         let feedViewController = FeedViewController(refreshController: refreshController)
-        feedViewPresenter.feedLoadingView = WeakRefVirtualProxy(object: refreshController)
-        feedViewPresenter.feedView = FeedViewAdapter(feedViewController: feedViewController, loader: imageLoader)
+        presenter.feedLoadingView = WeakRefVirtualProxy(object: refreshController)
+        presenter.feedView = FeedViewAdapter(feedViewController: feedViewController, loader: imageLoader)
         
         return feedViewController
     }
@@ -50,5 +51,28 @@ final class FeedViewAdapter: FeedView {
         controller?.tableModel = viewModel.feed.map { model in
             FeedImageCellController(feedImageViewModel: FeedImageViewModel(imageLoader: loader, feedModel: model, imageTransformer: UIImage.init))
         }
+    }
+}
+
+final class FeedLoaderPresentationAdapter {
+    private let presenter: FeedViewPresenter
+    private let feedLoader: FeedLoader
+    
+    init(presenter: FeedViewPresenter, feedLoader: FeedLoader) {
+        self.presenter = presenter
+        self.feedLoader = feedLoader
+    }
+    
+    func loadFeed() {
+        presenter.didStartLoadingFeed()
+        feedLoader.load(completion: { [weak self] result in
+            switch result {
+            case let .success(feed):
+                self?.presenter.didFinishLoadingFeed(with: feed)
+                
+            case let .failure(error):
+                self?.presenter.didFinishLoadingFeed(with: error)
+            }
+        })
     }
 }
