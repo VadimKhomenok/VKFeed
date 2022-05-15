@@ -10,7 +10,7 @@
         <!--My Feed-->
         <scene sceneID="1rs-k1-wlD">
             <objects>
-                <tableViewController id="SJH-gp-Uts" customClass="PrototypeTableViewController" sceneMemberID="viewController">
+                <tableViewController id="SJH-gp-Uts" customClass="FeedViewController" customModule="VKFeediOS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" id="ag8-h6-pmw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -125,9 +125,20 @@
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="TBV-Ey-JzA">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refresh" destination="eIG-Z9-e6A" eventType="valueChanged" id="pXS-Xo-Irf"/>
+                        </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="feedRefreshController" destination="eIG-Z9-e6A" id="qYm-6m-ShW"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p7h-6e-7zl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <customObject id="eIG-Z9-e6A" customClass="FeedRefreshViewController" customModule="VKFeediOS" customModuleProvider="target">
+                    <connections>
+                        <outlet property="refreshControl" destination="TBV-Ey-JzA" id="iFP-Z4-STp"/>
+                    </connections>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="939.13043478260875" y="16.741071428571427"/>
         </scene>
