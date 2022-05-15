@@ -119,6 +119,7 @@
                         <connections>
                             <outlet property="dataSource" destination="SJH-gp-Uts" id="pRq-s0-vJe"/>
                             <outlet property="delegate" destination="SJH-gp-Uts" id="qqh-au-f9d"/>
+                            <outlet property="prefetchDataSource" destination="SJH-gp-Uts" id="eEw-YN-9qJ"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="My Feed" id="XbM-AT-ahV"/>
