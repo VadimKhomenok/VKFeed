@@ -1,5 +1,5 @@
 //
-//  RefreshFeedController.swift
+//  FeedRefreshFeedController.swift
 //  VKFeediOS
 //
 //  Created by Vadim Khomenok on 11.05.22.
@@ -8,16 +8,15 @@
 import UIKit
 
 final class FeedRefreshViewController: NSObject, FeedLoadingView {
-    private var feedViewPresenter: FeedViewPresenter
-    
     private(set) lazy var refreshControl = loadView()
+    private let loadFeed: (() -> Void)
     
-    init(feedViewPresenter: FeedViewPresenter) {
-        self.feedViewPresenter = feedViewPresenter
+    init(loadFeed: @escaping () -> Void) {
+        self.loadFeed = loadFeed
     }
     
     @objc func refresh() {
-        feedViewPresenter.loadFeed()
+        loadFeed()
     }
     
     func display(_ viewModel: FeedLoadingViewModel) {
