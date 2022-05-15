@@ -34,7 +34,7 @@ final class FeedImageCellController: FeedImageView {
         cell?.locationContainer.isHidden = !viewModel.hasLocation
         cell?.descriptionLabel.isHidden = !viewModel.hasDescription
         cell?.onRetry = delegate.didRequestImage
-        cell?.feedImageView.image = viewModel.image
+        cell?.feedImageView.setImageAnimated(viewModel.image)
         cell?.feedImageContainer.isShimmering = viewModel.isLoading
         cell?.retryButton.isHidden = !viewModel.isRetry
     }
