@@ -10,7 +10,7 @@ import UIKit
 import VKFeed
 import VKFeediOS
 
-final class FeedViewControllerTests: XCTestCase {
+final class FeedUIIntegrationTests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
     }

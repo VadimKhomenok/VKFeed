@@ -9,7 +9,7 @@ import VKFeediOS
 import VKFeed
 import XCTest
 
-extension FeedViewControllerTests {
+extension FeedUIIntegrationTests {
     func assert(sut: FeedViewController, rendered feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         XCTAssertEqual(sut.numberOfRenderedFeedViews(), feed.count, "Expected to render \(feed.count) number of views, rendered \(sut.numberOfRenderedFeedViews()) instead", file: file, line: line)
         

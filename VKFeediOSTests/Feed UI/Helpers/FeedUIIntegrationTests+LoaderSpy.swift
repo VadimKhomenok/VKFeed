@@ -8,7 +8,7 @@
 import VKFeed
 import VKFeediOS
 
-extension FeedViewControllerTests {
+extension FeedUIIntegrationTests {
     class LoaderSpy: FeedLoader, FeedImageDataLoader {
         
         // MARK: - Feed Loader Spy
