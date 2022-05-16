@@ -15,6 +15,14 @@ final class FeedViewControllerTests: XCTestCase {
         continueAfterFailure = false
     }
     
+    func test_feedView_hasTitle() {
+        let (_, sut) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        
+        XCTAssertEqual(sut.title, "My Feed")
+    }
+    
     func test_loadFeedActions_requestFeedFromLoader() {
         let (loader, sut) = makeSUT()
         
