@@ -269,7 +269,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertNil(view?.renderedImage, "Expected no rendered image when image load finishes after the view is not visible anymore")
     }
 
-    func test_feedLoads_updatesUIInMainThread() {
+    func test_loadFeedCompletion_dispatchesFromBackgroundToMainThread() {
         let (loader, sut) = makeSUT()
         
         sut.loadViewIfNeeded()
