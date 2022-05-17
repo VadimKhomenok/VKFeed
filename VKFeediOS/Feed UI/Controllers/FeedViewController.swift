@@ -16,7 +16,15 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     var delegate: FeedViewControllerDelegate?
     
     var tableModel = [FeedImageCellController]() {
-        didSet { self.tableView.reloadData() }
+        didSet {
+            if Thread.isMainThread {
+                tableView.reloadData()
+            } else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
+            }
+        }
     }
     
     public override func viewDidLoad() {
@@ -30,6 +38,13 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     func display(_ viewModel: FeedLoadingViewModel) {
+        #warning("For some reason, if instead the guard statement with Thread.isMainThread check we will try to simply pack the code into DispatchQueue.main.async {} - as I usually do - the Feed UI Integration Test will fail on the check of visibility of the loading. Why is that?")
+        guard Thread.isMainThread else {
+            return DispatchQueue.main.async { [weak self] in
+                self?.display(viewModel)
+            }
+        }
+        
         if viewModel.isLoading {
             refreshControl?.beginRefreshing()
         } else {
