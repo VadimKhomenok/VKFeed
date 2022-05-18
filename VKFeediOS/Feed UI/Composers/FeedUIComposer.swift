@@ -37,20 +37,6 @@ private extension FeedViewController {
     }
 }
 
-private final class WeakRefVirtualProxy<T: AnyObject> {
-    private weak var object: T?
-    
-    init(object: T) {
-        self.object = object
-    }
-}
-
-extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
-    func display(_ viewModel: FeedLoadingViewModel) {
-        object?.display(viewModel)
-    }
-}
-
 private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, Image>: FeedImageCellControllerDelegate where View.Image == Image {
     var presenter: FeedImagePresenter<View, Image>?
     
@@ -80,12 +66,6 @@ private final class FeedImageDataLoaderPresentationAdapter<View: FeedImageView, 
     
     func didCancelImageRequest() {
         task?.cancel()
-    }
-}
-
-extension WeakRefVirtualProxy: FeedImageView where T: FeedImageView, T.Image == UIImage {
-    func display(_ viewModel: FeedImageViewData<UIImage>) {
-        object?.display(viewModel)
     }
 }
 
