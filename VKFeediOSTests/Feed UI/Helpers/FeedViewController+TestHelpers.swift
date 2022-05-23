@@ -1,3 +1,4 @@
+
 //
 //  FeedViewController+TestHelpers.swift
 //  VKFeediOSTests
@@ -59,5 +60,9 @@ extension FeedViewController {
     
     func numberOfRenderedFeedViews() -> Int {
         return tableView.numberOfRows(inSection: feedImagesSection)
+    }
+    
+    var errorMessage: String? {
+        return errorView.message
     }
 }
