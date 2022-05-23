@@ -307,6 +307,15 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertNil(sut.errorMessage, "Expected no error message on feed view loaded")
     }
     
+    func test_errorView_rendersErrorOnFeedLoadError() {
+        let (loader, sut) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        
+        loader.completeFeedLoading(with: anyNSError(), at: 0)
+        XCTAssertEqual(sut.errorMessage, localized("FEED_VIEW_CONNECTION_ERROR"), "Expected to render error message on feed load failure")
+    }
+    
     
     // MARK: - Helpers
     
