@@ -96,7 +96,8 @@ class FeedPresenterTests: XCTestCase {
         let feed = [makeUniqueImage()]
         
         sut.didFinishLoadingFeed(with: feed)
-        XCTAssertEqual(view.messages, [.display(feed: feed), .display(isLoading: false)])
+        XCTAssertEqual(view.messages, [.display(feed: feed),
+                                       .display(isLoading: false)])
     }
     
     func test_didFinishLoadingFeedWithError_displaysErrorAndStopsLoading() {
@@ -105,7 +106,7 @@ class FeedPresenterTests: XCTestCase {
         sut.didFinishLoadingFeed(with: anyNSError())
         
         XCTAssertEqual(view.messages, [.display(isLoading: false),
-                                       .display(errorMessage: sut.feedLoadError)])
+                                       .display(errorMessage: localized("FEED_VIEW_CONNECTION_ERROR"))])
     }
     
     // MARK: - Helpers
@@ -116,6 +117,18 @@ class FeedPresenterTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(view, file: file, line: line)
         return (sut, view)
+    }
+    
+    func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
+        let table = "Feed"
+        let bundle = Bundle(for: FeedPresenter.self)
+        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+        
+        if value == key {
+            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
+        }
+        
+        return value
     }
     
     private class ViewSpy: FeedLoadingView, FeedErrorView, FeedView {

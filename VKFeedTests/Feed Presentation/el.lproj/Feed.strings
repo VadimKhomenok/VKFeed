@@ -1,0 +1,10 @@
+/* 
+  Feed.strings
+  VKFeed
+
+  Created by Vadim Khomenok on 24.05.22.
+  
+*/
+
+"FEED_VIEW_TITLE" = "Το Feed μου";
+"FEED_VIEW_CONNECTION_ERROR" = "Δεν ήταν δυνατή η σύνδεση στο διακομιστή";
