@@ -22,6 +22,10 @@ struct FeedErrorViewModel {
     static var noError: FeedErrorViewModel {
         return FeedErrorViewModel(message: .none)
     }
+    
+    static func error(message: String) -> FeedErrorViewModel {
+        FeedErrorViewModel(message: message)
+    }
 }
 
 protocol FeedErrorView {
@@ -33,6 +37,13 @@ final class FeedPresenter {
     private let loadingView: FeedLoadingView
     private let feedErrorView: FeedErrorView
     
+    var feedLoadError: String {
+        return NSLocalizedString("FEED_VIEW_CONNECTION_ERROR",
+                                 tableName: "Feed",
+                                 bundle: Bundle(for: FeedPresenter.self),
+                                 comment: "Error message displayed when we can't load the image feed from the server")
+    }
+    
     init(feedLoadingView: FeedLoadingView, feedErrorView: FeedErrorView) {
         self.loadingView = feedLoadingView
         self.feedErrorView = feedErrorView
@@ -41,6 +52,11 @@ final class FeedPresenter {
     func didStartLoadingFeed() {
         feedErrorView.display(.noError)
         loadingView.display(FeedLoadingViewModel(isLoading: true))
+    }
+    
+    func didFinishLoadingFeed(with error: Error) {
+        loadingView.display(FeedLoadingViewModel(isLoading: false))
+        feedErrorView.display(.error(message: feedLoadError))
     }
 }
 
@@ -59,6 +75,15 @@ class FeedPresenterTests: XCTestCase {
         
         XCTAssertEqual(view.messages, [.display(errorMessage: .none),
                                        .display(isLoading: true)])
+    }
+    
+    func test_didFinishLoadingFeedWithError_displaysErrorAndStopsLoading() {
+        let (sut, view) = makeSUT()
+        
+        sut.didFinishLoadingFeed(with: anyNSError())
+        
+        XCTAssertEqual(view.messages, [.display(isLoading: false),
+                                       .display(errorMessage: sut.feedLoadError)])
     }
     
     // MARK: - Helpers
