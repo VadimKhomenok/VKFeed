@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import VKFeed
 
 protocol FeedViewControllerDelegate: AnyObject {
     func didRequestFeedRefresh()
@@ -33,12 +34,12 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
         delegate?.didRequestFeedRefresh()
     }
     
-    func display(_ viewModel: FeedLoadingViewModel) {
+    public func display(_ viewModel: FeedLoadingViewModel) {
         #warning("For some reason, if instead the guard statement with Thread.isMainThread check we will try to simply pack the code into DispatchQueue.main.async {} - as I usually do - the Feed UI Integration Test will fail on the check of visibility of the loading. Why is that?")
         refreshControl?.update(isRefreshing: viewModel.isLoading)
     }
     
-    func display(_ viewModel: FeedErrorViewModel) {
+    public func display(_ viewModel: FeedErrorViewModel) {
         errorView.message = viewModel.message
     }
     

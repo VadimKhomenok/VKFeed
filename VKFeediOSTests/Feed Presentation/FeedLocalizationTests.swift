@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import VKFeediOS
+@testable import VKFeed
 
 final class FeedLocalizationTests: XCTestCase {
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
