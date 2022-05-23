@@ -9,7 +9,7 @@ import Foundation
 import VKFeed
 
 struct FeedErrorViewModel {
-    let message: String
+    let message: String?
 }
 
 protocol FeedLoadingView {
@@ -51,6 +51,7 @@ final class FeedPresenter {
     
     func didStartLoadingFeed() {
         loadingView.display(FeedLoadingViewModel(isLoading: true))
+        feedErrorView.display(FeedErrorViewModel(message: .none))
     }
     
     func didFinishLoadingFeed(with feed: [FeedImage]) {
