@@ -8,10 +8,6 @@
 import Foundation
 import VKFeed
 
-struct FeedErrorViewModel {
-    let message: String?
-}
-
 protocol FeedLoadingView {
     func display(_ viewModel: FeedLoadingViewModel)
 }
