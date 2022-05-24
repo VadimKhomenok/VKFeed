@@ -67,7 +67,7 @@ class FeedImagePresenterTests: XCTestCase {
     func test_imagePresenterLoad_doesNotSendMessagesToView() {
         let (_, view) = makeSUT()
         
-        XCTAssertNil(view.message, "Expected to not send messages to view on FeedImagePresenter load")
+        XCTAssertTrue(view.messages.isEmpty, "Expected to not send messages to view on FeedImagePresenter load")
     }
     
     func test_didStartLoadingImageData_displayLoadingDataAndModelDetails() {
@@ -76,7 +76,7 @@ class FeedImagePresenterTests: XCTestCase {
         let loadingModel = loadingViewModel(model: feedImage)
         
         sut.didStartLoadingImageData(for: feedImage)
-        assert(model: loadingModel, relevantTo: view.message)
+        assert(model: loadingModel, equal: view.messages.first)
     }
     
     func test_didFinishLoadingImageData_displaysRetryAndModelDetails() {
@@ -85,7 +85,7 @@ class FeedImagePresenterTests: XCTestCase {
         let retryModel = retryViewModel(model: feedImage)
         
         sut.didFinishLoadingImageData(with: anyNSError(), for: feedImage)
-        assert(model: retryModel, relevantTo: view.message)
+        assert(model: retryModel, equal: view.messages.first)
     }
     
     func test_didFinishLoadingImageData_displaysImageDataAndModelDetails() {
@@ -96,7 +96,7 @@ class FeedImagePresenterTests: XCTestCase {
         let imageDataModel = imageDataModel(image: transformedData, model: feedImage)
         
         sut.didFinishLoadingImageData(with: anyData(), for: feedImage)
-        assert(model: imageDataModel, relevantTo: view.message)
+        assert(model: imageDataModel, equal: view.messages.first)
     }
     
     func test_didFinishLoadingImageData_displaysRetryAndModelDetailsOnImageTranformationFailure() {
@@ -106,7 +106,7 @@ class FeedImagePresenterTests: XCTestCase {
         let retryDataModel = retryViewModel(model: feedImage)
         
         sut.didFinishLoadingImageData(with: anyData(), for: feedImage)
-        assert(model: retryDataModel, relevantTo: view.message)
+        assert(model: retryDataModel, equal: view.messages.first)
     }
     
     
@@ -129,8 +129,8 @@ class FeedImagePresenterTests: XCTestCase {
         return (sut, view)
     }
     
-    private func assert(model: FeedImageViewData<AnyImage>, relevantTo displayMessage: ViewSpy.DisplayMessage?, file: StaticString = #file, line: UInt = #line) {
-        guard let expectedModel = displayMessage?.model else {
+    private func assert(model: FeedImageViewData<AnyImage>, equal expectedModel: FeedImageViewData<AnyImage>?, file: StaticString = #file, line: UInt = #line) {
+        guard let expectedModel = expectedModel else {
             XCTFail("Expected that display message contains model, received nil instead")
             return
         }
@@ -143,15 +143,10 @@ class FeedImagePresenterTests: XCTestCase {
     }
 
     private final class ViewSpy: FeedImageView {
-        
-        struct DisplayMessage {
-            var model: FeedImageViewData<AnyImage>
-        }
-        
-        var message: DisplayMessage?
+        private(set) var messages = [FeedImageViewData<AnyImage>]()
         
         func display(_ viewModel: FeedImageViewData<AnyImage>) {
-            message = DisplayMessage(model: viewModel)
+            messages.append(viewModel)
         }
     }
     
