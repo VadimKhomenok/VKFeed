@@ -8,23 +8,25 @@
 import XCTest
 import VKFeed
 
-struct FeedImageViewData {
+struct FeedImageViewData<Image> {
     var description: String?
     var location: String?
     var isLoading: Bool
     var isRetry: Bool
-    var image: UIImage?
+    var image: Image?
 }
 
 protocol FeedImageView {
-    func display(_ viewModel: FeedImageViewData)
+    associatedtype Image
+    
+    func display(_ viewModel: FeedImageViewData<Image>)
 }
 
-final class FeedImagePresenter {
-    var view: FeedImageView
-    var imageTransformer: (Data) -> UIImage?
+final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
+    var view: View
+    var imageTransformer: (Data) -> Image?
     
-    init(view: FeedImageView, imageTransformer: @escaping (Data) -> UIImage?) {
+    init(view: View, imageTransformer: @escaping (Data) -> Image?) {
         self.view = view
         self.imageTransformer = imageTransformer
     }
@@ -112,17 +114,19 @@ class FeedImagePresenterTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private typealias ImageTransformerClosure = (Data) -> UIImage?
+    private typealias ImageTransformerClosure = (Data) -> AnyImage?
     
     private static var succeedableImageTransformer: ImageTransformerClosure = {_ in
-        return UIImage()
+        return AnyImage()
     }
     
     private static var failableImageTransformer: ImageTransformerClosure = { _ in
         return nil
     }
     
-    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = succeedableImageTransformer, file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter, view: ViewSpy) {
+    private struct AnyImage: Equatable {}
+    
+    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = succeedableImageTransformer, file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter<ViewSpy, AnyImage>, view: ViewSpy) {
         let view = ViewSpy()
         let sut = FeedImagePresenter(view: view, imageTransformer: imageTransformer)
         
@@ -132,7 +136,7 @@ class FeedImagePresenterTests: XCTestCase {
         return (sut, view)
     }
     
-    private func assert(model: FeedImageViewData, relevantTo displayMessage: ViewSpy.DisplayMessage?, file: StaticString = #file, line: UInt = #line) {
+    private func assert(model: FeedImageViewData<AnyImage>, relevantTo displayMessage: ViewSpy.DisplayMessage?, file: StaticString = #file, line: UInt = #line) {
         guard let expectedModel = displayMessage?.model else {
             XCTFail("Expected that display message contains model, received nil instead")
             return
@@ -148,17 +152,17 @@ class FeedImagePresenterTests: XCTestCase {
     private final class ViewSpy: FeedImageView {
         
         struct DisplayMessage {
-            var model: FeedImageViewData
+            var model: FeedImageViewData<AnyImage>
         }
         
         var message: DisplayMessage?
         
-        func display(_ viewModel: FeedImageViewData) {
+        func display(_ viewModel: FeedImageViewData<AnyImage>) {
             message = DisplayMessage(model: viewModel)
         }
     }
     
-    private func loadingViewModel(model: FeedImage) -> FeedImageViewData {
+    private func loadingViewModel(model: FeedImage) -> FeedImageViewData<AnyImage> {
         return FeedImageViewData(
             description: model.description,
             location: model.location,
@@ -167,7 +171,7 @@ class FeedImagePresenterTests: XCTestCase {
             image: nil)
     }
     
-    private func retryViewModel(model: FeedImage) -> FeedImageViewData {
+    private func retryViewModel(model: FeedImage) -> FeedImageViewData<AnyImage> {
         return FeedImageViewData(
             description: model.description,
             location: model.location,
@@ -176,7 +180,7 @@ class FeedImagePresenterTests: XCTestCase {
             image: nil)
     }
     
-    private func imageDataModel(image: UIImage, model: FeedImage) -> FeedImageViewData {
+    private func imageDataModel(image: AnyImage, model: FeedImage) -> FeedImageViewData<AnyImage> {
         return FeedImageViewData(
             description: model.description,
             location: model.location,
