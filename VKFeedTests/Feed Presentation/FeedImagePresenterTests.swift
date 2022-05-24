@@ -13,6 +13,7 @@ struct FeedImageViewData: Equatable {
     var location: String?
     var isLoading: Bool
     var isRetry: Bool
+    var image: Data?
 }
 
 protocol FeedImageView {
@@ -32,6 +33,15 @@ final class FeedImagePresenter {
             location: model.location,
             isLoading: true,
             isRetry: false))
+    }
+    
+    func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+        view.display(FeedImageViewData(
+            description: model.description,
+            location: model.location,
+            isLoading: false,
+            isRetry: false,
+            image: data))
     }
     
     func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
@@ -68,6 +78,17 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: retryModel)])
     }
     
+    func test_didFinishLoadingImageData_displaysImageDataAndModelDetails() {
+        let (sut, view) = makeSUT()
+        let feedImage = makeUniqueImage()
+        let imageData = anyData()
+        let imageDataModel = imageDataModel(imageData: imageData, model: feedImage)
+        
+        sut.didFinishLoadingImageData(with: imageData, for: feedImage)
+        XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: imageDataModel)])
+    }
+    
+    
     // MARK: - Helpers
     
     private func makeSUT() -> (sut: FeedImagePresenter, view: ViewSpy) {
@@ -98,7 +119,8 @@ class FeedImagePresenterTests: XCTestCase {
             description: model.description,
             location: model.location,
             isLoading: true,
-            isRetry: false)
+            isRetry: false,
+            image: nil)
     }
     
     private func retryViewModel(model: FeedImage) -> FeedImageViewData {
@@ -106,6 +128,16 @@ class FeedImagePresenterTests: XCTestCase {
             description: model.description,
             location: model.location,
             isLoading: false,
-            isRetry: true)
+            isRetry: true,
+            image: nil)
+    }
+    
+    private func imageDataModel(imageData: Data, model: FeedImage) -> FeedImageViewData {
+        return FeedImageViewData(
+            description: model.description,
+            location: model.location,
+            isLoading: false,
+            isRetry: false,
+            image: imageData)
     }
 }
