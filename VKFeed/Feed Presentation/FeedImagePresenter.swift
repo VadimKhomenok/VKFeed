@@ -7,18 +7,10 @@
 
 import Foundation
 
-public struct FeedImageViewData<Image> {
-    public var description: String?
-    public var location: String?
-    public var isLoading: Bool
-    public var isRetry: Bool
-    public var image: Image?
-}
-
 public protocol FeedImageView {
     associatedtype Image
     
-    func display(_ viewModel: FeedImageViewData<Image>)
+    func display(_ viewModel: FeedImageViewModel<Image>)
 }
 
 public final class FeedImagePresenter<View: FeedImageView, Image> where View.Image == Image {
@@ -31,7 +23,7 @@ public final class FeedImagePresenter<View: FeedImageView, Image> where View.Ima
     }
     
     public func didStartLoadingImageData(for model: FeedImage) {
-        view.display(FeedImageViewData(
+        view.display(FeedImageViewModel(
             description: model.description,
             location: model.location,
             isLoading: true,
@@ -45,7 +37,7 @@ public final class FeedImagePresenter<View: FeedImageView, Image> where View.Ima
             return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
         }
         
-        view.display(FeedImageViewData(
+        view.display(FeedImageViewModel(
             description: model.description,
             location: model.location,
             isLoading: false,
@@ -54,7 +46,7 @@ public final class FeedImagePresenter<View: FeedImageView, Image> where View.Ima
     }
     
     public func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
-        view.display(FeedImageViewData(
+        view.display(FeedImageViewModel(
             description: model.description,
             location: model.location,
             isLoading: false,

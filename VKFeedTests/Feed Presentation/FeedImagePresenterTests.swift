@@ -97,9 +97,9 @@ class FeedImagePresenterTests: XCTestCase {
     }
 
     private final class ViewSpy: FeedImageView {
-        private(set) var messages = [FeedImageViewData<AnyImage>]()
+        private(set) var messages = [FeedImageViewModel<AnyImage>]()
         
-        func display(_ viewModel: FeedImageViewData<AnyImage>) {
+        func display(_ viewModel: FeedImageViewModel<AnyImage>) {
             messages.append(viewModel)
         }
     }
