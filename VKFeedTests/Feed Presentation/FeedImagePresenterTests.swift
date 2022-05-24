@@ -13,7 +13,7 @@ struct FeedImageViewData: Equatable {
     var location: String?
     var isLoading: Bool
     var isRetry: Bool
-    var image: Data?
+    var image: UIImage?
 }
 
 protocol FeedImageView {
@@ -22,9 +22,11 @@ protocol FeedImageView {
 
 final class FeedImagePresenter {
     var view: FeedImageView
+    var imageTransformer: (Data) -> UIImage?
     
-    init(view: FeedImageView) {
+    init(view: FeedImageView, imageTransformer: @escaping (Data) -> UIImage?) {
         self.view = view
+        self.imageTransformer = imageTransformer
     }
     
     func didStartLoadingImageData(for model: FeedImage) {
@@ -41,7 +43,7 @@ final class FeedImagePresenter {
             location: model.location,
             isLoading: false,
             isRetry: false,
-            image: data))
+            image: imageTransformer(data)))
     }
     
     func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
@@ -82,7 +84,8 @@ class FeedImagePresenterTests: XCTestCase {
         let (sut, view) = makeSUT()
         let feedImage = makeUniqueImage()
         let imageData = anyData()
-        let imageDataModel = imageDataModel(imageData: imageData, model: feedImage)
+        let image = UIImage()
+        let imageDataModel = imageDataModel(image: image, model: feedImage)
         
         sut.didFinishLoadingImageData(with: imageData, for: feedImage)
         XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: imageDataModel)])
@@ -91,9 +94,19 @@ class FeedImagePresenterTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT() -> (sut: FeedImagePresenter, view: ViewSpy) {
+    private typealias ImageTransformerClosure = (Data) -> UIImage?
+    
+    private static var imageTransformerSuccess: ImageTransformerClosure = {_ in
+        return UIImage()
+    }
+    
+    private static var imageTransformerFailing: ImageTransformerClosure = { _ in
+        return nil
+    }
+    
+    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = imageTransformerSuccess) -> (sut: FeedImagePresenter, view: ViewSpy) {
         let view = ViewSpy()
-        let sut = FeedImagePresenter(view: view)
+        let sut = FeedImagePresenter(view: view, imageTransformer: imageTransformer)
         
         trackForMemoryLeaks(view)
         trackForMemoryLeaks(sut)
@@ -132,12 +145,12 @@ class FeedImagePresenterTests: XCTestCase {
             image: nil)
     }
     
-    private func imageDataModel(imageData: Data, model: FeedImage) -> FeedImageViewData {
+    private func imageDataModel(image: UIImage, model: FeedImage) -> FeedImageViewData {
         return FeedImageViewData(
             description: model.description,
             location: model.location,
             isLoading: false,
             isRetry: false,
-            image: imageData)
+            image: image)
     }
 }
