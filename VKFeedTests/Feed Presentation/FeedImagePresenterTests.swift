@@ -89,44 +89,37 @@ class FeedImagePresenterTests: XCTestCase {
     }
     
     func test_didFinishLoadingImageData_displaysImageDataAndModelDetails() {
-        let (sut, view) = makeSUT()
         let feedImage = makeUniqueImage()
-        let imageData = anyData()
-        let image = Self.succeedableImageTransformer(imageData)!
+        let transformedData = AnyImage()
+        let (sut, view) = makeSUT(imageTransformer: { _ in transformedData })
         
-        let imageDataModel = imageDataModel(image: image, model: feedImage)
+        let imageDataModel = imageDataModel(image: transformedData, model: feedImage)
         
-        sut.didFinishLoadingImageData(with: imageData, for: feedImage)
+        sut.didFinishLoadingImageData(with: anyData(), for: feedImage)
         assert(model: imageDataModel, relevantTo: view.message)
     }
     
     func test_didFinishLoadingImageData_displaysRetryAndModelDetailsOnImageTranformationFailure() {
-        let (sut, view) = makeSUT(imageTransformer: Self.failableImageTransformer)
+        let (sut, view) = makeSUT(imageTransformer: fail)
         let feedImage = makeUniqueImage()
-        let imageData = anyData()
         
         let retryDataModel = retryViewModel(model: feedImage)
         
-        sut.didFinishLoadingImageData(with: imageData, for: feedImage)
+        sut.didFinishLoadingImageData(with: anyData(), for: feedImage)
         assert(model: retryDataModel, relevantTo: view.message)
     }
     
     
     // MARK: - Helpers
     
+    private struct AnyImage: Equatable {}
     private typealias ImageTransformerClosure = (Data) -> AnyImage?
     
-    private static var succeedableImageTransformer: ImageTransformerClosure = {_ in
-        return AnyImage()
+    private var fail: ImageTransformerClosure {
+        return { _ in nil }
     }
-    
-    private static var failableImageTransformer: ImageTransformerClosure = { _ in
-        return nil
-    }
-    
-    private struct AnyImage: Equatable {}
-    
-    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = succeedableImageTransformer, file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter<ViewSpy, AnyImage>, view: ViewSpy) {
+
+    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = { _ in nil }, file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter<ViewSpy, AnyImage>, view: ViewSpy) {
         let view = ViewSpy()
         let sut = FeedImagePresenter(view: view, imageTransformer: imageTransformer)
         
