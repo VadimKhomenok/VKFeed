@@ -8,7 +8,7 @@
 import XCTest
 import VKFeed
 
-struct FeedImageViewData: Equatable {
+struct FeedImageViewData {
     var description: String?
     var location: String?
     var isLoading: Bool
@@ -65,7 +65,7 @@ class FeedImagePresenterTests: XCTestCase {
     func test_imagePresenterLoad_doesNotSendMessagesToView() {
         let (_, view) = makeSUT()
         
-        XCTAssertTrue(view.messages.isEmpty, "Expected to not send messages to view on FeedImagePresenter load")
+        XCTAssertNil(view.message, "Expected to not send messages to view on FeedImagePresenter load")
     }
     
     func test_didStartLoadingImageData_displayLoadingDataAndModelDetails() {
@@ -74,7 +74,7 @@ class FeedImagePresenterTests: XCTestCase {
         let loadingModel = loadingViewModel(model: feedImage)
         
         sut.didStartLoadingImageData(for: feedImage)
-        XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: loadingModel)])
+        assert(model: loadingModel, relevantTo: view.message)
     }
     
     func test_didFinishLoadingImageData_displaysRetryAndModelDetails() {
@@ -83,7 +83,7 @@ class FeedImagePresenterTests: XCTestCase {
         let retryModel = retryViewModel(model: feedImage)
         
         sut.didFinishLoadingImageData(with: anyNSError(), for: feedImage)
-        XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: retryModel)])
+        assert(model: retryModel, relevantTo: view.message)
     }
     
     func test_didFinishLoadingImageData_displaysImageDataAndModelDetails() {
@@ -95,7 +95,7 @@ class FeedImagePresenterTests: XCTestCase {
         let imageDataModel = imageDataModel(image: image, model: feedImage)
         
         sut.didFinishLoadingImageData(with: imageData, for: feedImage)
-        XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: imageDataModel)])
+        assert(model: imageDataModel, relevantTo: view.message)
     }
     
     func test_didFinishLoadingImageData_displaysRetryAndModelDetailsOnImageTranformationFailure() {
@@ -106,7 +106,7 @@ class FeedImagePresenterTests: XCTestCase {
         let retryDataModel = retryViewModel(model: feedImage)
         
         sut.didFinishLoadingImageData(with: imageData, for: feedImage)
-        XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: retryDataModel)])
+        assert(model: retryDataModel, relevantTo: view.message)
     }
     
     
@@ -122,26 +122,39 @@ class FeedImagePresenterTests: XCTestCase {
         return nil
     }
     
-    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = succeedableImageTransformer) -> (sut: FeedImagePresenter, view: ViewSpy) {
+    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = succeedableImageTransformer, file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter, view: ViewSpy) {
         let view = ViewSpy()
         let sut = FeedImagePresenter(view: view, imageTransformer: imageTransformer)
         
-        trackForMemoryLeaks(view)
-        trackForMemoryLeaks(sut)
+        trackForMemoryLeaks(view, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut, view)
+    }
+    
+    private func assert(model: FeedImageViewData, relevantTo displayMessage: ViewSpy.DisplayMessage?, file: StaticString = #file, line: UInt = #line) {
+        guard let expectedModel = displayMessage?.model else {
+            XCTFail("Expected that display message contains model, received nil instead")
+            return
+        }
+        
+        XCTAssertEqual(model.description, expectedModel.description, file: file, line: line)
+        XCTAssertEqual(model.location, expectedModel.location, file: file, line: line)
+        XCTAssertEqual(model.isLoading, expectedModel.isLoading, file: file, line: line)
+        XCTAssertEqual(model.isRetry, expectedModel.isRetry, file: file, line: line)
+        XCTAssertEqual(model.image, expectedModel.image, file: file, line: line)
     }
 
     private final class ViewSpy: FeedImageView {
         
-        struct DisplayMessage: Equatable {
+        struct DisplayMessage {
             var model: FeedImageViewData
         }
         
-        var messages = [DisplayMessage]()
+        var message: DisplayMessage?
         
         func display(_ viewModel: FeedImageViewData) {
-            messages.append(DisplayMessage(model: viewModel))
+            message = DisplayMessage(model: viewModel)
         }
     }
     
