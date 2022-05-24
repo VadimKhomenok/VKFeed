@@ -37,13 +37,19 @@ final class FeedImagePresenter {
             isRetry: false))
     }
     
+    private struct InvalidImageDataError: Error {}
+    
     func didFinishLoadingImageData(with data: Data, for model: FeedImage) {
+        guard let image = imageTransformer(data) else {
+            return didFinishLoadingImageData(with: InvalidImageDataError(), for: model)
+        }
+        
         view.display(FeedImageViewData(
             description: model.description,
             location: model.location,
             isLoading: false,
             isRetry: false,
-            image: imageTransformer(data)))
+            image: image))
     }
     
     func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
@@ -84,7 +90,7 @@ class FeedImagePresenterTests: XCTestCase {
         let (sut, view) = makeSUT()
         let feedImage = makeUniqueImage()
         let imageData = anyData()
-        let image = Self.imageTransformerSuccess(imageData)!
+        let image = Self.succeedableImageTransformer(imageData)!
         
         let imageDataModel = imageDataModel(image: image, model: feedImage)
         
@@ -92,20 +98,31 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: imageDataModel)])
     }
     
+    func test_didFinishLoadingImageData_displaysRetryAndModelDetailsOnImageTranformationFailure() {
+        let (sut, view) = makeSUT(imageTransformer: Self.failableImageTransformer)
+        let feedImage = makeUniqueImage()
+        let imageData = anyData()
+        
+        let retryDataModel = retryViewModel(model: feedImage)
+        
+        sut.didFinishLoadingImageData(with: imageData, for: feedImage)
+        XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: retryDataModel)])
+    }
+    
     
     // MARK: - Helpers
     
     private typealias ImageTransformerClosure = (Data) -> UIImage?
     
-    private static var imageTransformerSuccess: ImageTransformerClosure = {_ in
+    private static var succeedableImageTransformer: ImageTransformerClosure = {_ in
         return UIImage()
     }
     
-    private static var imageTransformerFailing: ImageTransformerClosure = { _ in
+    private static var failableImageTransformer: ImageTransformerClosure = { _ in
         return nil
     }
     
-    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = imageTransformerSuccess) -> (sut: FeedImagePresenter, view: ViewSpy) {
+    private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = succeedableImageTransformer) -> (sut: FeedImagePresenter, view: ViewSpy) {
         let view = ViewSpy()
         let sut = FeedImagePresenter(view: view, imageTransformer: imageTransformer)
         
