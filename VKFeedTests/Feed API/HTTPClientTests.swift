@@ -88,10 +88,6 @@ class URLSessionHTTPClientTests: XCTestCase {
         return sut
     }
     
-    func anyData() -> Data {
-        return Data("any data".utf8)
-    }
-    
     func anyNonHTTPURLResponse() -> URLResponse {
         return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
     }
