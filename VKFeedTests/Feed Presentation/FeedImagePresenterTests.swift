@@ -6,9 +6,13 @@
 //
 
 import XCTest
+import VKFeed
 
 struct FeedImageViewData: Equatable {
+    var description: String?
+    var location: String?
     var isLoading: Bool
+    var isRetry: Bool
 }
 
 protocol FeedImageView {
@@ -22,8 +26,12 @@ final class FeedImagePresenter {
         self.view = view
     }
     
-    func didStartLoadingImageData() {
-        view.display(FeedImageViewData(isLoading: true))
+    func didStartLoadingImageData(for model: FeedImage) {
+        view.display(FeedImageViewData(
+            description: model.description,
+            location: model.location,
+            isLoading: true,
+            isRetry: false))
     }
 }
 
@@ -34,11 +42,12 @@ class FeedImagePresenterTests: XCTestCase {
         XCTAssertTrue(view.messages.isEmpty, "Expected to not send messages to view on FeedImagePresenter load")
     }
     
-    func test_didStartLoadingImageData_displayLoadingData() {
+    func test_didStartLoadingImageData_displayLoadingDataAndModelDetails() {
         let (sut, view) = makeSUT()
+        let feedImage = makeUniqueImage()
+        let loadingModel = startLoadingViewModel(model: feedImage)
         
-        let loadingModel = FeedImageViewData(isLoading: true)
-        sut.didStartLoadingImageData()
+        sut.didStartLoadingImageData(for: feedImage)
         XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: loadingModel)])
     }
     
@@ -65,5 +74,13 @@ class FeedImagePresenterTests: XCTestCase {
         func display(_ viewModel: FeedImageViewData) {
             messages.append(DisplayMessage(model: viewModel))
         }
+    }
+    
+    private func startLoadingViewModel(model: FeedImage) -> FeedImageViewData {
+        return FeedImageViewData(
+            description: model.description,
+            location: model.location,
+            isLoading: true,
+            isRetry: false)
     }
 }
