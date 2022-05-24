@@ -7,7 +7,7 @@
 
 import XCTest
 
-class FeedImagePresenter {
+final class FeedImagePresenter {
     var view: Any
     
     init(view: Any) {
@@ -17,13 +17,24 @@ class FeedImagePresenter {
 
 class FeedImagePresenterTests: XCTestCase {
     func test_imagePresenterLoad_doesNotSendMessagesToView() {
-        let view = ViewSpy()
-        let _ = FeedImagePresenter(view: view)
+        let (_, view) = makeSUT()
         
         XCTAssertTrue(view.messages.isEmpty, "Expected to not send messages to view on FeedImagePresenter load")
     }
     
-    struct ViewSpy {
+    // MARK: - Helpers
+    
+    private func makeSUT() -> (sut: FeedImagePresenter, view: ViewSpy) {
+        let view = ViewSpy()
+        let sut = FeedImagePresenter(view: view)
+        
+        trackForMemoryLeaks(view)
+        trackForMemoryLeaks(sut)
+        
+        return (sut, view)
+    }
+    
+    private final class ViewSpy {
         var messages = [Any]()
     }
 }
