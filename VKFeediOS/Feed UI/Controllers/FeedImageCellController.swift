@@ -28,7 +28,7 @@ final class FeedImageCellController: FeedImageView {
         return cell!
     }
 
-    func display(_ viewModel: FeedImageViewData<UIImage>) {
+    func display(_ viewModel: FeedImageViewModel<UIImage>) {
         cell?.descriptionLabel.text = viewModel.description
         cell?.locationLabel.text = viewModel.location
         cell?.locationContainer.isHidden = !viewModel.hasLocation
