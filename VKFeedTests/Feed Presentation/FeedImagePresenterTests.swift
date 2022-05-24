@@ -84,7 +84,8 @@ class FeedImagePresenterTests: XCTestCase {
         let (sut, view) = makeSUT()
         let feedImage = makeUniqueImage()
         let imageData = anyData()
-        let image = UIImage()
+        let image = Self.imageTransformerSuccess(imageData)!
+        
         let imageDataModel = imageDataModel(image: image, model: feedImage)
         
         sut.didFinishLoadingImageData(with: imageData, for: feedImage)
