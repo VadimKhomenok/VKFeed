@@ -33,6 +33,14 @@ final class FeedImagePresenter {
             isLoading: true,
             isRetry: false))
     }
+    
+    func didFinishLoadingImageData(with error: Error, for model: FeedImage) {
+        view.display(FeedImageViewData(
+            description: model.description,
+            location: model.location,
+            isLoading: false,
+            isRetry: true))
+    }
 }
 
 class FeedImagePresenterTests: XCTestCase {
@@ -45,10 +53,19 @@ class FeedImagePresenterTests: XCTestCase {
     func test_didStartLoadingImageData_displayLoadingDataAndModelDetails() {
         let (sut, view) = makeSUT()
         let feedImage = makeUniqueImage()
-        let loadingModel = startLoadingViewModel(model: feedImage)
+        let loadingModel = loadingViewModel(model: feedImage)
         
         sut.didStartLoadingImageData(for: feedImage)
         XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: loadingModel)])
+    }
+    
+    func test_didFinishLoadingImageData_displaysRetryAndModelDetails() {
+        let (sut, view) = makeSUT()
+        let feedImage = makeUniqueImage()
+        let retryModel = retryViewModel(model: feedImage)
+        
+        sut.didFinishLoadingImageData(with: anyNSError(), for: feedImage)
+        XCTAssertEqual(view.messages, [ViewSpy.DisplayMessage(model: retryModel)])
     }
     
     // MARK: - Helpers
@@ -76,11 +93,19 @@ class FeedImagePresenterTests: XCTestCase {
         }
     }
     
-    private func startLoadingViewModel(model: FeedImage) -> FeedImageViewData {
+    private func loadingViewModel(model: FeedImage) -> FeedImageViewData {
         return FeedImageViewData(
             description: model.description,
             location: model.location,
             isLoading: true,
             isRetry: false)
+    }
+    
+    private func retryViewModel(model: FeedImage) -> FeedImageViewData {
+        return FeedImageViewData(
+            description: model.description,
+            location: model.location,
+            isLoading: false,
+            isRetry: true)
     }
 }
