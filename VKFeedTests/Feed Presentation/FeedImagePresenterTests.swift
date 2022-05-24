@@ -73,40 +73,62 @@ class FeedImagePresenterTests: XCTestCase {
     func test_didStartLoadingImageData_displayLoadingDataAndModelDetails() {
         let (sut, view) = makeSUT()
         let feedImage = makeUniqueImage()
-        let loadingModel = loadingViewModel(model: feedImage)
         
         sut.didStartLoadingImageData(for: feedImage)
-        assert(model: loadingModel, equal: view.messages.first)
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.description, feedImage.description)
+        XCTAssertEqual(message?.location, feedImage.location)
+        XCTAssertEqual(message?.isLoading, true)
+        XCTAssertEqual(message?.isRetry, false)
+        XCTAssertNil(message?.image)
     }
     
-    func test_didFinishLoadingImageData_displaysRetryAndModelDetails() {
+    func test_didFinishLoadingImageDataWithError_displaysRetryAndModelDetails() {
         let (sut, view) = makeSUT()
         let feedImage = makeUniqueImage()
-        let retryModel = retryViewModel(model: feedImage)
         
         sut.didFinishLoadingImageData(with: anyNSError(), for: feedImage)
-        assert(model: retryModel, equal: view.messages.first)
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.description, feedImage.description)
+        XCTAssertEqual(message?.location, feedImage.location)
+        XCTAssertEqual(message?.isLoading, false)
+        XCTAssertEqual(message?.isRetry, true)
+        XCTAssertNil(message?.image)
     }
     
-    func test_didFinishLoadingImageData_displaysImageDataAndModelDetails() {
+    func test_didFinishLoadingImageDataWithSuccess_displaysImageDataAndModelDetails() {
         let feedImage = makeUniqueImage()
         let transformedData = AnyImage()
         let (sut, view) = makeSUT(imageTransformer: { _ in transformedData })
         
-        let imageDataModel = imageDataModel(image: transformedData, model: feedImage)
-        
         sut.didFinishLoadingImageData(with: anyData(), for: feedImage)
-        assert(model: imageDataModel, equal: view.messages.first)
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.description, feedImage.description)
+        XCTAssertEqual(message?.location, feedImage.location)
+        XCTAssertEqual(message?.isLoading, false)
+        XCTAssertEqual(message?.isRetry, false)
+        XCTAssertEqual(message?.image, transformedData)
     }
     
     func test_didFinishLoadingImageData_displaysRetryAndModelDetailsOnImageTranformationFailure() {
         let (sut, view) = makeSUT(imageTransformer: fail)
         let feedImage = makeUniqueImage()
         
-        let retryDataModel = retryViewModel(model: feedImage)
-        
         sut.didFinishLoadingImageData(with: anyData(), for: feedImage)
-        assert(model: retryDataModel, equal: view.messages.first)
+        
+        let message = view.messages.first
+        XCTAssertEqual(view.messages.count, 1)
+        XCTAssertEqual(message?.description, feedImage.description)
+        XCTAssertEqual(message?.location, feedImage.location)
+        XCTAssertEqual(message?.isLoading, false)
+        XCTAssertEqual(message?.isRetry, true)
+        XCTAssertNil(message?.image)
     }
     
     
@@ -128,19 +150,6 @@ class FeedImagePresenterTests: XCTestCase {
         
         return (sut, view)
     }
-    
-    private func assert(model: FeedImageViewData<AnyImage>, equal expectedModel: FeedImageViewData<AnyImage>?, file: StaticString = #file, line: UInt = #line) {
-        guard let expectedModel = expectedModel else {
-            XCTFail("Expected that display message contains model, received nil instead")
-            return
-        }
-        
-        XCTAssertEqual(model.description, expectedModel.description, file: file, line: line)
-        XCTAssertEqual(model.location, expectedModel.location, file: file, line: line)
-        XCTAssertEqual(model.isLoading, expectedModel.isLoading, file: file, line: line)
-        XCTAssertEqual(model.isRetry, expectedModel.isRetry, file: file, line: line)
-        XCTAssertEqual(model.image, expectedModel.image, file: file, line: line)
-    }
 
     private final class ViewSpy: FeedImageView {
         private(set) var messages = [FeedImageViewData<AnyImage>]()
@@ -148,32 +157,5 @@ class FeedImagePresenterTests: XCTestCase {
         func display(_ viewModel: FeedImageViewData<AnyImage>) {
             messages.append(viewModel)
         }
-    }
-    
-    private func loadingViewModel(model: FeedImage) -> FeedImageViewData<AnyImage> {
-        return FeedImageViewData(
-            description: model.description,
-            location: model.location,
-            isLoading: true,
-            isRetry: false,
-            image: nil)
-    }
-    
-    private func retryViewModel(model: FeedImage) -> FeedImageViewData<AnyImage> {
-        return FeedImageViewData(
-            description: model.description,
-            location: model.location,
-            isLoading: false,
-            isRetry: true,
-            image: nil)
-    }
-    
-    private func imageDataModel(image: AnyImage, model: FeedImage) -> FeedImageViewData<AnyImage> {
-        return FeedImageViewData(
-            description: model.description,
-            location: model.location,
-            isLoading: false,
-            isRetry: false,
-            image: image)
     }
 }
