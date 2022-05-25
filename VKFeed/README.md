@@ -1,114 +1,227 @@
-#  Story: Customer requests to feed
+# Essential Feed App – Image Feed Feature
 
-'''
-As a user I want my feed to load automatically at application startup
-'''
+[![Build Status](https://travis-ci.com/essentialdevelopercom/essential-feed-case-study.svg?branch=master)](https://travis-ci.com/essentialdevelopercom/essential-feed-case-study)
 
-#### Scenarios:
+## BDD Specs
 
- Customer has connectivity
- When customer requests feed images
- Load feed images from remote and display on screen
- And replace cache with new feed (or save to cache if no cache yet available)
- 
- Customer doesn't have connectivity
- And cache is available
- When customer requests feed images
- Show cached feed
- 
- Customer doesn't have connectivity
- And cache is empty
- When customer requests feed images
- Show an error message
+### Story: Customer requests to see their image feed
 
+### Narrative #1
 
-## Use Cases:
+```
+As an online customer
+I want the app to automatically load my latest image feed
+So I can always enjoy the newest images of my friends
+```
 
-### Load Feed Images from remote use case:
+#### Scenarios (Acceptance criteria)
+
+```
+Given the customer has connectivity
+ When the customer requests to see their feed
+ Then the app should display the latest feed from remote
+  And replace the cache with the new feed
+```
+
+### Narrative #2
+
+```
+As an offline customer
+I want the app to show the latest saved version of my image feed
+So I can always enjoy images of my friends
+```
+
+#### Scenarios (Acceptance criteria)
+
+```
+Given the customer doesn't have connectivity
+  And there’s a cached version of the feed
+  And the cache is less than seven days old
+ When the customer requests to see the feed
+ Then the app should display the latest feed saved
+
+Given the customer doesn't have connectivity
+  And there’s a cached version of the feed
+  And the cache is seven days old or more
+ When the customer requests to see the feed
+ Then the app should display an error message
+
+Given the customer doesn't have connectivity
+  And the cache is empty
+ When the customer requests to see the feed
+ Then the app should display an error message
+```
+
+## Use Cases
+
+### Load Feed From Remote Use Case
 
 #### Data:
 - URL
 
 #### Primary course (happy path):
-1. Execute 'Load Feed Images' with above data (URL)
-2. System downloads data with URL.
+1. Execute "Load Image Feed" command with above data.
+2. System downloads data from the URL.
 3. System validates downloaded data.
-4. System decodes received data to FeedImage objects.
-5. System delivers objects to screen.
+4. System creates image feed from valid data.
+5. System delivers image feed.
 
-#### Invalid data - error course (sad path):
-1. System delivers error.
+#### Invalid data – error course (sad path):
+1. System delivers invalid data error.
 
-#### No connectivity - error course (sad path):
-1. System delivers error.
+#### No connectivity – error course (sad path):
+1. System delivers connectivity error.
 
-#### Request failed - error course (sad path):
-1. System delivers error.
+---
 
-
-### Load Feed Fallback (Cache) use case:
+### Load Feed Image Data From Remote Use Case
 
 #### Data:
-- Max. cache age - 7 days old.
+- URL
 
 #### Primary course (happy path):
-1. Execute 'Load Feed Images' with provided data.
-2. System retrieves data from cache.
-3. System validates for cache age.
-4. System creates Feed Images from cache.
-5. System delivers objects to screen.
+1. Execute "Load Image Data" command with above data.
+2. System downloads data from the URL.
+3. System validates downloaded data.
+4. System delivers image data.
 
-#### No cache - error course (sad path):
+#### Cancel course:
+1. System does not deliver image data nor error.
+
+#### Invalid data – error course (sad path):
+1. System delivers invalid data error.
+
+#### No connectivity – error course (sad path):
+1. System delivers connectivity error.
+
+---
+
+### Load Feed From Cache Use Case
+
+#### Primary course:
+1. Execute "Load Image Feed" command with above data.
+2. System retrieves feed data from cache.
+3. System validates cache is less than seven days old.
+4. System creates image feed from cached data.
+5. System delivers image feed.
+
+#### Retrieval error course (sad path):
 1. System delivers error.
 
-#### Max. age expired - error course (sad path):
-1. System delivers error.
+#### Expired cache course (sad path): 
+1. System delivers no feed images.
 
-#### Load cache failed - error course (sad path):
-1. System delivers error.
+#### Empty cache course (sad path): 
+1. System delivers no feed images.
 
+---
 
-### Save Feed Images (Cache) use case:
+### Load Feed Image Data From Cache Use Case
 
 #### Data:
-- Feed Images
+- URL
 
 #### Primary course (happy path):
-1. Execute 'Save Feed Images' with provided data.
-2. System encodes feed images.
-3. System timestampts the new cache.
-4. System renames old cache to name_tmp.
-5. System saves new cache.
-6. System deletes old cache.
-7. System delivers success message.
+1. Execute "Load Image Data" command with above data.
+2. System retrieves data from the cache.
+3. System delivers cached image data.
 
-#### Encoding failed - error course (sad path):
+#### Cancel course:
+1. System does not deliver image data nor error.
+
+#### Retrieval error course (sad path):
 1. System delivers error.
 
-#### Rename failed - error course (sad path):
-1. System delivers error.
+#### Empty cache course (sad path):
+1. System delivers no image data.
 
-#### Save failed - error course (sad path):
-1. System delivers error.
+---
 
-#### Delete failed - error course (sad path):
-1. System delivers error.
+### Validate Feed Cache Use Case
 
+#### Primary course:
+1. Execute "Validate Cache" command with above data.
+2. System retrieves feed data from cache.
+3. System validates cache is less than seven days old.
 
-### Validate Feed (Cache) Use Case:
+#### Retrieval error course (sad path):
+1. System deletes cache.
 
-### Data:
-- Max. cache age - 7 days
+#### Expired cache course (sad path): 
+1. System deletes cache.
+
+---
+
+### Cache Feed Use Case
+
+#### Data:
+- Image Feed
 
 #### Primary course (happy path):
-1. Execute 'Validate Feed Images Cache' with provided data.
-2. System retrieves data from cache.
-3. System validates for cache age.
+1. Execute "Save Image Feed" command with above data.
+2. System deletes old cache data.
+3. System encodes image feed.
+4. System timestamps the new cache.
+5. System saves new cache data.
+6. System delivers success message.
 
-#### Retrieve error - error course (sad path):
-1. System deletes cache.
-2. System delivers error.
+#### Deleting error course (sad path):
+1. System delivers error.
 
-#### Max. age expired - error course (sad path):
-1. System deletes cache.
-2. System delivers error.
+#### Saving error course (sad path):
+1. System delivers error.
+
+---
+
+## Flowchart
+
+![Feed Loading Feature](feed_flowchart.png)
+
+## Architecture
+
+![Feed Loading Feature](feed_architecture.png)
+
+## Model Specs
+
+### Feed Image
+
+| Property      | Type                |
+|---------------|---------------------|
+| `id`          | `UUID`              |
+| `description` | `String` (optional) |
+| `location`    | `String` (optional) |
+| `url`            | `URL`               |
+
+### Payload contract
+
+```
+GET *url* (TBD)
+
+200 RESPONSE
+
+{
+    "items": [
+        {
+            "id": "a UUID",
+            "description": "a description",
+            "location": "a location",
+            "image": "https://a-image.url",
+        },
+        {
+            "id": "another UUID",
+            "description": "another description",
+            "image": "https://another-image.url"
+        },
+        {
+            "id": "even another UUID",
+            "location": "even another location",
+            "image": "https://even-another-image.url"
+        },
+        {
+            "id": "yet another UUID",
+            "image": "https://yet-another-image.url"
+        }
+        ...
+    ]
+}
+```
