@@ -8,15 +8,6 @@
 import VKFeed
 import XCTest
 
-//public protocol FeedImageDataLoaderTask {
-//    func cancel()
-//}
-//
-//public protocol FeedImageDataLoader {
-//    typealias Result = Swift.Result<Data, Error>
-//    func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> FeedImageDataLoaderTask
-//}
-
 class RemoteFeedImageDataLoader {
     private var client: HTTPClient
     
@@ -24,9 +15,15 @@ class RemoteFeedImageDataLoader {
         self.client = client
     }
     
-    func loadImageData(from url: URL, completion: @escaping (Error?) -> Void = { _ in }) {
-        client.get(from: url, completion: { _ in
-            completion(anyNSError())
+    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) {
+        client.get(from: url, completion: { result in
+            switch result {
+            case let .failure(error):
+                completion(.failure(error))
+            
+            default:
+                break
+            }
         })
     }
 }
@@ -36,33 +33,27 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
     func test_init_doesNotRequestData() {
         let (_, client) = makeSUT()
         
-        XCTAssertTrue(client.messages.isEmpty, "Expected not to send any requests on initialization")
+        XCTAssertTrue(client.requestedURLs.isEmpty, "Expected not to send any requests on initialization")
     }
     
     func test_loadImageData_requestsImageDataFromURL() {
         let (sut, client) = makeSUT()
         let url = anyURL()
         
-        sut.loadImageData(from: url)
+        sut.loadImageData(from: url) { _ in }
         XCTAssertEqual(client.requestedURLs, [url], "Expected to request a URL when loadImageData called")
         
-        sut.loadImageData(from: url)
+        sut.loadImageData(from: url) { _ in }
         XCTAssertEqual(client.requestedURLs, [url, url], "Expected to request twice when loadImageData called twice")
     }
     
     func test_loadImageData_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        let url = anyURL()
+        let error = anyNSError()
         
-        let exp = expectation(description: "Wait for load to complete")
-        sut.loadImageData(from: url) { error in
-            XCTAssertNotNil(error)
-            exp.fulfill()
+        expect(sut: sut, toCompleteWith: .failure(error)) {
+            client.complete(with: error)
         }
-        
-        client.complete(with: anyNSError())
-        
-        wait(for: [exp], timeout: 1)
     }
 
     
@@ -74,5 +65,45 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
         trackForMemoryLeaks(httpClient, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, httpClient)
+    }
+    
+    private func expect(sut: RemoteFeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, onAction action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        let url = anyURL()
+        let exp = expectation(description: "Wait for load to complete")
+        
+        sut.loadImageData(from: url) { result in
+            switch (result, expectedResult) {
+            case let (.success(data), .success(expectedData)):
+                XCTAssertEqual(data, expectedData, file: file, line: line)
+                
+            case let (.failure(error as NSError), .failure(expectedError as NSError)):
+                XCTAssertEqual(error, expectedError, file: file, line: line)
+                
+            default:
+                XCTFail("Expected result \(expectedResult) got \(result) instead", file: file, line: line)
+            }
+         
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1)
+    }
+    
+    private class HTTPClientSpy: HTTPClient {
+        private var messages = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
+
+        var requestedURLs: [URL] {
+            return messages.map { $0.url }
+        }
+
+        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
+            messages.append((url, completion))
+        }
+
+        func complete(with error: Error, at index: Int = 0) {
+            messages[index].completion(.failure(error))
+        }
     }
 }
