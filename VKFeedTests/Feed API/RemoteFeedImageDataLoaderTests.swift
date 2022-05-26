@@ -86,7 +86,7 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
         }
     }
     
-    func test_loadImageData_deliversImageOn200Success() {
+    func test_loadImageData_deliversReceivedNonEmptyDataOn200Success() {
         let (sut, client) = makeSUT()
         let anyData = anyData()
         
