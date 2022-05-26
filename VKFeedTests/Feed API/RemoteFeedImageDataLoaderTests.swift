@@ -77,11 +77,8 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         let emptyData = Data()
         
-        let codes = [199, 201, 300, 400, 500]
-        codes.enumerated().forEach { index, code in
-            expect(sut: sut, toCompleteWith: failure(.invalidData)) {
-                client.complete(withStatusCode: code, data: emptyData, at: index)
-            }
+        expect(sut: sut, toCompleteWith: failure(.invalidData)) {
+            client.complete(withStatusCode: 200, data: emptyData)
         }
     }
 
