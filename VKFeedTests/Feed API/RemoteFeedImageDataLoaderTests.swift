@@ -20,7 +20,9 @@ class RemoteFeedImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) {
-        client.get(from: url, completion: { result in
+        client.get(from: url, completion: { [weak self] result in
+            guard self != nil else { return }
+            
             switch result {
             case let .success((data, response)):
                 if response.statusCode == 200 && !data.isEmpty {
@@ -95,6 +97,18 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
         }
     }
 
+    func test_loadImageData_doesNotDeliverAfterDeallocation() {
+        var (sut, client): (RemoteFeedImageDataLoader?, HTTPClientSpy) = makeSUT()
+        let anyData = anyData()
+        
+        sut!.loadImageData(from: anyURL()) { _ in
+            XCTFail("Expected not to complete after deallocation")
+        }
+        
+        sut = nil
+        client.complete(withStatusCode: 200, data: anyData)
+    }
+    
     
     // MARK: - Helpers
     
