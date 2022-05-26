@@ -79,6 +79,24 @@ class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertEqual(receivedValues?.response.statusCode, httpUrlResponse.statusCode)
     }
     
+    func test_cancelGetFromURLTask_cancelsURLRequest() {
+        let data = Data()
+        let response = normalHTTPURLResponse()
+        
+        URLProtocolStub.stub(data: data, response: response, error: nil)
+        
+        let sut = makeSUT()
+    
+        var capturedResults = [HTTPClient.Result]()
+        let task = sut.get(from: anyURL()) { result in
+            capturedResults.append(result)
+        }
+        
+        task.cancel()
+        
+        XCTAssertTrue(capturedResults.isEmpty, "Expected no results after task was cancelled")
+    }
+    
 
 // MARK: - Helpers
     
