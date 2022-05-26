@@ -80,21 +80,21 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_cancelGetFromURLTask_cancelsURLRequest() {
-        let data = Data()
-        let response = normalHTTPURLResponse()
-        
-        URLProtocolStub.stub(data: data, response: response, error: nil)
-        
-        let sut = makeSUT()
-    
-        var capturedResults = [HTTPClient.Result]()
-        let task = sut.get(from: anyURL()) { result in
-            capturedResults.append(result)
+        let exp = expectation(description: "Wait for sut to complete get request")
+        let task = makeSUT().get(from: anyURL()) { result in
+            switch result {
+            case let .failure(error as NSError) where error.code == URLError.cancelled.rawValue:
+                break
+                
+            default:
+                XCTFail("Expected cancelled result, got \(result) instead")
+            }
+            
+            exp.fulfill()
         }
         
         task.cancel()
-        
-        XCTAssertTrue(capturedResults.isEmpty, "Expected no results after task was cancelled")
+        wait(for: [exp], timeout: 1.0)
     }
     
 
