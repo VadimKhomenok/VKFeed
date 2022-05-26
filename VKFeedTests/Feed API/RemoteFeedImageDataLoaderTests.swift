@@ -99,14 +99,14 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
 
     func test_loadImageData_doesNotDeliverAfterDeallocation() {
         var (sut, client): (RemoteFeedImageDataLoader?, HTTPClientSpy) = makeSUT()
-        let anyData = anyData()
         
-        sut!.loadImageData(from: anyURL()) { _ in
-            XCTFail("Expected not to complete after deallocation")
-        }
+        var capturedResults = [FeedImageDataLoader.Result]()
+        sut!.loadImageData(from: anyURL()) { capturedResults.append($0) }
         
         sut = nil
-        client.complete(withStatusCode: 200, data: anyData)
+        client.complete(withStatusCode: 200, data: anyData())
+        
+        XCTAssertTrue(capturedResults.isEmpty, "Expected no results if sut was deallocated before client load completion")
     }
     
     
