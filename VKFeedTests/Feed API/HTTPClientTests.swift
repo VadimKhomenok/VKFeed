@@ -146,21 +146,27 @@ class URLSessionHTTPClientTests: XCTestCase {
 // MARK: - Stubs
 
     class URLProtocolStub: URLProtocol {
-        private static var stub: Stub?
-        private static var requestObserver: ((URLRequest) -> Void)?
-        
         private struct Stub {
             var data: Data?
             var response: URLResponse?
             var error: Error?
+            var requestObserver: ((URLRequest) -> Void)?
         }
         
+        private static var _stub: Stub?
+        private static var stub: Stub? {
+            get { return queue.sync { _stub } }
+            set { queue.sync { _stub = newValue } }
+        }
+        
+        private static let queue = DispatchQueue(label: "URLProtocolStub.queue")
+        
         class func stub(data: Data?, response: URLResponse?, error: Error?) {
-            stub = Stub(data: data, response: response, error: error)
+            stub = Stub(data: data, response: response, error: error, requestObserver: nil)
         }
         
         class func observeRequest(_ observer: @escaping (URLRequest) -> Void) {
-            requestObserver = observer
+            stub = Stub(data: nil, response: nil, error: nil, requestObserver: observer)
         }
         
         
@@ -173,7 +179,6 @@ class URLSessionHTTPClientTests: XCTestCase {
         class func stopInterceptingRequests() {
             URLProtocol.unregisterClass(URLProtocolStub.self)
             URLProtocolStub.stub = nil
-            URLProtocolStub.requestObserver = nil
         }
         
         // MARK: - Overridden methods of URLProtocol
@@ -187,11 +192,6 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         override func startLoading() {
-            if let requestObserver = URLProtocolStub.requestObserver {
-                client?.urlProtocolDidFinishLoading(self)
-                return requestObserver(request)
-            }
-            
             guard let stub = URLProtocolStub.stub else { return }
             
             if let data = stub.data {
@@ -207,6 +207,8 @@ class URLSessionHTTPClientTests: XCTestCase {
             } else {
                 client?.urlProtocolDidFinishLoading(self)
             }
+            
+            stub.requestObserver?(request)
         }
         
         override func stopLoading() {}
