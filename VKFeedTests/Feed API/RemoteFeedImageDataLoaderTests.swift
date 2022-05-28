@@ -59,10 +59,10 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
         let url = anyURL()
         
-        sut.loadImageData(from: url) { _ in }
+        _ = sut.loadImageData(from: url) { _ in }
         XCTAssertEqual(client.requestedURLs, [url], "Expected to request a URL when loadImageData called")
         
-        sut.loadImageData(from: url) { _ in }
+        _ = sut.loadImageData(from: url) { _ in }
         XCTAssertEqual(client.requestedURLs, [url, url], "Expected to request twice when loadImageData called twice")
     }
     
@@ -109,12 +109,23 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
         var (sut, client): (RemoteFeedImageDataLoader?, HTTPClientSpy) = makeSUT()
         
         var capturedResults = [FeedImageDataLoader.Result]()
-        sut!.loadImageData(from: anyURL()) { capturedResults.append($0) }
+        _ = sut!.loadImageData(from: anyURL()) { capturedResults.append($0) }
         
         sut = nil
         client.complete(withStatusCode: 200, data: anyData())
         
         XCTAssertTrue(capturedResults.isEmpty, "Expected no results if sut was deallocated before client load completion")
+    }
+    
+    func test_cancelLoadImageDataURLTask_cancelsClientURLRequest() {
+        let (sut, client) = makeSUT()
+        let url = anyURL()
+        
+        let task = sut.loadImageData(from: url) { _ in }
+        XCTAssertTrue(client.cancelledUrls.isEmpty, "Expected no cancelled URL request until task is cancelled")
+
+        task.cancel()
+        XCTAssertEqual(client.cancelledUrls, [url], "Expected cancelled URL request after task is cancelled")
     }
     
     
@@ -136,7 +147,7 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
         let url = anyURL()
         let exp = expectation(description: "Wait for load to complete")
         
-        sut.loadImageData(from: url) { result in
+        _ = sut.loadImageData(from: url) { result in
             switch (result, expectedResult) {
             case let (.success(data), .success(expectedData)):
                 XCTAssertEqual(data, expectedData, file: file, line: line)
@@ -162,10 +173,15 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
     private class HTTPClientSpy: HTTPClient {
         
         private struct Task: HTTPClientTask {
-            func cancel() { }
+            let callback: () -> Void
+            
+            func cancel() {
+                callback()
+            }
         }
         
         private var messages = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
+        private(set) var cancelledUrls = [URL]()
 
         var requestedURLs: [URL] {
             return messages.map { $0.url }
@@ -173,7 +189,9 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
 
         func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
             messages.append((url, completion))
-            return Task()
+            return Task { [weak self] in
+                self?.cancelledUrls.append(url)
+            }
         }
 
         func complete(with error: Error, at index: Int = 0) {
