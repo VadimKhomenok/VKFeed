@@ -12,16 +12,10 @@ import VKFeed
 // why we need to specifically override resume() method in FakeURLSessionDataTask? Shouldn't it be inherited and be called by default in superclass?
 
 class URLSessionHTTPClientTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        
-        URLProtocolStub.startInterceptingRequests()
-    }
-    
     override func tearDown() {
         super.tearDown()
         
-        URLProtocolStub.stopInterceptingRequests()
+        URLProtocolStub.removeStub()
     }
     
     func test_getFromUrl_requestHasProperUrlAndMethod() {
@@ -89,7 +83,11 @@ class URLSessionHTTPClientTests: XCTestCase {
 // MARK: - Helpers
     
     func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> HTTPClient {
-        let sut = URLSessionHTTPClient()
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [URLProtocolStub.self]
+        let session = URLSession(configuration: configuration)
+        
+        let sut = URLSessionHTTPClient(session: session)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
@@ -170,17 +168,6 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         
-        // MARK: - Helper methods
-        
-        class func startInterceptingRequests() {
-            URLProtocol.registerClass(URLProtocolStub.self)
-        }
-        
-        class func stopInterceptingRequests() {
-            URLProtocol.unregisterClass(URLProtocolStub.self)
-            URLProtocolStub.stub = nil
-        }
-        
         // MARK: - Overridden methods of URLProtocol
         
         override class func canInit(with request: URLRequest) -> Bool {
@@ -212,5 +199,9 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         override func stopLoading() {}
+        
+        static func removeStub() {
+            stub = nil
+        }
     }
 }
