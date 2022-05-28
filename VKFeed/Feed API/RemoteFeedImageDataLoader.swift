@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class RemoteFeedImageDataLoader {
+public class RemoteFeedImageDataLoader: FeedImageDataLoader {
     private var client: HTTPClient
     
     private final class HTTPTaskWrapper: FeedImageDataLoaderTask {
