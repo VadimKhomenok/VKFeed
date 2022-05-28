@@ -1,5 +1,5 @@
 //
-//  RemoteFeedImageDataLoader.swift
+//  LoadFeedImageDataFromRemoteUseCaseTests.swift
 //  VKFeed
 //
 //  Created by Vadim Khomenok on 25.05.22.
@@ -8,7 +8,7 @@
 import VKFeed
 import XCTest
 
-class RemoteFeedImageDataLoaderTests: XCTestCase {
+class LoadFeedImageDataFromRemoteUseCaseTests: XCTestCase {
     
     func test_init_doesNotRequestData() {
         let (_, client) = makeSUT()
