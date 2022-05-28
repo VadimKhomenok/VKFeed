@@ -27,11 +27,11 @@ class RemoteFeedImageDataLoaderTests: XCTestCase {
         XCTAssertEqual(client.requestedURLs, [url, url], "Expected to request twice when loadImageData called twice")
     }
     
-    func test_loadImageData_deliversErrorOnClientError() {
+    func test_loadImageDataFromURL_deliversConnectivityErrorOnClientError() {
         let (sut, client) = makeSUT()
         let error = anyNSError()
         
-        expect(sut: sut, toCompleteWith: .failure(error)) {
+        expect(sut: sut, toCompleteWith: failure(.connectivity)) {
             client.complete(with: error)
         }
     }
