@@ -1,5 +1,5 @@
 //
-//  LocalFeedImageDataLoaderTests.swift
+//  LoadFeedImageDataFromCacheUseCaseTests.swift
 //  VKFeedTests
 //
 //  Created by Vadim Khomenok on 30.05.22.
@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 import VKFeed
 
-class LocalFeedImageDataLoaderTests: XCTestCase {
+class LoadFeedImageDataFromCacheUseCaseTests: XCTestCase {
     func test_localFeedImageDataLoader_doesNotMessageStoreUponCreation() {
         let (_, store) = makeSUT()
         
