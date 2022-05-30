@@ -8,43 +8,64 @@
 import Foundation
 import XCTest
 import VKFeed
+ 
+protocol FeedImageDataStore {
+    func retrieve(dataForURL url: URL)
+}
 
-final class LocalFeedImageDataLoader {
-    private let store: Any
+final class LocalFeedImageDataLoader: FeedImageDataLoader {
+    private struct Task: FeedImageDataLoaderTask {
+        func cancel() {}
+    }
     
-    init(store: Any) {
+    private let store: FeedImageDataStore
+    
+    init(store: FeedImageDataStore) {
         self.store = store
+    }
+    
+    func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
+        store.retrieve(dataForURL: url)
+        return Task()
     }
 }
 
 class LocalFeedImageDataLoaderTests: XCTestCase {
     func test_localFeedImageDataLoader_doesNotMessageStoreUponCreation() {
-        let store = FeedStoreSpy()
-        let _ = LocalFeedImageDataLoader(store: store)
+        let (_, store) = makeSUT()
         
         XCTAssertTrue(store.messages.isEmpty)
+    }
+    
+    func test_loadStoredData_requestsStoredDataForURL() {
+        let (sut, store) = makeSUT()
+        let url = anyURL()
+
+        _ = sut.loadImageData(from: url) { _ in }
+        
+        XCTAssertEqual(store.messages, [.retrieve(dataFor: url)])
     }
     
     
     // MARK: - Helpers
     
-    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: FeedStoreSpy) {
-        let store = FeedStoreSpy()
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #file, line: UInt = #line) -> (sut: LocalFeedImageDataLoader, store: StoreSpy) {
+        let store = StoreSpy()
         let sut = LocalFeedImageDataLoader(store: store)
         trackForMemoryLeaks(store, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, store)
     }
     
-    private class FeedStoreSpy {
+    private class StoreSpy: FeedImageDataStore {
         enum ReceivedMessages: Equatable {
-            case retrieve
+            case retrieve(dataFor: URL)
         }
         
-        var messages = [ReceivedMessages]()
+        private(set) var messages = [ReceivedMessages]()
     
-        func retrieve() {
-            messages.append(.retrieve)
+        func retrieve(dataForURL url: URL) {
+            messages.append(.retrieve(dataFor: url))
         }
     }
 }
