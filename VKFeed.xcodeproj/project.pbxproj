@@ -236,6 +236,7 @@
 		67F9BB8628173E1000B606BA /* VKFeedCacheIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedCacheIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F9BB8828173E1000B606BA /* VKFeedCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedCacheIntegrationTests.swift; sourceTree = "<group>"; };
 		67FC9ECF2846AAA0009F9398 /* CoreDataFeedImageDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedImageDataStoreTests.swift; sourceTree = "<group>"; };
+		67FC9ED12846B916009F9398 /* FeedStore2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore2.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1522,9 +1523,10 @@
 		67F9BB6A2816C59000B606BA /* FeedStore.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				67FC9ED12846B916009F9398 /* FeedStore2.xcdatamodel */,
 				67F9BB6B2816C59000B606BA /* FeedStore.xcdatamodel */,
 			);
-			currentVersion = 67F9BB6B2816C59000B606BA /* FeedStore.xcdatamodel */;
+			currentVersion = 67FC9ED12846B916009F9398 /* FeedStore2.xcdatamodel */;
 			path = FeedStore.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
