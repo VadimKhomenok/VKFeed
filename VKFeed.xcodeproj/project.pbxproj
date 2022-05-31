@@ -105,6 +105,7 @@
 		67F9BB92281742E700B606BA /* FeedCacheTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E8A6D028116CEC004B20F2 /* FeedCacheTestHelpers.swift */; };
 		67FC9ED02846AAA0009F9398 /* CoreDataFeedImageDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FC9ECF2846AAA0009F9398 /* CoreDataFeedImageDataStoreTests.swift */; };
 		67FC9ED32846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FC9ED22846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift */; };
+		67FC9ED52846C928009F9398 /* CoreDataFeedStore+FeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FC9ED42846C928009F9398 /* CoreDataFeedStore+FeedStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -239,6 +240,7 @@
 		67FC9ECF2846AAA0009F9398 /* CoreDataFeedImageDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedImageDataStoreTests.swift; sourceTree = "<group>"; };
 		67FC9ED12846B916009F9398 /* FeedStore2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore2.xcdatamodel; sourceTree = "<group>"; };
 		67FC9ED22846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataFeedStore+FeedImageDataLoader.swift"; sourceTree = "<group>"; };
+		67FC9ED42846C928009F9398 /* CoreDataFeedStore+FeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataFeedStore+FeedStore.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -601,6 +603,7 @@
 				67F9BB7E2817143C00B606BA /* ManagedCache.swift */,
 				67F9BB802817145300B606BA /* ManagedFeedImage.swift */,
 				67F9BB772816D10000B606BA /* CoreDataFeedStore.swift */,
+				67FC9ED42846C928009F9398 /* CoreDataFeedStore+FeedStore.swift */,
 				67F9BB7C2817133C00B606BA /* CoreDataHelpers.swift */,
 				67FC9ED22846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift */,
 				67F9BB6A2816C59000B606BA /* FeedStore.xcdatamodeld */,
@@ -886,6 +889,7 @@
 				67F9BB7D2817133C00B606BA /* CoreDataHelpers.swift in Sources */,
 				677292F6283C53BA00AE05A1 /* FeedLoadingViewModel.swift in Sources */,
 				67F9BB6C2816C59000B606BA /* FeedStore.xcdatamodeld in Sources */,
+				67FC9ED52846C928009F9398 /* CoreDataFeedStore+FeedStore.swift in Sources */,
 				67F3F7D32804849A0078CFEA /* HTTPClient.swift in Sources */,
 				67F9BB7F2817143C00B606BA /* ManagedCache.swift in Sources */,
 				67378090280621600054CD20 /* FeedItemsMapper.swift in Sources */,
