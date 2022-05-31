@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension CoreDataFeedStore {
+extension CoreDataFeedStore: FeedImageDataStore {
     public func retrieve(dataForURL url: URL, completion: @escaping (FeedImageDataStore.RetrievalResult) -> Void) {
         perform { context in
             completion(Result {
