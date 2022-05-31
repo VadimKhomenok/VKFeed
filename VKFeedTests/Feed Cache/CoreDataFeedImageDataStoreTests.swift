@@ -8,18 +8,7 @@
 import VKFeed
 import XCTest
 
-extension CoreDataFeedStore {
-    func retrieve(dataForURL: URL, completion: @escaping (FeedImageDataStore.RetrievalResult) -> Void) {
-        completion(.success(.none))
-    }
-    
-    func insert(_ data: Data, for url: URL, completion: @escaping (FeedImageDataStore.InsertionResult) -> Void) {
-        
-    }
-}
-
 class CoreDataFeedImageDataStoreTests: XCTestCase {
-
     func test_retrieveImageData_deliversNotFoundWhenEmpty() {
         let sut = makeSUT()
 

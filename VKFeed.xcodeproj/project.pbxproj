@@ -104,6 +104,7 @@
 		67F9BB9128173E6F00B606BA /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E8A6D328116E5D004B20F2 /* SharedTestHelpers.swift */; };
 		67F9BB92281742E700B606BA /* FeedCacheTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E8A6D028116CEC004B20F2 /* FeedCacheTestHelpers.swift */; };
 		67FC9ED02846AAA0009F9398 /* CoreDataFeedImageDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FC9ECF2846AAA0009F9398 /* CoreDataFeedImageDataStoreTests.swift */; };
+		67FC9ED32846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FC9ED22846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -237,6 +238,7 @@
 		67F9BB8828173E1000B606BA /* VKFeedCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedCacheIntegrationTests.swift; sourceTree = "<group>"; };
 		67FC9ECF2846AAA0009F9398 /* CoreDataFeedImageDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedImageDataStoreTests.swift; sourceTree = "<group>"; };
 		67FC9ED12846B916009F9398 /* FeedStore2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore2.xcdatamodel; sourceTree = "<group>"; };
+		67FC9ED22846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataFeedStore+FeedImageDataLoader.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -600,6 +602,7 @@
 				67F9BB802817145300B606BA /* ManagedFeedImage.swift */,
 				67F9BB772816D10000B606BA /* CoreDataFeedStore.swift */,
 				67F9BB7C2817133C00B606BA /* CoreDataHelpers.swift */,
+				67FC9ED22846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift */,
 				67F9BB6A2816C59000B606BA /* FeedStore.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -874,6 +877,7 @@
 				67E8E810280F66460057A38E /* FeedStore.swift in Sources */,
 				677292FA283C53F100AE05A1 /* FeedErrorViewModel.swift in Sources */,
 				67E8CBAB280897E800A48903 /* URLSessionHTTPClient.swift in Sources */,
+				67FC9ED32846B9F6009F9398 /* CoreDataFeedStore+FeedImageDataLoader.swift in Sources */,
 				67A71D522845842A008ED413 /* FeedImageDataStore.swift in Sources */,
 				67F3F7CE28046CE40078CFEA /* FeedLoader.swift in Sources */,
 				67CA3AA1283D9B83004E247C /* FeedImagePresenter.swift in Sources */,
