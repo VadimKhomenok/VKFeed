@@ -35,6 +35,21 @@ class CoreDataFeedImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteRetrievalWith: found(storedData), for: matchingUrl)
     }
     
+    func test_retrieveImageData_deliversLastInsertedValueOverwritingPreviousValues() {
+        let sut = makeSUT()
+        let firstData = Data("Initial_data".utf8)
+        let secondData = Data("Second_data".utf8)
+        let lastData = Data("Last_data".utf8)
+        
+        let matchingUrl = anyURL()
+        
+        insert(firstData, for: matchingUrl, into: sut)
+        insert(secondData, for: matchingUrl, into: sut)
+        insert(lastData, for: matchingUrl, into: sut)
+        
+        expect(sut, toCompleteRetrievalWith: found(lastData), for: matchingUrl)
+    }
+    
 
     // - MARK: Helpers
     
