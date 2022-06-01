@@ -9,12 +9,12 @@ import Foundation
 
 public class LocalFeedLoader {
     private var store: FeedStore
-    private var currentDate: Date
+    private let currentDate: () -> Date
 
     public typealias SaveResult = Result<Void, Error>
     public typealias LoadResult = FeedLoader.Result
     
-    public init(store: FeedStore, currentDate: Date) {
+    public init(store: FeedStore, currentDate: @escaping () -> Date) {
         self.store = store
         self.currentDate = currentDate
     }
@@ -38,7 +38,7 @@ extension LocalFeedLoader {
     }
     
     private func cache(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        store.insert(feed.toLocal(), timestamp: self.currentDate, completion: { [weak self] insertionResult in
+        store.insert(feed.toLocal(), timestamp: currentDate(), completion: { [weak self] insertionResult in
             guard self != nil else { return }
             completion(insertionResult)
         })
@@ -58,7 +58,7 @@ extension LocalFeedLoader: FeedLoader {
         store.retrieve { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case let .success(.some(cache)) where FeedCachePolicy.validate(cache.timestamp, against: self.currentDate):
+            case let .success(.some(cache)) where FeedCachePolicy.validate(cache.timestamp, against: self.currentDate()):
                 completion(.success(cache.feed.toModel()))
             case .success:
                 completion(.success([]))
@@ -85,7 +85,7 @@ extension LocalFeedLoader {
         store.retrieve { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case let .success(.some(cache)) where !FeedCachePolicy.validate(cache.timestamp, against: self.currentDate):
+            case let .success(.some(cache)) where !FeedCachePolicy.validate(cache.timestamp, against: self.currentDate()):
                 self.store.deleteCache { _ in completion(.success(())) }
                 
             case .failure(_):
