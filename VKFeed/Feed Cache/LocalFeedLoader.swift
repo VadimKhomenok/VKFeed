@@ -89,7 +89,7 @@ extension LocalFeedLoader {
                 self.store.deleteCache { _ in completion(.success(())) }
                 
             case .failure(_):
-                self.store.deleteCache { _ in completion(.success(())) }
+                self.store.deleteCache(completion)
                 
             case .success:
                 completion(.success(()))
