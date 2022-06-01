@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		679937DE2848330C00D2ECB0 /* VKFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679937DD2848330C00D2ECB0 /* VKFeed.framework */; };
+		679937DF2848330C00D2ECB0 /* VKFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 679937DD2848330C00D2ECB0 /* VKFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		679937E22848331000D2ECB0 /* VKFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679937E12848331000D2ECB0 /* VKFeediOS.framework */; };
+		679937E32848331000D2ECB0 /* VKFeediOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 679937E12848331000D2ECB0 /* VKFeediOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		67C3B6BD28482E39004206B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3B6BC28482E39004206B8 /* AppDelegate.swift */; };
 		67C3B6BF28482E39004206B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3B6BE28482E39004206B8 /* SceneDelegate.swift */; };
 		67C3B6C128482E39004206B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3B6C028482E39004206B8 /* ViewController.swift */; };
@@ -35,7 +39,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		679937E02848330D00D2ECB0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				679937DF2848330C00D2ECB0 /* VKFeed.framework in Embed Frameworks */,
+				679937E32848331000D2ECB0 /* VKFeediOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		679937DD2848330C00D2ECB0 /* VKFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VKFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		679937E12848331000D2ECB0 /* VKFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VKFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67C3B6B928482E39004206B8 /* VKFeedApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKFeedApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67C3B6BC28482E39004206B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		67C3B6BE28482E39004206B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				679937DE2848330C00D2ECB0 /* VKFeed.framework in Frameworks */,
+				679937E22848331000D2ECB0 /* VKFeediOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +99,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		679937DC2848330C00D2ECB0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				679937E12848331000D2ECB0 /* VKFeediOS.framework */,
+				679937DD2848330C00D2ECB0 /* VKFeed.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		67C3B6B028482E39004206B8 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +115,7 @@
 				67C3B6D228482E3D004206B8 /* VKFeedAppTests */,
 				67C3B6DC28482E3E004206B8 /* VKFeedAppUITests */,
 				67C3B6BA28482E39004206B8 /* Products */,
+				679937DC2848330C00D2ECB0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -137,6 +170,7 @@
 				67C3B6B528482E39004206B8 /* Sources */,
 				67C3B6B628482E39004206B8 /* Frameworks */,
 				67C3B6B728482E39004206B8 /* Resources */,
+				679937E02848330D00D2ECB0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
