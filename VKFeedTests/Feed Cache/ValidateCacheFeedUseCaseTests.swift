@@ -18,7 +18,7 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
     func test_validateCache_sendsRetrieveMessageToStore() {
         let (sut, store) = makeSUT()
         
-        sut.validateCache()
+        sut.validateCache() { _ in }
         
         XCTAssertEqual(store.messages, [.retrieve])
     }
@@ -27,7 +27,7 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let retrieveError = anyNSError()
         
-        sut.validateCache()
+        sut.validateCache() { _ in }
         store.completeRetrieval(with: retrieveError)
         
         XCTAssertEqual(store.messages, [.retrieve, .delete])
@@ -36,7 +36,7 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
     func test_validateCache_doesNotDeleteCacheOnRetrieveEmptyCache() {
         let (sut, store) = makeSUT()
         
-        sut.validateCache()
+        sut.validateCache() { _ in }
         store.completeRetrievalWithEmptyCache()
         
         XCTAssertEqual(store.messages, [.retrieve])
@@ -47,7 +47,7 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let atExpirationTimestamp = fixedCurrentDate.minusFeedCacheMaxAge()
 
-        sut.validateCache()
+        sut.validateCache() { _ in }
         let feed = makeUniqueImageFeed()
         store.completeRetrieval(with: feed.local, timestamp: atExpirationTimestamp)
         
@@ -59,7 +59,7 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let expiredCacheTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: -1)
 
-        sut.validateCache()
+        sut.validateCache() { _ in }
         let feed = makeUniqueImageFeed()
         store.completeRetrieval(with: feed.local, timestamp: expiredCacheTimestamp)
         
@@ -71,7 +71,7 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT(fixedCurrentDate: fixedCurrentDate)
         let nonExpiredTimestamp = fixedCurrentDate.minusFeedCacheMaxAge().adding(seconds: 1)
 
-        sut.validateCache()
+        sut.validateCache() { _ in }
         let feed = makeUniqueImageFeed()
         store.completeRetrieval(with: feed.local, timestamp: nonExpiredTimestamp)
         
@@ -82,7 +82,7 @@ class ValidateCacheFeedUseCaseTests: XCTestCase {
         let retrievalError = anyNSError()
         var (sut, store): (LocalFeedLoader?, FeedStoreSpy) = makeSUT()
 
-        sut?.validateCache()
+        sut?.validateCache() { _ in }
         sut = nil
         store.completeRetrieval(with: retrievalError)
         
