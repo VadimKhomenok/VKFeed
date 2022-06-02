@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6779CA2D2849820C00BE57BF /* RemoteLoaderWithLocalFallbackLoaderCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6779CA2C2849820C00BE57BF /* RemoteLoaderWithLocalFallbackLoaderCompositeTests.swift */; };
 		679937DE2848330C00D2ECB0 /* VKFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679937DD2848330C00D2ECB0 /* VKFeed.framework */; };
 		679937DF2848330C00D2ECB0 /* VKFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 679937DD2848330C00D2ECB0 /* VKFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		679937E22848331000D2ECB0 /* VKFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679937E12848331000D2ECB0 /* VKFeediOS.framework */; };
@@ -15,20 +16,10 @@
 		67C3B6BF28482E39004206B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3B6BE28482E39004206B8 /* SceneDelegate.swift */; };
 		67C3B6C628482E3D004206B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67C3B6C528482E3D004206B8 /* Assets.xcassets */; };
 		67C3B6C928482E3D004206B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C3B6C728482E3D004206B8 /* LaunchScreen.storyboard */; };
-		67C3B6D428482E3D004206B8 /* VKFeedAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3B6D328482E3D004206B8 /* VKFeedAppTests.swift */; };
-		67C3B6DE28482E3E004206B8 /* VKFeedAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3B6DD28482E3E004206B8 /* VKFeedAppUITests.swift */; };
-		67C3B6E028482E3E004206B8 /* VKFeedAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3B6DF28482E3E004206B8 /* VKFeedAppUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		67C3B6D028482E3D004206B8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 67C3B6B128482E39004206B8 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 67C3B6B828482E39004206B8;
-			remoteInfo = VKFeedApp;
-		};
-		67C3B6DA28482E3E004206B8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 67C3B6B128482E39004206B8 /* Project object */;
 			proxyType = 1;
@@ -53,6 +44,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6779CA2C2849820C00BE57BF /* RemoteLoaderWithLocalFallbackLoaderCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteLoaderWithLocalFallbackLoaderCompositeTests.swift; sourceTree = "<group>"; };
 		679937DD2848330C00D2ECB0 /* VKFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VKFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		679937E12848331000D2ECB0 /* VKFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VKFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67C3B6B928482E39004206B8 /* VKFeedApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKFeedApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,10 +54,6 @@
 		67C3B6C828482E3D004206B8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		67C3B6CA28482E3D004206B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67C3B6CF28482E3D004206B8 /* VKFeedAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		67C3B6D328482E3D004206B8 /* VKFeedAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedAppTests.swift; sourceTree = "<group>"; };
-		67C3B6D928482E3E004206B8 /* VKFeedAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		67C3B6DD28482E3E004206B8 /* VKFeedAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedAppUITests.swift; sourceTree = "<group>"; };
-		67C3B6DF28482E3E004206B8 /* VKFeedAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,13 +67,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		67C3B6CC28482E3D004206B8 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67C3B6D628482E3E004206B8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -109,7 +90,6 @@
 			children = (
 				67C3B6BB28482E39004206B8 /* VKFeedApp */,
 				67C3B6D228482E3D004206B8 /* VKFeedAppTests */,
-				67C3B6DC28482E3E004206B8 /* VKFeedAppUITests */,
 				67C3B6BA28482E39004206B8 /* Products */,
 				679937DC2848330C00D2ECB0 /* Frameworks */,
 			);
@@ -120,7 +100,6 @@
 			children = (
 				67C3B6B928482E39004206B8 /* VKFeedApp.app */,
 				67C3B6CF28482E3D004206B8 /* VKFeedAppTests.xctest */,
-				67C3B6D928482E3E004206B8 /* VKFeedAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,18 +119,9 @@
 		67C3B6D228482E3D004206B8 /* VKFeedAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				67C3B6D328482E3D004206B8 /* VKFeedAppTests.swift */,
+				6779CA2C2849820C00BE57BF /* RemoteLoaderWithLocalFallbackLoaderCompositeTests.swift */,
 			);
 			path = VKFeedAppTests;
-			sourceTree = "<group>";
-		};
-		67C3B6DC28482E3E004206B8 /* VKFeedAppUITests */ = {
-			isa = PBXGroup;
-			children = (
-				67C3B6DD28482E3E004206B8 /* VKFeedAppUITests.swift */,
-				67C3B6DF28482E3E004206B8 /* VKFeedAppUITestsLaunchTests.swift */,
-			);
-			path = VKFeedAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,24 +163,6 @@
 			productReference = 67C3B6CF28482E3D004206B8 /* VKFeedAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		67C3B6D828482E3E004206B8 /* VKFeedAppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 67C3B6E928482E3E004206B8 /* Build configuration list for PBXNativeTarget "VKFeedAppUITests" */;
-			buildPhases = (
-				67C3B6D528482E3E004206B8 /* Sources */,
-				67C3B6D628482E3E004206B8 /* Frameworks */,
-				67C3B6D728482E3E004206B8 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				67C3B6DB28482E3E004206B8 /* PBXTargetDependency */,
-			);
-			name = VKFeedAppUITests;
-			productName = VKFeedAppUITests;
-			productReference = 67C3B6D928482E3E004206B8 /* VKFeedAppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -225,10 +177,6 @@
 						CreatedOnToolsVersion = 13.3.1;
 					};
 					67C3B6CE28482E3D004206B8 = {
-						CreatedOnToolsVersion = 13.3.1;
-						TestTargetID = 67C3B6B828482E39004206B8;
-					};
-					67C3B6D828482E3E004206B8 = {
 						CreatedOnToolsVersion = 13.3.1;
 						TestTargetID = 67C3B6B828482E39004206B8;
 					};
@@ -249,7 +197,6 @@
 			targets = (
 				67C3B6B828482E39004206B8 /* VKFeedApp */,
 				67C3B6CE28482E3D004206B8 /* VKFeedAppTests */,
-				67C3B6D828482E3E004206B8 /* VKFeedAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -265,13 +212,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		67C3B6CD28482E3D004206B8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67C3B6D728482E3E004206B8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -294,16 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67C3B6D428482E3D004206B8 /* VKFeedAppTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		67C3B6D528482E3E004206B8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				67C3B6DE28482E3E004206B8 /* VKFeedAppUITests.swift in Sources */,
-				67C3B6E028482E3E004206B8 /* VKFeedAppUITestsLaunchTests.swift in Sources */,
+				6779CA2D2849820C00BE57BF /* RemoteLoaderWithLocalFallbackLoaderCompositeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,11 +245,6 @@
 			isa = PBXTargetDependency;
 			target = 67C3B6B828482E39004206B8 /* VKFeedApp */;
 			targetProxy = 67C3B6D028482E3D004206B8 /* PBXContainerItemProxy */;
-		};
-		67C3B6DB28482E3E004206B8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 67C3B6B828482E39004206B8 /* VKFeedApp */;
-			targetProxy = 67C3B6DA28482E3E004206B8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -544,42 +470,6 @@
 			};
 			name = Release;
 		};
-		67C3B6EA28482E3E004206B8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Z9F52A55VD;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = VK.VKFeedAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = VKFeedApp;
-			};
-			name = Debug;
-		};
-		67C3B6EB28482E3E004206B8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Z9F52A55VD;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = VK.VKFeedAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = VKFeedApp;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -606,15 +496,6 @@
 			buildConfigurations = (
 				67C3B6E728482E3E004206B8 /* Debug */,
 				67C3B6E828482E3E004206B8 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		67C3B6E928482E3E004206B8 /* Build configuration list for PBXNativeTarget "VKFeedAppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				67C3B6EA28482E3E004206B8 /* Debug */,
-				67C3B6EB28482E3E004206B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
