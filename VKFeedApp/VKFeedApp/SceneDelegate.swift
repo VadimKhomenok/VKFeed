@@ -6,17 +6,26 @@
 //
 
 import UIKit
+import VKFeediOS
+import VKFeed
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        let url = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
+        let urlSession = URLSession(configuration: .ephemeral)
+        let httpClient = URLSessionHTTPClient(session: urlSession)
+        let feedLoader = RemoteFeedLoader(url: url, client: httpClient)
+        let imageLoader = RemoteFeedImageDataLoader(client: httpClient)
+        let feedViewController = FeedUIComposer.feedComposedWith(imageLoader: imageLoader, feedLoader: feedLoader)
+        
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = feedViewController
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
