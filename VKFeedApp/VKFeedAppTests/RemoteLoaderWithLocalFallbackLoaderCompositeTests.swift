@@ -79,15 +79,6 @@ class RemoteLoaderWithLocalFallbackLoaderCompositeTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    private func makeUniqueFeed() -> [FeedImage] {
-        return [FeedImage(id: UUID(), description: nil, location: nil, url: anyURL()),
-                FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())]
-    }
-    
-    private func anyURL() -> URL {
-        return URL(string: "http://api-url.com")!
-    }
-    
     private class FeedLoaderStub: FeedLoader {
         private let result: FeedLoader.Result
         
@@ -99,16 +90,6 @@ class RemoteLoaderWithLocalFallbackLoaderCompositeTests: XCTestCase {
             completion(self.result)
         }
     }
-
-    func anyNSError() -> NSError {
-        return NSError(domain: "An error", code: 400)
-    }
 }
 
-extension XCTestCase {
-    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Instance is not deallocated, possible memory leak.", file: file, line: line)
-        }
-    }
-}
+
