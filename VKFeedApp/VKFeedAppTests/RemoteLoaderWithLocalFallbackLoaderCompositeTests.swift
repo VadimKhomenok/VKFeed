@@ -37,14 +37,20 @@ class RemoteLoaderWithLocalFallbackLoaderCompositeTests: XCTestCase {
         let fallbackFeed = makeUniqueFeed()
         let sut = makeSUT(primaryLoaderResult: .success(primaryFeed), fallbackLoaderResult: .success(fallbackFeed))
         
-        expect(sut, toLoad: primaryFeed)
+        expect(sut, toDeliver: .success(primaryFeed))
     }
     
     func test_loadFeed_deliversFallbackFeedOnPrimaryFeedLoaderFailure() {
         let fallbackFeed = makeUniqueFeed()
         let sut = makeSUT(primaryLoaderResult: .failure(anyNSError()), fallbackLoaderResult: .success(fallbackFeed))
         
-        expect(sut, toLoad: fallbackFeed)
+        expect(sut, toDeliver: .success(fallbackFeed))
+    }
+    
+    func test_loadFeed_deliversErrorOnPrimaryAndFallbackLoadersFailure() {
+        let sut = makeSUT(primaryLoaderResult: .failure(anyNSError()), fallbackLoaderResult: .failure(anyNSError()))
+        
+        expect(sut, toDeliver: .failure(anyNSError()))
     }
     
     
@@ -62,14 +68,17 @@ class RemoteLoaderWithLocalFallbackLoaderCompositeTests: XCTestCase {
         return sut
     }
     
-    private func expect(_ sut: FeedLoaderWithFallbackComposite, toLoad expectedFeed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: FeedLoaderWithFallbackComposite, toDeliver expectedResult: FeedLoader.Result, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load to complete")
         sut.load() { result in
-            switch result {
-            case let .success(resultFeed):
+            switch (result, expectedResult) {
+            case let (.success(resultFeed), .success(expectedFeed)):
                 XCTAssertEqual(resultFeed, expectedFeed, "Expected to receive \(expectedFeed) feed, received \(resultFeed) instead")
                 
-            case .failure:
+            case let (.failure(error as NSError?), .failure(expectedError as NSError?)):
+                XCTAssertEqual(error, expectedError, "Expected to receive \(String(describing: expectedError)) error, received \(String(describing: error)) instead")
+                
+            default:
                 XCTFail("Expected load to succeed")
             }
             
