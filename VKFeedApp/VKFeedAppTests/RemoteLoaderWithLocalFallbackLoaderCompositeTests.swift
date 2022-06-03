@@ -31,42 +31,42 @@ class RemoteLoaderWithLocalFallbackLoaderComposite {
 }
 
 class RemoteLoaderWithLocalFallbackLoaderCompositeTests: XCTestCase {
-    
     func test_loadFeed_deliversRemoteFeedOnRemoteSuccess() {
         let remoteFeed = makeUniqueFeed()
         let localFeed = makeUniqueFeed()
-        let remoteLoaderStub = RemoteFeedLoaderStub(result: .success(remoteFeed))
-        let localLoaderStub = LocalFeedLoaderStub(result: .success(localFeed))
-        let sut = RemoteLoaderWithLocalFallbackLoaderComposite(remoteFeedLoader: remoteLoaderStub, localFeedLoader: localLoaderStub)
+        let sut = makeSUT(remoteLoaderResult: .success(remoteFeed), localLoaderResult: .success(localFeed))
         
-        let exp = expectation(description: "Wait for load to complete")
-        sut.load() { result in
-            switch result {
-            case let .success(resultFeed):
-                XCTAssertEqual(resultFeed, remoteFeed, "Expected to receive remote feed on Remote loader load success")
-                
-            case .failure:
-                XCTFail("Expected load to succeed")
-            }
-            
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
+        expect(sut, toLoad: remoteFeed)
     }
     
     func test_loadFeed_deliversLocalFeedOnRemoteFeedFailure() {
-        let remoteFeed = makeUniqueFeed()
         let localFeed = makeUniqueFeed()
-        let remoteLoaderStub = RemoteFeedLoaderStub(result: .failure(anyNSError()))
-        let localLoaderStub = LocalFeedLoaderStub(result: .success(localFeed))
+        let sut = makeSUT(remoteLoaderResult: .failure(anyNSError()), localLoaderResult: .success(localFeed))
+        
+        expect(sut, toLoad: localFeed)
+    }
+    
+    
+    // MARK: - Helpers
+    
+    private func makeSUT(remoteLoaderResult: FeedLoader.Result, localLoaderResult: FeedLoader.Result, file: StaticString = #filePath, line: UInt = #line) -> RemoteLoaderWithLocalFallbackLoaderComposite {
+        let remoteLoaderStub = RemoteFeedLoaderStub(result: remoteLoaderResult)
+        let localLoaderStub = LocalFeedLoaderStub(result: localLoaderResult)
         let sut = RemoteLoaderWithLocalFallbackLoaderComposite(remoteFeedLoader: remoteLoaderStub, localFeedLoader: localLoaderStub)
         
+        trackForMemoryLeaks(remoteLoaderStub, file: file, line: line)
+        trackForMemoryLeaks(localLoaderStub, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        
+        return sut
+    }
+    
+    private func expect(_ sut: RemoteLoaderWithLocalFallbackLoaderComposite, toLoad expectedFeed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for load to complete")
         sut.load() { result in
             switch result {
             case let .success(resultFeed):
-                XCTAssertEqual(resultFeed, localFeed, "Expected to receive remote feed on Remote loader load success")
+                XCTAssertEqual(resultFeed, expectedFeed, "Expected to receive \(expectedFeed) feed, received \(resultFeed) instead")
                 
             case .failure:
                 XCTFail("Expected load to succeed")
@@ -77,8 +77,6 @@ class RemoteLoaderWithLocalFallbackLoaderCompositeTests: XCTestCase {
         
         wait(for: [exp], timeout: 1.0)
     }
-    
-    // MARK: - Helpers
     
     private func makeUniqueFeed() -> [FeedImage] {
         return [FeedImage(id: UUID(), description: nil, location: nil, url: anyURL()),
@@ -115,5 +113,13 @@ class RemoteLoaderWithLocalFallbackLoaderCompositeTests: XCTestCase {
     
     func anyNSError() -> NSError {
         return NSError(domain: "An error", code: 400)
+    }
+}
+
+extension XCTestCase {
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance is not deallocated, possible memory leak.", file: file, line: line)
+        }
     }
 }
