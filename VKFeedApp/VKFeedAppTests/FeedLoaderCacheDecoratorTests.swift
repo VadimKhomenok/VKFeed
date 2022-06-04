@@ -34,7 +34,7 @@ class FeedLoaderCacheDecorator: FeedLoader {
     }
 }
 
-class FeedLoaderCacheDecoratorTests: XCTestCase {
+class FeedLoaderCacheDecoratorTests: XCTestCase, FeedLoaderTestCase {
     func test_load_deliversFeedOnLoaderSuccess() {
         let expectedFeed = makeUniqueFeed()
         let sut = makeSUT(with: .success(expectedFeed))
@@ -77,26 +77,6 @@ class FeedLoaderCacheDecoratorTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         
         return sut
-    }
-    
-    private func expect(_ sut: FeedLoaderCacheDecorator, toCompleteWith expectedResult: FeedLoader.Result, file: StaticString = #file, line: UInt = #line) {
-        let exp = expectation(description: "Wait for load to complete")
-        sut.load { receivedResult in
-            switch (receivedResult, expectedResult) {
-            case let (.success(receivedFeed), .success(expectedFeed)):
-                XCTAssertEqual(receivedFeed, expectedFeed, file: file, line: line)
-                
-            case (.failure, .failure):
-                break
-                
-            default:
-                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
-            }
-            
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
     }
     
     private class FeedCacheSpy: FeedCache {
