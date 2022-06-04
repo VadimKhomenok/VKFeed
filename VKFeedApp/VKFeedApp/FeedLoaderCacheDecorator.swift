@@ -7,7 +7,7 @@
 
 import VKFeed
 
-public class FeedLoaderCacheDecorator: FeedLoader {
+public final class FeedLoaderCacheDecorator: FeedLoader {
     private let decoratee: FeedLoader
     private let cache: FeedCache
     

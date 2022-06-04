@@ -7,7 +7,7 @@
 
 import VKFeed
 
-public class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
+public final class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
     private let primary: FeedImageDataLoader
     private let fallback: FeedImageDataLoader
 
