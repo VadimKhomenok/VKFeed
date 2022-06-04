@@ -10,7 +10,7 @@ import XCTest
 class VKFeedAppUIAcceptanceTests: XCTestCase {
     func test_launch_displaysRemoteFeedWhenCustomerHasConnectivity() {
         let app = XCUIApplication()
-        
+        app.launchArguments = ["-reset"]
         app.launch()
         
         let feedImageCells = app.cells.matching(identifier: "feed-image-cell")
@@ -22,6 +22,7 @@ class VKFeedAppUIAcceptanceTests: XCTestCase {
     
     func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
         let app = XCUIApplication()
+        app.launchArguments = ["-reset"]
         app.launch()
         
         let offlineApp = XCUIApplication()
