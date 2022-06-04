@@ -37,6 +37,31 @@ class FeedImageDataLoaderCacheDecorator: FeedImageDataLoader {
 }
 
 class FeedImageDataLoaderCacheDecoratorTests: XCTestCase, FeedImageDataLoaderTestCase {
+    func test_init_doesNotLoadImageData() {
+        let (_, spy) = makeSUT()
+        
+        XCTAssertTrue(spy.loadedURLs.isEmpty, "Expected no loaded URLs")
+    }
+    
+    func test_loadImageData_loadsFromLoader() {
+        let url = anyURL()
+        let (sut, spy) = makeSUT()
+        
+        _ = sut.loadImageData(from: url) { _ in }
+        
+        XCTAssertEqual(spy.loadedURLs, [url], "Expected to load URL from loader")
+    }
+    
+    func test_cancelLoadImageData_cancelsLoaderTask() {
+        let url = anyURL()
+        let (sut, spy) = makeSUT()
+        
+        let task = sut.loadImageData(from: url) { _ in }
+        task.cancel()
+        
+        XCTAssertEqual(spy.cancelledURLs, [url], "Expected to cancel URL loading from loader")
+    }
+    
     func test_load_deliversFeedOnLoaderSuccess() {
         let expectedData = anyData()
         let (sut, spy) = makeSUT()
@@ -79,7 +104,7 @@ class FeedImageDataLoaderCacheDecoratorTests: XCTestCase, FeedImageDataLoaderTes
     
     // MARK: - Helpers
     
-    private func makeSUT(cache: FeedImageDataCacheSpy = .init(), file: StaticString = #file, line: UInt = #line) -> (sut: FeedImageDataLoaderCacheDecorator, spy: FeedImageDataLoaderSpy) {
+    private func makeSUT(cache: FeedImageDataCacheSpy = .init(), file: StaticString = #file, line: UInt = #line) -> (sut: FeedImageDataLoader, spy: FeedImageDataLoaderSpy) {
         let spy = FeedImageDataLoaderSpy()
         let sut = FeedImageDataLoaderCacheDecorator(decoratee: spy, cache: cache)
         trackForMemoryLeaks(spy, file: file, line: line)
