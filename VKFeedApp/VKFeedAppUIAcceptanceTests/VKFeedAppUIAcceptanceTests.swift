@@ -16,7 +16,22 @@ class VKFeedAppUIAcceptanceTests: XCTestCase {
         let feedImageCells = app.cells.matching(identifier: "feed-image-cell")
         XCTAssertEqual(feedImageCells.count, 22)
         
-        let feedImage = app.cells.firstMatch.images.matching(identifier: "feed-image-view")
-        XCTAssertEqual(feedImage.count, 1)
+        let feedImage = app.cells.firstMatch.images.matching(identifier: "feed-image-view").firstMatch
+        XCTAssertTrue(feedImage.exists)
+    }
+    
+    func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let offlineApp = XCUIApplication()
+        offlineApp.launchArguments = ["-connectivity", "offline"]
+        offlineApp.launch()
+        
+        let cachedFeedCells = offlineApp.cells.matching(identifier: "feed-image-cell")
+        XCTAssertEqual(cachedFeedCells.count, 22)
+        
+        let firstCachedImage = offlineApp.images.matching(identifier: "feed-image-view").firstMatch
+        XCTAssertTrue(firstCachedImage.exists)
     }
 }
