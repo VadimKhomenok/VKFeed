@@ -78,6 +78,7 @@
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NoD-AX-jjn">
                                                             <rect key="frame" x="0.0" y="0.0" width="354" height="354"/>
+                                                            <accessibility key="accessibilityConfiguration" identifier="feed-image-view"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                                     <integer key="value" value="10"/>
@@ -135,6 +136,7 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="lXy-tj-AMe" secondAttribute="trailing" constant="10" id="xjz-GJ-E9L"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <accessibility key="accessibilityConfiguration" identifier="feed-image-cell"/>
                                 <connections>
                                     <outlet property="descriptionLabel" destination="BAF-1Y-eWJ" id="E0J-hP-Gmh"/>
                                     <outlet property="feedImageContainer" destination="4Gx-nZ-bW3" id="xD0-Yh-04g"/>

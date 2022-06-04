@@ -13,7 +13,10 @@ class VKFeedAppUIAcceptanceTests: XCTestCase {
         
         app.launch()
         
-        XCTAssertEqual(app.cells.count, 22)
-//        XCTAssertEqual(app.cells.firstMatch.images.count, 1)
+        let feedImageCells = app.cells.matching(identifier: "feed-image-cell")
+        XCTAssertEqual(feedImageCells.count, 22)
+        
+        let feedImage = app.cells.firstMatch.images.matching(identifier: "feed-image-view")
+        XCTAssertEqual(feedImage.count, 1)
     }
 }
