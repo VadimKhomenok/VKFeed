@@ -10,8 +10,7 @@ import Foundation
 public class LocalFeedLoader {
     private var store: FeedStore
     private let currentDate: () -> Date
-
-    public typealias SaveResult = Result<Void, Error>
+    
     public typealias LoadResult = FeedLoader.Result
     
     public init(store: FeedStore, currentDate: @escaping () -> Date) {
@@ -24,6 +23,8 @@ public class LocalFeedLoader {
 // MARK: - Local Feed Loader Save
 
 extension LocalFeedLoader {
+    public typealias SaveResult = Result<Void, Error>
+    
     public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
         store.deleteCache() { [weak self] deletionResult in
             guard let self = self else { return }
