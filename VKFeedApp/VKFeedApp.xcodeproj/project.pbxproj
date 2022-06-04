@@ -29,6 +29,7 @@
 		67C3B6C628482E3D004206B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67C3B6C528482E3D004206B8 /* Assets.xcassets */; };
 		67C3B6C928482E3D004206B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C3B6C728482E3D004206B8 /* LaunchScreen.storyboard */; };
 		67F148AE284C002300304B49 /* VKFeedAppUIAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F148AD284C002300304B49 /* VKFeedAppUIAcceptanceTests.swift */; };
+		67F148B7284C11FE00304B49 /* DebuggingSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F148B6284C11FE00304B49 /* DebuggingSceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		67C3B6CF28482E3D004206B8 /* VKFeedAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F148AB284C002300304B49 /* VKFeedAppUIAcceptanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAppUIAcceptanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F148AD284C002300304B49 /* VKFeedAppUIAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedAppUIAcceptanceTests.swift; sourceTree = "<group>"; };
+		67F148B6284C11FE00304B49 /* DebuggingSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingSceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 				671DC5DE284BE62F00C81B23 /* FeedImageDataLoaderCacheDecorator.swift */,
 				67C3B6BC28482E39004206B8 /* AppDelegate.swift */,
 				67C3B6BE28482E39004206B8 /* SceneDelegate.swift */,
+				67F148B6284C11FE00304B49 /* DebuggingSceneDelegate.swift */,
 				67C3B6C528482E3D004206B8 /* Assets.xcassets */,
 				67C3B6C728482E3D004206B8 /* LaunchScreen.storyboard */,
 				67C3B6CA28482E3D004206B8 /* Info.plist */,
@@ -331,6 +334,7 @@
 				671DC5D5284BD50800C81B23 /* FeedLoaderCacheDecorator.swift in Sources */,
 				671DC5DF284BE62F00C81B23 /* FeedImageDataLoaderCacheDecorator.swift in Sources */,
 				6784A8D8284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift in Sources */,
+				67F148B7284C11FE00304B49 /* DebuggingSceneDelegate.swift in Sources */,
 				67C3B6BF28482E39004206B8 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
