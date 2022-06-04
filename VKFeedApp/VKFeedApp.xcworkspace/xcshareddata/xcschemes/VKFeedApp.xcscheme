@@ -40,6 +40,16 @@
                ReferencedContainer = "container:VKFeedApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "67F148AA284C002300304B49"
+               BuildableName = "VKFeedAppUIAcceptanceTests.xctest"
+               BlueprintName = "VKFeedAppUIAcceptanceTests"
+               ReferencedContainer = "container:VKFeedApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
