@@ -84,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		671DC5C9284BB21A00C81B23 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				6779CA2E28498A4400BE57BF /* VKFeedAppTestsHelpers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		679937DC2848330C00D2ECB0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -131,7 +139,7 @@
 			children = (
 				6779CA2C2849820C00BE57BF /* FeedLoaderWithFallbackCompositeTests.swift */,
 				6784A8D5284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift */,
-				6779CA2E28498A4400BE57BF /* VKFeedAppTestsHelpers.swift */,
+				671DC5C9284BB21A00C81B23 /* Helpers */,
 			);
 			path = VKFeedAppTests;
 			sourceTree = "<group>";

@@ -128,10 +128,6 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    func anyData() -> Data {
-        return Data("any data".utf8)
-    }
-    
     private class FeedImageDataLoaderSpy: FeedImageDataLoader {
         private struct Task: FeedImageDataLoaderTask {
             var cancelCallback: () -> Void

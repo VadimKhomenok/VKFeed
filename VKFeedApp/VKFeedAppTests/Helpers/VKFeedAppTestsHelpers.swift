@@ -28,3 +28,7 @@ func makeUniqueFeed() -> [FeedImage] {
     return [FeedImage(id: UUID(), description: nil, location: nil, url: anyURL()),
             FeedImage(id: UUID(), description: nil, location: nil, url: anyURL())]
 }
+
+func anyData() -> Data {
+    return Data("any data".utf8)
+}
