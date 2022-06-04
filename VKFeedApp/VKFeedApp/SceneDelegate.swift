@@ -17,14 +17,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let url = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed/v1/feed")!
-        let urlSession = URLSession(configuration: .ephemeral)
-        let httpClient = URLSessionHTTPClient(session: urlSession)
+        let httpClient = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let feedLoader = RemoteFeedLoader(url: url, client: httpClient)
         let imageLoader = RemoteFeedImageDataLoader(client: httpClient)
-        let feedViewController = FeedUIComposer.feedComposedWith(imageLoader: imageLoader, feedLoader: feedLoader)
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = feedViewController
+        window?.rootViewController = FeedUIComposer.feedComposedWith(imageLoader: imageLoader, feedLoader: feedLoader)
         window?.makeKeyAndVisible()
     }
 
