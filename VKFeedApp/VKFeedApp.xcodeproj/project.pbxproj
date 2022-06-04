@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		6779CA2D2849820C00BE57BF /* FeedLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6779CA2C2849820C00BE57BF /* FeedLoaderWithFallbackCompositeTests.swift */; };
 		6779CA2F28498A4400BE57BF /* VKFeedAppTestsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6779CA2E28498A4400BE57BF /* VKFeedAppTestsHelpers.swift */; };
+		6784A8D6284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6784A8D5284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift */; };
+		6784A8D8284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6784A8D7284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift */; };
 		679937DE2848330C00D2ECB0 /* VKFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679937DD2848330C00D2ECB0 /* VKFeed.framework */; };
 		679937DF2848330C00D2ECB0 /* VKFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 679937DD2848330C00D2ECB0 /* VKFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		679937E22848331000D2ECB0 /* VKFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679937E12848331000D2ECB0 /* VKFeediOS.framework */; };
@@ -47,6 +49,8 @@
 /* Begin PBXFileReference section */
 		6779CA2C2849820C00BE57BF /* FeedLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		6779CA2E28498A4400BE57BF /* VKFeedAppTestsHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedAppTestsHelpers.swift; sourceTree = "<group>"; };
+		6784A8D5284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
+		6784A8D7284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		679937DD2848330C00D2ECB0 /* VKFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VKFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		679937E12848331000D2ECB0 /* VKFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VKFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67C3B6B928482E39004206B8 /* VKFeedApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKFeedApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +113,7 @@
 		67C3B6BB28482E39004206B8 /* VKFeedApp */ = {
 			isa = PBXGroup;
 			children = (
+				6784A8D7284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift */,
 				67C3B6BC28482E39004206B8 /* AppDelegate.swift */,
 				67C3B6BE28482E39004206B8 /* SceneDelegate.swift */,
 				67C3B6C528482E3D004206B8 /* Assets.xcassets */,
@@ -122,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				6779CA2C2849820C00BE57BF /* FeedLoaderWithFallbackCompositeTests.swift */,
+				6784A8D5284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift */,
 				6779CA2E28498A4400BE57BF /* VKFeedAppTestsHelpers.swift */,
 			);
 			path = VKFeedAppTests;
@@ -229,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				67C3B6BD28482E39004206B8 /* AppDelegate.swift in Sources */,
+				6784A8D8284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift in Sources */,
 				67C3B6BF28482E39004206B8 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,6 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6784A8D6284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */,
 				6779CA2F28498A4400BE57BF /* VKFeedAppTestsHelpers.swift in Sources */,
 				6779CA2D2849820C00BE57BF /* FeedLoaderWithFallbackCompositeTests.swift in Sources */,
 			);
