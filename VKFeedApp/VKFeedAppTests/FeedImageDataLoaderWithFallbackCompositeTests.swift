@@ -10,7 +10,7 @@ import Foundation
 import VKFeed
 import VKFeedApp
 
-class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
+class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase, FeedImageDataLoaderTestCase {
     
     func test_init_doesNotLoadImageData() {
         let (_, primarySpy, fallbackSpy) = makeSUT()
@@ -104,28 +104,6 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut, primarySpy, fallbackSpy)
-    }
-    
-    func expect(_ sut: FeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, onAction action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        let exp = expectation(description: "Wait for load completion")
-        _ = sut.loadImageData(from: anyURL()) { result in
-            switch (result, expectedResult) {
-            case let (.success(resultData), .success(expectedData)):
-                XCTAssertEqual(resultData, expectedData, file: file, line: line)
-                
-            case (.failure, .failure):
-                break
-                
-            default:
-                XCTFail("Expected \(expectedResult), got \(result) instead", file: file, line: line)
-            }
-            
-            exp.fulfill()
-        }
-        
-        action()
-        
-        wait(for: [exp], timeout: 1.0)
     }
     
     private class FeedImageDataLoaderSpy: FeedImageDataLoader {
