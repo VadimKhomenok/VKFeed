@@ -10,6 +10,7 @@ import Foundation
 import VKFeed
 
 class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
+    private let primary: FeedImageDataLoader
 
     private class Task: FeedImageDataLoaderTask {
         func cancel() {
@@ -18,10 +19,11 @@ class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
     }
     
     init(primary: FeedImageDataLoader, fallback: FeedImageDataLoader) {
-
+        self.primary = primary
     }
     
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
+        _ = primary.loadImageData(from: url) { _ in }
         return Task()
     }
 }
@@ -34,6 +36,18 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         let _ = FeedImageDataLoaderWithFallbackComposite(primary: primarySpy, fallback: fallbackSpy)
         
         XCTAssertTrue(primarySpy.loadedURLs.isEmpty, "Expected no loaded URLs in the primary loader")
+        XCTAssertTrue(fallbackSpy.loadedURLs.isEmpty, "Expected no loaded URLs in the fallback loader")
+    }
+    
+    func test_loadFeedImageData_loadsFromPrimaryLoaderFirst() {
+        let primarySpy = FeedImageDataLoaderSpy()
+        let fallbackSpy = FeedImageDataLoaderSpy()
+        let sut = FeedImageDataLoaderWithFallbackComposite(primary: primarySpy, fallback: fallbackSpy)
+        let url = anyURL()
+        
+        _ = sut.loadImageData(from: url) { _ in }
+
+        XCTAssertEqual(primarySpy.loadedURLs, [url], "Expected to load URL from primary loader")
         XCTAssertTrue(fallbackSpy.loadedURLs.isEmpty, "Expected no loaded URLs in the fallback loader")
     }
     
