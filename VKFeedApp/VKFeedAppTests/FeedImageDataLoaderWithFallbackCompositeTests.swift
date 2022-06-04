@@ -31,18 +31,14 @@ class FeedImageDataLoaderWithFallbackComposite: FeedImageDataLoader {
 class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     
     func test_init_doesNotLoadImageData() {
-        let primarySpy = FeedImageDataLoaderSpy()
-        let fallbackSpy = FeedImageDataLoaderSpy()
-        let _ = FeedImageDataLoaderWithFallbackComposite(primary: primarySpy, fallback: fallbackSpy)
+        let (_, primarySpy, fallbackSpy) = makeSUT()
         
         XCTAssertTrue(primarySpy.loadedURLs.isEmpty, "Expected no loaded URLs in the primary loader")
         XCTAssertTrue(fallbackSpy.loadedURLs.isEmpty, "Expected no loaded URLs in the fallback loader")
     }
     
     func test_loadFeedImageData_loadsFromPrimaryLoaderFirst() {
-        let primarySpy = FeedImageDataLoaderSpy()
-        let fallbackSpy = FeedImageDataLoaderSpy()
-        let sut = FeedImageDataLoaderWithFallbackComposite(primary: primarySpy, fallback: fallbackSpy)
+        let (sut, primarySpy, fallbackSpy) = makeSUT()
         let url = anyURL()
         
         _ = sut.loadImageData(from: url) { _ in }
@@ -52,6 +48,18 @@ class FeedImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     }
     
     // MARK: - Helpers
+    
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (FeedImageDataLoaderWithFallbackComposite, FeedImageDataLoaderSpy, FeedImageDataLoaderSpy) {
+        let primarySpy = FeedImageDataLoaderSpy()
+        let fallbackSpy = FeedImageDataLoaderSpy()
+        let sut = FeedImageDataLoaderWithFallbackComposite(primary: primarySpy, fallback: fallbackSpy)
+        
+        trackForMemoryLeaks(primarySpy, file: file, line: line)
+        trackForMemoryLeaks(fallbackSpy, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        
+        return (sut, primarySpy, fallbackSpy)
+    }
     
     private class FeedImageDataLoaderSpy: FeedImageDataLoader {
         private struct Task: FeedImageDataLoaderTask {
