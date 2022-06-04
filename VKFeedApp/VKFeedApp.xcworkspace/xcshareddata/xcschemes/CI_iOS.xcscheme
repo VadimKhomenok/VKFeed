@@ -17,7 +17,7 @@
                BlueprintIdentifier = "67F3F7AF2804664F0078CFEA"
                BuildableName = "VKFeed.framework"
                BlueprintName = "VKFeed"
-               ReferencedContainer = "container:VKFeed.xcodeproj">
+               ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "67F6BDD6281F4964004EB491"
                BuildableName = "VKFeediOSTests.xctest"
                BlueprintName = "VKFeediOSTests"
-               ReferencedContainer = "container:VKFeed.xcodeproj">
+               ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -49,14 +49,21 @@
             BlueprintIdentifier = "67F3F7AF2804664F0078CFEA"
             BuildableName = "VKFeed.framework"
             BlueprintName = "VKFeed"
-            ReferencedContainer = "container:VKFeed.xcodeproj">
+            ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "67F6BDCD281F4963004EB491"
             BuildableName = "VKFeediOS.framework"
             BlueprintName = "VKFeediOS"
-            ReferencedContainer = "container:VKFeed.xcodeproj">
+            ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "67C3B6B828482E39004206B8"
+            BuildableName = "VKFeedApp.app"
+            BlueprintName = "VKFeedApp"
+            ReferencedContainer = "container:VKFeedApp.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
@@ -68,7 +75,7 @@
                BlueprintIdentifier = "67F3F7BF280466A00078CFEA"
                BuildableName = "VKFeedTests.xctest"
                BlueprintName = "VKFeedTests"
-               ReferencedContainer = "container:VKFeed.xcodeproj">
+               ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -79,7 +86,7 @@
                BlueprintIdentifier = "67B4BBA82808DA63006CD939"
                BuildableName = "VKFeedAPIEndToEndTests.xctest"
                BlueprintName = "VKFeedAPIEndToEndTests"
-               ReferencedContainer = "container:VKFeed.xcodeproj">
+               ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -90,7 +97,7 @@
                BlueprintIdentifier = "67F9BB8528173E1000B606BA"
                BuildableName = "VKFeedCacheIntegrationTests.xctest"
                BlueprintName = "VKFeedCacheIntegrationTests"
-               ReferencedContainer = "container:VKFeed.xcodeproj">
+               ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -101,7 +108,18 @@
                BlueprintIdentifier = "67F6BDD6281F4964004EB491"
                BuildableName = "VKFeediOSTests.xctest"
                BlueprintName = "VKFeediOSTests"
-               ReferencedContainer = "container:VKFeed.xcodeproj">
+               ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "67C3B6CE28482E3D004206B8"
+               BuildableName = "VKFeedAppTests.xctest"
+               BlueprintName = "VKFeedAppTests"
+               ReferencedContainer = "container:VKFeedApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -129,7 +147,7 @@
             BlueprintIdentifier = "67F3F7AF2804664F0078CFEA"
             BuildableName = "VKFeed.framework"
             BlueprintName = "VKFeed"
-            ReferencedContainer = "container:VKFeed.xcodeproj">
+            ReferencedContainer = "container:../VKFeed/VKFeed.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
