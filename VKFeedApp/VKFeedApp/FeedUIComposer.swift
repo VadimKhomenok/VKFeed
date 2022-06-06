@@ -6,7 +6,7 @@
 //
 
 import VKFeed
-import Foundation
+import VKFeediOS
 import UIKit
 
 public final class FeedUIComposer {

@@ -8,7 +8,7 @@
 import UIKit
 import VKFeed
 
-protocol FeedViewControllerDelegate: AnyObject {
+public protocol FeedViewControllerDelegate: AnyObject {
     func didRequestFeedRefresh()
 }
 
@@ -16,13 +16,13 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     
     @IBOutlet public var errorView: ErrorView!
     
-    var delegate: FeedViewControllerDelegate?
-    
-    var tableModel = [FeedImageCellController]() {
+    private var tableModel = [FeedImageCellController]() {
         didSet {
             tableView.reloadData()
         }
     }
+    
+    public var delegate: FeedViewControllerDelegate?
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +32,10 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     
     @IBAction func refresh() {
         delegate?.didRequestFeedRefresh()
+    }
+    
+    public func display(_ cellControllers: [FeedImageCellController]) {
+        tableModel = cellControllers
     }
     
     public func display(_ viewModel: FeedLoadingViewModel) {

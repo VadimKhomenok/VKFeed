@@ -6,6 +6,7 @@
 //
 
 import VKFeed
+import VKFeediOS
 
 final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
     var presenter: FeedPresenter?

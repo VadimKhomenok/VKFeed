@@ -9,6 +9,7 @@ import XCTest
 import UIKit
 import VKFeed
 import VKFeediOS
+@testable import VKFeedApp
 
 final class FeedUIIntegrationTests: XCTestCase {
     override func setUp() {
