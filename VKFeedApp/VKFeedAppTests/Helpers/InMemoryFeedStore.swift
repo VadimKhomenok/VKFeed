@@ -8,8 +8,12 @@
 import VKFeed
 
 class InMemoryFeedStore: FeedStore, FeedImageDataStore {
-    private var feedCache: CachedFeed?
+    private(set) var feedCache: CachedFeed?
     private var feedImageDataCache: [URL: Data] = [:]
+    
+    init(feedCache: CachedFeed? = nil) {
+        self.feedCache = feedCache
+    }
     
     func deleteCache(_ completion: @escaping FeedStore.DeletionCompletion) {
         feedCache = nil
@@ -38,5 +42,13 @@ class InMemoryFeedStore: FeedStore, FeedImageDataStore {
 extension InMemoryFeedStore {
     static var empty: InMemoryFeedStore {
         InMemoryFeedStore()
+    }
+
+    static var withExpiredFeedCache: InMemoryFeedStore {
+        InMemoryFeedStore(feedCache: CachedFeed(feed: [], timestamp: Date.distantPast))
+    }
+
+    static var withNonExpiredFeedCache: InMemoryFeedStore {
+        InMemoryFeedStore(feedCache: CachedFeed(feed: [], timestamp: Date()))
     }
 }
