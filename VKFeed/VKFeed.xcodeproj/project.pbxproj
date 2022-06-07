@@ -421,10 +421,10 @@
 			isa = PBXGroup;
 			children = (
 				67F3F7B22804664F0078CFEA /* VKFeed */,
+				67F6BDCF281F4964004EB491 /* VKFeediOS */,
 				67F3F7C1280466A00078CFEA /* VKFeedTests */,
 				67B4BBAA2808DA64006CD939 /* VKFeedAPIEndToEndTests */,
 				67F9BB8728173E1000B606BA /* VKFeedCacheIntegrationTests */,
-				67F6BDCF281F4964004EB491 /* VKFeediOS */,
 				67F3F7B12804664F0078CFEA /* Products */,
 			);
 			sourceTree = "<group>";
