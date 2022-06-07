@@ -45,7 +45,6 @@
 		67C3B6BF28482E39004206B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C3B6BE28482E39004206B8 /* SceneDelegate.swift */; };
 		67C3B6C628482E3D004206B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67C3B6C528482E3D004206B8 /* Assets.xcassets */; };
 		67C3B6C928482E3D004206B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C3B6C728482E3D004206B8 /* LaunchScreen.storyboard */; };
-		67F148AE284C002300304B49 /* VKFeedAppUIAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F148AD284C002300304B49 /* VKFeedAppUIAcceptanceTests.swift */; };
 		67F148B7284C11FE00304B49 /* DebuggingSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F148B6284C11FE00304B49 /* DebuggingSceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -122,7 +121,6 @@
 		67C3B6CA28482E3D004206B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67C3B6CF28482E3D004206B8 /* VKFeedAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67F148AB284C002300304B49 /* VKFeedAppUIAcceptanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAppUIAcceptanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		67F148AD284C002300304B49 /* VKFeedAppUIAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedAppUIAcceptanceTests.swift; sourceTree = "<group>"; };
 		67F148B6284C11FE00304B49 /* DebuggingSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebuggingSceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -188,7 +186,6 @@
 			children = (
 				67C3B6BB28482E39004206B8 /* VKFeedApp */,
 				67C3B6D228482E3D004206B8 /* VKFeedAppTests */,
-				67F148AC284C002300304B49 /* VKFeedAppUIAcceptanceTests */,
 				67C3B6BA28482E39004206B8 /* Products */,
 				679937DC2848330C00D2ECB0 /* Frameworks */,
 			);
@@ -239,14 +236,6 @@
 				671DC5C9284BB21A00C81B23 /* Helpers */,
 			);
 			path = VKFeedAppTests;
-			sourceTree = "<group>";
-		};
-		67F148AC284C002300304B49 /* VKFeedAppUIAcceptanceTests */ = {
-			isa = PBXGroup;
-			children = (
-				67F148AD284C002300304B49 /* VKFeedAppUIAcceptanceTests.swift */,
-			);
-			path = VKFeedAppUIAcceptanceTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -427,7 +416,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67F148AE284C002300304B49 /* VKFeedAppUIAcceptanceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
