@@ -54,6 +54,10 @@ extension FeedViewController {
 
     @discardableResult
     func renderedFeedImageView(at row: Int) -> UITableViewCell? {
+        guard numberOfRenderedFeedViews() > row else {
+            return nil
+        }
+
         let dataSource = tableView.dataSource
         return dataSource?.tableView(tableView, cellForRowAt: feedImageIndexPath(for: row))
     }
