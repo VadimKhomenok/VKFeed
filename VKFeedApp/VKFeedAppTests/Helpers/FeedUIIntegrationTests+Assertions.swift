@@ -8,7 +8,7 @@
 import VKFeediOS
 import VKFeed
 import XCTest
-
+    
 extension FeedUIIntegrationTests {
     func assert(sut: FeedViewController, rendered feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
         sut.view.enforceLayoutCycle()
