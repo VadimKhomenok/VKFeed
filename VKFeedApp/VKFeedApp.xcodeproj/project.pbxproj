@@ -47,6 +47,7 @@
 		67C3B6C628482E3D004206B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67C3B6C528482E3D004206B8 /* Assets.xcassets */; };
 		67C3B6C928482E3D004206B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 67C3B6C728482E3D004206B8 /* LaunchScreen.storyboard */; };
 		67D6695428514B3000E8AEEA /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D6695328514B2F00E8AEEA /* UIImage+TestHelpers.swift */; };
+		67D6695E2851687A00E8AEEA /* UIView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D6695D2851687A00E8AEEA /* UIView+TestHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +124,7 @@
 		67C3B6CA28482E3D004206B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		67C3B6CF28482E3D004206B8 /* VKFeedAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67D6695328514B2F00E8AEEA /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
+		67D6695D2851687A00E8AEEA /* UIView+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+TestHelpers.swift"; sourceTree = "<group>"; };
 		67F148AB284C002300304B49 /* VKFeedAppUIAcceptanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKFeedAppUIAcceptanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -156,6 +158,7 @@
 		671DC5C9284BB21A00C81B23 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				67D6695D2851687A00E8AEEA /* UIView+TestHelpers.swift */,
 				67D6695328514B2F00E8AEEA /* UIImage+TestHelpers.swift */,
 				67B41FCB284EB55A00CCE9D6 /* UIRefreshControl+TestHelpers.swift */,
 				67B41FC4284EB55900CCE9D6 /* UIButton+TestHelpers.swift */,
@@ -409,6 +412,7 @@
 				6779CA2D2849820C00BE57BF /* FeedLoaderWithFallbackCompositeTests.swift in Sources */,
 				67D6695428514B3000E8AEEA /* UIImage+TestHelpers.swift in Sources */,
 				67B41FCE284EB55B00CCE9D6 /* FeedUIIntegrationTests+LoaderSpy.swift in Sources */,
+				67D6695E2851687A00E8AEEA /* UIView+TestHelpers.swift in Sources */,
 				67B41FD1284EB55B00CCE9D6 /* UIButton+TestHelpers.swift in Sources */,
 				67B41FD4284EB55B00CCE9D6 /* UIControl+TestHelpers.swift in Sources */,
 				671DC5CD284BC1C400C81B23 /* FeedLoaderCacheDecoratorTests.swift in Sources */,

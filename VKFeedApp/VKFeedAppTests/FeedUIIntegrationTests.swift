@@ -60,7 +60,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertFalse(sut.isShowingLoadingIndicator(), "Expected no loading indicator after loading is completed with error")
     }
 
-    func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
+    func test_loadFeedCompletion_rendersSuccessfullyLoadedFeedAfterOnceSuccessfullyLoaded() {
         let (loader, sut) = makeSUT()
         let image0 = makeImage(description: "a description", location: "a location")
         let image1 = makeImage(description: "another description", location: nil)
@@ -257,7 +257,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(loader.cancelledRequestedUrls, [image0.url, image1.url], "Expected second cancelled image URL request once second image is not near visible anymore")
     }
     
-    func test_Idontknow_rendersSuccessfullyLoadedFeed() {
+    func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
         let (loader, sut) = makeSUT()
 
         sut.loadViewIfNeeded()
@@ -268,6 +268,21 @@ final class FeedUIIntegrationTests: XCTestCase {
         loader.completeImageLoading(with: anyImageData(), at: 0)
         
         XCTAssertNil(view?.renderedImage, "Expected no rendered image when image load finishes after the view is not visible anymore")
+    }
+    
+    func test_loadFeedCompletion_rendersSuccessfullyLoadedEmptyFeedAfterNonEmptyFeed() {
+        let image0 = makeImage()
+        let image1 = makeImage()
+        let (loader, sut) = makeSUT()
+
+        sut.loadViewIfNeeded()
+    
+        loader.completeFeedLoading(feed: [image0, image1], at: 0)
+        assert(sut: sut, rendered: [image0, image1])
+
+        sut.simulateUserInitiatedFeedReload()
+        loader.completeFeedLoading(feed: [], at: 1)
+        assert(sut: sut, rendered: [])
     }
 
     func test_loadFeedCompletion_dispatchesFromBackgroundToMainThread() {

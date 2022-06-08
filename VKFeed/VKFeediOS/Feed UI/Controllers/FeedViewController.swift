@@ -14,6 +14,8 @@ public protocol FeedViewControllerDelegate: AnyObject {
 
 public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, FeedLoadingView, FeedErrorView {
     
+    private var loadingControllers = [IndexPath: FeedImageCellController]()
+    
     @IBOutlet public var errorView: ErrorView!
     
     private var tableModel = [FeedImageCellController]() {
@@ -41,6 +43,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     public func display(_ cellControllers: [FeedImageCellController]) {
+        loadingControllers = [:]
         tableModel = cellControllers
     }
     
@@ -81,11 +84,14 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     private func cellController(for indexPath: IndexPath) -> FeedImageCellController {
-        return tableModel[indexPath.row]
+        let controller = tableModel[indexPath.row]
+        loadingControllers[indexPath] = controller
+        return controller
     }
     
     private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
-        cellController(for: indexPath).cancelLoad()
+        loadingControllers[indexPath]?.cancelLoad()
+        loadingControllers[indexPath] = nil
     }
 }
 

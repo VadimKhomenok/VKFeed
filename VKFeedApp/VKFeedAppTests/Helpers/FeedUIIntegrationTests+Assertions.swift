@@ -11,6 +11,8 @@ import XCTest
 
 extension FeedUIIntegrationTests {
     func assert(sut: FeedViewController, rendered feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
+        sut.view.enforceLayoutCycle()
+        
         XCTAssertEqual(sut.numberOfRenderedFeedViews(), feed.count, "Expected to render \(feed.count) number of views, rendered \(sut.numberOfRenderedFeedViews()) instead", file: file, line: line)
         
         for (index, feedImage) in feed.enumerated() {
