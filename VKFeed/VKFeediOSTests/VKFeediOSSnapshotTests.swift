@@ -27,6 +27,14 @@ class VKFeediOSSnapshotTests: XCTestCase {
         record(snapshot: feed.snapshot(), named: "FEED_WITH_CONTENT")
     }
     
+    func test_errorFeed() {
+        let feed = makeSUT()
+        
+        feed.display(FeedErrorViewModel(message: "This is a\nmulti-line\nerror message"))
+        
+        record(snapshot: feed.snapshot(), named: "FEED_WITH_ERROR_MESSAGE")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT() -> FeedViewController {

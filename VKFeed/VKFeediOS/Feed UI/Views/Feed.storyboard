@@ -20,7 +20,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e3C-gh-fS0">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="34"/>
+                                    <rect key="frame" x="0.0" y="4" width="414" height="26"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
@@ -30,8 +30,8 @@
                             <constraints>
                                 <constraint firstItem="e3C-gh-fS0" firstAttribute="leading" secondItem="mpZ-vf-wRp" secondAttribute="leading" id="2sM-aX-Jrl"/>
                                 <constraint firstAttribute="trailing" secondItem="e3C-gh-fS0" secondAttribute="trailing" id="5Y3-0f-8Zg"/>
-                                <constraint firstItem="e3C-gh-fS0" firstAttribute="top" secondItem="mpZ-vf-wRp" secondAttribute="top" id="9BU-rO-Z9I"/>
-                                <constraint firstAttribute="bottom" secondItem="e3C-gh-fS0" secondAttribute="bottom" id="F5F-ft-xZd"/>
+                                <constraint firstItem="e3C-gh-fS0" firstAttribute="top" secondItem="mpZ-vf-wRp" secondAttribute="top" constant="4" id="9BU-rO-Z9I"/>
+                                <constraint firstAttribute="bottom" secondItem="e3C-gh-fS0" secondAttribute="bottom" constant="4" id="F5F-ft-xZd"/>
                             </constraints>
                             <connections>
                                 <outlet property="label" destination="e3C-gh-fS0" id="BbE-Ad-svd"/>
