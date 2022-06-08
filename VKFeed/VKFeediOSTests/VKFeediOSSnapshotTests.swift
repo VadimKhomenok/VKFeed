@@ -7,17 +7,24 @@
 
 import XCTest
 import VKFeediOS
+@testable import VKFeed
 
 class VKFeediOSSnapshotTests: XCTestCase {
     
     func test_emptyFeed_snapshot() {
         let feed = makeSUT()
         
-        feed.display([])
+        feed.display(stubs: [])
         
-        let snapshot = feed.snapshot()
+        record(snapshot: feed.snapshot(), named: "EMPTY_FEED")
+    }
+    
+    func test_nonEmptyFeed() {
+        let feed = makeSUT()
         
-        record(snapshot: snapshot, named: "EMPTY_FEED")
+        feed.display(stubs: feedWithContent())
+        
+        record(snapshot: feed.snapshot(), named: "FEED_WITH_CONTENT")
     }
     
     // MARK: - Helpers
@@ -53,6 +60,52 @@ class VKFeediOSSnapshotTests: XCTestCase {
             XCTFail("Failed to record snapshot with error: \(error)", file: file, line: line)
         }
     }
+    
+    private func feedWithContent() -> [ImageStub] {
+        return [
+            ImageStub(
+                description: "The East Side Gallery is an open-air gallery in Berlin. It consists of a series of murals painted directly on a 1,316 m long remnant of the Berlin Wall, located near the centre of Berlin, on Mühlenstraße in Friedrichshain-Kreuzberg. The gallery has official status as a Denkmal, or heritage-protected landmark.",
+                location: "East Side Gallery\nMemorial in Berlin, Germany",
+                image: UIImage.makeTinyImage(color: .red)
+            ),
+            ImageStub(
+                description: "Garth Pier is a Grade II listed structure in Bangor, Gwynedd, North Wales.",
+                location: "Garth Pier",
+                image: UIImage.makeTinyImage(color: .green)
+            )
+        ]
+    }
+}
+
+private extension FeedViewController {
+    func display(stubs: [ImageStub]) {
+        let cells: [FeedImageCellController] = stubs.map { stub in
+            let cellController = FeedImageCellController(delegate: stub)
+            stub.controller = cellController
+            return cellController
+        }
+        
+        display(cells)
+    }
+}
+
+private class ImageStub: FeedImageCellControllerDelegate {
+    let viewModel: FeedImageViewModel<UIImage>
+    weak var controller: FeedImageCellController?
+    
+    init(description: String?, location: String?, image: UIImage?) {
+        self.viewModel = FeedImageViewModel<UIImage>.init(description: description,
+                                                          location: location,
+                                                          isLoading: false,
+                                                          isRetry: false,
+                                                          image: image)
+    }
+    
+    func didRequestImage() {
+        controller?.display(viewModel)
+    }
+    
+    func didCancelImageRequest() {}
 }
 
 extension UIViewController {
