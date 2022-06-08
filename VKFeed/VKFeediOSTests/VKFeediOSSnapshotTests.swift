@@ -19,7 +19,7 @@ class VKFeediOSSnapshotTests: XCTestCase {
         record(snapshot: feed.snapshot(), named: "EMPTY_FEED")
     }
     
-    func test_nonEmptyFeed() {
+    func test_nonEmptyFeed_snapshot() {
         let feed = makeSUT()
         
         feed.display(stubs: feedWithContent())
@@ -27,12 +27,20 @@ class VKFeediOSSnapshotTests: XCTestCase {
         record(snapshot: feed.snapshot(), named: "FEED_WITH_CONTENT")
     }
     
-    func test_errorFeed() {
+    func test_errorFeed_snapshot() {
         let feed = makeSUT()
         
         feed.display(FeedErrorViewModel(message: "This is a\nmulti-line\nerror message"))
         
         record(snapshot: feed.snapshot(), named: "FEED_WITH_ERROR_MESSAGE")
+    }
+    
+    func test_errorImageLoading_snapshot() {
+        let feed = makeSUT()
+        
+        feed.display(stubs: feedWithFailedImageLoading())
+        
+        record(snapshot: feed.snapshot(), named: "FEED_WITH_FAILED_IMAGE_LOADING")
     }
     
     // MARK: - Helpers
@@ -83,6 +91,21 @@ class VKFeediOSSnapshotTests: XCTestCase {
             )
         ]
     }
+    
+    private func feedWithFailedImageLoading() -> [ImageStub] {
+        return [
+            ImageStub(
+                description: nil,
+                location: "Cannon Street, London",
+                image: nil
+            ),
+            ImageStub(
+                description: nil,
+                location: "Brighton Seafront",
+                image: nil
+            )
+        ]
+    }
 }
 
 private extension FeedViewController {
@@ -105,7 +128,7 @@ private class ImageStub: FeedImageCellControllerDelegate {
         self.viewModel = FeedImageViewModel<UIImage>.init(description: description,
                                                           location: location,
                                                           isLoading: false,
-                                                          isRetry: false,
+                                                          isRetry: image == nil,
                                                           image: image)
     }
     
