@@ -22,6 +22,7 @@
 		6779CA2F28498A4400BE57BF /* VKFeedAppTestsHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6779CA2E28498A4400BE57BF /* VKFeedAppTestsHelpers.swift */; };
 		6784A8D6284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6784A8D5284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift */; };
 		6784A8D8284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6784A8D7284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift */; };
+		6796BE902856417C00FAA0DE /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6796BE8F2856417C00FAA0DE /* SceneDelegateTests.swift */; };
 		679937DE2848330C00D2ECB0 /* VKFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679937DD2848330C00D2ECB0 /* VKFeed.framework */; };
 		679937DF2848330C00D2ECB0 /* VKFeed.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 679937DD2848330C00D2ECB0 /* VKFeed.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		679937E22848331000D2ECB0 /* VKFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 679937E12848331000D2ECB0 /* VKFeediOS.framework */; };
@@ -98,6 +99,7 @@
 		6779CA2E28498A4400BE57BF /* VKFeedAppTestsHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeedAppTestsHelpers.swift; sourceTree = "<group>"; };
 		6784A8D5284ACEFB001CFAEA /* FeedImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		6784A8D7284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
+		6796BE8F2856417C00FAA0DE /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
 		679937DD2848330C00D2ECB0 /* VKFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VKFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		679937E12848331000D2ECB0 /* VKFeediOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VKFeediOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67B41FB4284EAE7A00CCE9D6 /* FeedAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAcceptanceTests.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				671DC5D6284BD65A00C81B23 /* FeedImageDataLoaderCacheDecoratorTests.swift */,
 				67B41FD5284EB57200CCE9D6 /* FeedUIIntegrationTests.swift */,
 				67B41FB4284EAE7A00CCE9D6 /* FeedAcceptanceTests.swift */,
+				6796BE8F2856417C00FAA0DE /* SceneDelegateTests.swift */,
 				671DC5C9284BB21A00C81B23 /* Helpers */,
 			);
 			path = VKFeedAppTests;
@@ -417,6 +420,7 @@
 				67B41FD4284EB55B00CCE9D6 /* UIControl+TestHelpers.swift in Sources */,
 				671DC5CD284BC1C400C81B23 /* FeedLoaderCacheDecoratorTests.swift in Sources */,
 				67B41FB6284EB21300CCE9D6 /* FeedAcceptanceTests.swift in Sources */,
+				6796BE902856417C00FAA0DE /* SceneDelegateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
