@@ -7,25 +7,31 @@
 
 import VKFeed
 import VKFeediOS
+import Combine
 
 final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
     var presenter: FeedPresenter?
-    private let feedLoader: FeedLoader
+    private let feedLoader: () -> FeedLoader.Publisher
     
-    init(feedLoader: FeedLoader) {
+    private var cancellable: Cancellable?
+    
+    init(feedLoader: @escaping () -> FeedLoader.Publisher) {
         self.feedLoader = feedLoader
     }
 
     func didRequestFeedRefresh() {
         presenter?.didStartLoadingFeed()
-        feedLoader.load(completion: { [weak self] result in
-            switch result {
-            case let .success(feed):
-                self?.presenter?.didFinishLoadingFeed(with: feed)
+        
+        cancellable = feedLoader().sink { [weak self] completion in
+            switch completion {
+            case .finished:
+                break
                 
             case let .failure(error):
                 self?.presenter?.didFinishLoadingFeed(with: error)
             }
-        })
+        } receiveValue: { [weak self] feed in
+            self?.presenter?.didFinishLoadingFeed(with: feed)
+        }
     }
 }

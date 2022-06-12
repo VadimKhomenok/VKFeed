@@ -181,6 +181,15 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		677B8419285695FB0072495E /* Legacy Design Patterns (replaced by Combine */ = {
+			isa = PBXGroup;
+			children = (
+				671DC5D4284BD50800C81B23 /* FeedLoaderCacheDecorator.swift */,
+				6784A8D7284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift */,
+			);
+			path = "Legacy Design Patterns (replaced by Combine";
+			sourceTree = "<group>";
+		};
 		679937DC2848330C00D2ECB0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,9 +222,8 @@
 		67C3B6BB28482E39004206B8 /* VKFeedApp */ = {
 			isa = PBXGroup;
 			children = (
-				6784A8D7284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift */,
+				677B8419285695FB0072495E /* Legacy Design Patterns (replaced by Combine */,
 				671DC5C7284BB0A100C81B23 /* FeedImageDataLoaderWithFallbackComposite.swift */,
-				671DC5D4284BD50800C81B23 /* FeedLoaderCacheDecorator.swift */,
 				671DC5DE284BE62F00C81B23 /* FeedImageDataLoaderCacheDecorator.swift */,
 				67B41FB9284EB52300CCE9D6 /* FeedUIComposer.swift */,
 				67B41FBB284EB52300CCE9D6 /* FeedViewAdapter.swift */,
