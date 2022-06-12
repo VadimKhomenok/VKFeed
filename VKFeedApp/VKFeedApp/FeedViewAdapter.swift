@@ -11,9 +11,9 @@ import VKFeediOS
 
 final class FeedViewAdapter: FeedView {
     private weak var controller: FeedViewController?
-    private let loader: FeedImageDataLoader
+    private let loader: (URL) -> FeedImageDataLoader.Publisher
     
-    init(feedViewController: FeedViewController, loader: FeedImageDataLoader) {
+    init(feedViewController: FeedViewController, loader: @escaping (URL) -> FeedImageDataLoader.Publisher) {
         self.controller = feedViewController
         self.loader = loader
     }

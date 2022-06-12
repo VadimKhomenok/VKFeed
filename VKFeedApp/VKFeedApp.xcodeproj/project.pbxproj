@@ -184,6 +184,9 @@
 		677B8419285695FB0072495E /* Legacy Design Patterns (replaced by Combine */ = {
 			isa = PBXGroup;
 			children = (
+				67B41FB8284EB52300CCE9D6 /* MainQueueDispatchDecorator.swift */,
+				671DC5C7284BB0A100C81B23 /* FeedImageDataLoaderWithFallbackComposite.swift */,
+				671DC5DE284BE62F00C81B23 /* FeedImageDataLoaderCacheDecorator.swift */,
 				671DC5D4284BD50800C81B23 /* FeedLoaderCacheDecorator.swift */,
 				6784A8D7284ACF3C001CFAEA /* FeedLoaderWithFallbackComposite.swift */,
 			);
@@ -202,6 +205,7 @@
 		67C3B6B028482E39004206B8 = {
 			isa = PBXGroup;
 			children = (
+				677B8419285695FB0072495E /* Legacy Design Patterns (replaced by Combine */,
 				67C3B6BB28482E39004206B8 /* VKFeedApp */,
 				67C3B6D228482E3D004206B8 /* VKFeedAppTests */,
 				67C3B6BA28482E39004206B8 /* Products */,
@@ -222,14 +226,10 @@
 		67C3B6BB28482E39004206B8 /* VKFeedApp */ = {
 			isa = PBXGroup;
 			children = (
-				677B8419285695FB0072495E /* Legacy Design Patterns (replaced by Combine */,
-				671DC5C7284BB0A100C81B23 /* FeedImageDataLoaderWithFallbackComposite.swift */,
-				671DC5DE284BE62F00C81B23 /* FeedImageDataLoaderCacheDecorator.swift */,
 				67B41FB9284EB52300CCE9D6 /* FeedUIComposer.swift */,
 				67B41FBB284EB52300CCE9D6 /* FeedViewAdapter.swift */,
 				67B41FBC284EB52300CCE9D6 /* FeedLoaderPresentationAdapter.swift */,
 				67B41FB7284EB52300CCE9D6 /* FeedImageDataLoaderPresentationAdapter.swift */,
-				67B41FB8284EB52300CCE9D6 /* MainQueueDispatchDecorator.swift */,
 				67B41FBA284EB52300CCE9D6 /* WeakRefVirtualProxy.swift */,
 				67C3B6BC28482E39004206B8 /* AppDelegate.swift */,
 				67C3B6BE28482E39004206B8 /* SceneDelegate.swift */,
