@@ -18,6 +18,8 @@ extension FeedUIIntegrationTests {
         for (index, feedImage) in feed.enumerated() {
             assert(sut: sut, hasViewConfigured: feedImage, at: index)
         }
+        
+        executeRunLoopToCleanUpReferences()
     }
     
     func assert(sut: FeedViewController, hasViewConfigured feedImage: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
@@ -34,5 +36,9 @@ extension FeedUIIntegrationTests {
         XCTAssertEqual(cell.locationText, feedImage.location, "Expected location text to be \(String(describing: feedImage.location)) for image  view at index (\(index))", file: file, line: line)
         XCTAssertEqual(cell.locationIsVisible, shouldLocationBeVisible, "Expected `locationIsVisible` to be \(shouldLocationBeVisible) for cell at index (\(index))", file: file, line: line)
         XCTAssertEqual(cell.descriptionIsVisible, shouldDescriptionBeVisible, "Expected `descriptionIsVisible` to be \(shouldDescriptionBeVisible) for cell at index (\(index))", file: file, line: line)
+    }
+    
+    private func executeRunLoopToCleanUpReferences() {
+        RunLoop.current.run(until: Date())
     }
 }
