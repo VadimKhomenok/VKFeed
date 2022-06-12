@@ -38,7 +38,7 @@ public extension FeedImageDataLoader {
 extension Publisher {
     func fallback(to fallbackPublisher: @escaping () -> AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> {
         self.catch { _ in fallbackPublisher() }
-        .eraseToAnyPublisher()
+            .eraseToAnyPublisher()
     }
 }
 
@@ -79,35 +79,49 @@ extension Publisher {
 
 extension DispatchQueue {
     static var immediateWhenOnMainQueueScheduler: ImmediateWhenOnMainQueueScheduler {
-          ImmediateWhenOnMainQueueScheduler()
-      }
+        ImmediateWhenOnMainQueueScheduler.shared
+    }
     
     struct ImmediateWhenOnMainQueueScheduler: Scheduler {
         typealias SchedulerTimeType = DispatchQueue.SchedulerTimeType
         typealias SchedulerOptions = DispatchQueue.SchedulerOptions
         
         var now: SchedulerTimeType {
-             DispatchQueue.main.now
-         }
-
-         var minimumTolerance: SchedulerTimeType.Stride {
-             DispatchQueue.main.minimumTolerance
-         }
-
-         func schedule(options: SchedulerOptions?, _ action: @escaping () -> Void) {
-             guard Thread.isMainThread else {
-                 return DispatchQueue.main.schedule(options: options, action)
-             }
-
-             action()
-         }
-
-         func schedule(after date: SchedulerTimeType, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, _ action: @escaping () -> Void) {
-             DispatchQueue.main.schedule(after: date, tolerance: tolerance, options: options, action)
-         }
-
-         func schedule(after date: SchedulerTimeType, interval: SchedulerTimeType.Stride, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, _ action: @escaping () -> Void) -> Cancellable {
-             DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
-         }
+            DispatchQueue.main.now
+        }
+        
+        var minimumTolerance: SchedulerTimeType.Stride {
+            DispatchQueue.main.minimumTolerance
+        }
+        
+        static let shared = Self()
+        
+        private static let key = DispatchSpecificKey<UInt8>()
+        private static let value = UInt8.max
+        
+        private init() {
+            DispatchQueue.main.setSpecific(key: Self.key, value: Self.value)
+        }
+        
+        /// If we are in the main queue - it guarantees that we are on the Main Thread, because main queue is always executed in the Main Thread. But if we are in the Main Thread - it doesn't guarantee that we are in the main queue (though it is true in 99% of cases), because background queues may also be executed in the Main Thread (for example if Main Thread is idling, this is an optimisation). Therefore to be 100% sure we are in the main queue (which is necessary, for example, for MapKit) we need to somehow check this and there is no convenient way to do it unlike the Main Thread. So we use workaround - we set a value for a specific key for main queue and then we check this value
+        private func isMainQueue() -> Bool {
+            return DispatchQueue.getSpecific(key: Self.key) == Self.value
+        }
+        
+        func schedule(options: SchedulerOptions?, _ action: @escaping () -> Void) {
+            guard isMainQueue() else {
+                return DispatchQueue.main.schedule(options: options, action)
+            }
+            
+            action()
+        }
+        
+        func schedule(after date: SchedulerTimeType, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, _ action: @escaping () -> Void) {
+            DispatchQueue.main.schedule(after: date, tolerance: tolerance, options: options, action)
+        }
+        
+        func schedule(after date: SchedulerTimeType, interval: SchedulerTimeType.Stride, tolerance: SchedulerTimeType.Stride, options: SchedulerOptions?, _ action: @escaping () -> Void) -> Cancellable {
+            DispatchQueue.main.schedule(after: date, interval: interval, tolerance: tolerance, options: options, action)
+        }
     }
 }
