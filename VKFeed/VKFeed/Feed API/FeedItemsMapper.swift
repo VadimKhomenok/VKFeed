@@ -9,14 +9,25 @@ import Foundation
 
 final class FeedItemsMapper {
     private struct FeedItemsWrapper: Decodable {
-        var items: [RemoteFeedItem]
+        private let items: [RemoteFeedItem]
+        
+        private struct RemoteFeedItem: Decodable {
+            var id: UUID
+            var description: String?
+            var location: String?
+            var image: URL
+        }
+        
+        var feed: [FeedImage] {
+            items.map { FeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.image) }
+        }
     }
 
-    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [RemoteFeedItem] {
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [FeedImage] {
         guard response.isOK, let wrapper = try? JSONDecoder().decode(FeedItemsWrapper.self, from: data) else {
             throw RemoteFeedLoader.Error.invalidData
         }
          
-        return wrapper.items
+        return wrapper.feed
     }
 }
