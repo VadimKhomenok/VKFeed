@@ -516,6 +516,14 @@
 			path = "Image Comments API";
 			sourceTree = "<group>";
 		};
+		67F348EE285BDCF9003AD24C /* Image Comments Feature */ = {
+			isa = PBXGroup;
+			children = (
+				67F348E4285BD12E003AD24C /* ImageComment.swift */,
+			);
+			path = "Image Comments Feature";
+			sourceTree = "<group>";
+		};
 		67F3F7A62804664F0078CFEA = {
 			isa = PBXGroup;
 			children = (
@@ -545,6 +553,7 @@
 		67F3F7B22804664F0078CFEA /* VKFeed */ = {
 			isa = PBXGroup;
 			children = (
+				67F348EE285BDCF9003AD24C /* Image Comments Feature */,
 				67F348EC285BDA67003AD24C /* Image Comments API */,
 				67F348E6285BD935003AD24C /* Shared API */,
 				67F348E7285BD93F003AD24C /* Shared API Infra */,
@@ -592,7 +601,6 @@
 				67F3F7D4280484A50078CFEA /* RemoteFeedLoader.swift */,
 				67D0C9BC28429AD800A8541A /* RemoteFeedImageDataLoader.swift */,
 				6737808F280621600054CD20 /* FeedItemsMapper.swift */,
-				67F348E4285BD12E003AD24C /* ImageComment.swift */,
 			);
 			path = "Feed API";
 			sourceTree = "<group>";
