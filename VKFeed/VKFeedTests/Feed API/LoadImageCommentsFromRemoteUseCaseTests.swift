@@ -43,10 +43,10 @@ class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
         }
     }
     
-    func test_load_deliversErrorOnNon200StatusResponse() {
+    func test_load_deliversErrorOnNon2xxStatusResponse() {
         let (sut, client) = makeSUT()
         
-        let codes = [199, 201, 300, 400, 500]
+        let codes = [150, 199, 300, 400, 500]
         codes.enumerated().forEach { index, code in
             expect(sut, toCompleteWithExpectedResult: failure(.invalidData)) {
                 let validJsonData = makeItemsJson([])
@@ -55,21 +55,27 @@ class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
         }
     }
     
-    func test_load_deliversErrorOn200StatusCodeWithInvalidJson() {
+    func test_load_deliversErrorOn2xxStatusCodeWithInvalidJson() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithExpectedResult: failure(.invalidData)) {
-            let invalidJson = Data("invalid json".utf8)
-            client.complete(withStatusCode: 200, data: invalidJson)
+        let codes = [200, 201, 240, 290, 299]
+        codes.enumerated().forEach { index, code in
+            expect(sut, toCompleteWithExpectedResult: failure(.invalidData)) {
+                let invalidJson = Data("invalid json".utf8)
+                client.complete(withStatusCode: code, data: invalidJson, at: index)
+            }
         }
     }
     
-    func test_load_deliversNoItemsOn200StatusCodeWithEmptyJson() {
+    func test_load_deliversNoItemsOn2xxStatusCodeWithEmptyJson() {
         let (sut, client) = makeSUT()
         
-        expect(sut, toCompleteWithExpectedResult: .success([])) {
-            let emptyJson = makeItemsJson([])
-            client.complete(withStatusCode: 200, data: emptyJson)
+        let codes = [200, 201, 240, 290, 299]
+        codes.enumerated().forEach { index, code in
+            expect(sut, toCompleteWithExpectedResult: .success([])) {
+                let emptyJson = makeItemsJson([])
+                client.complete(withStatusCode: code, data: emptyJson, at: index)
+            }
         }
     }
     
