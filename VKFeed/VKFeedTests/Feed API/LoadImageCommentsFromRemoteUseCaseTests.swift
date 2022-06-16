@@ -82,8 +82,16 @@ class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
     func test_load_deliversFeedItemsOn200StatusCodeWithItemsJson() {
         let (sut, client) = makeSUT()
         
-        let (item1, item1Json) = makeItem(id: UUID(), imageUrl: URL(string: "https://url.com")!)
-        let (item2, item2Json) = makeItem(id: UUID(), description: "a description", location: "a location", imageUrl: URL(string: "https://another-url.com")!)
+        let (item1, item1Json) = makeItem(
+            id: UUID(),
+            message: "a comment",
+            createdAt: (Date(timeIntervalSince1970: 1598627222), "2020-08-28T15:07:02+00:00"),
+            username: "User 1")
+        let (item2, item2Json) = makeItem(
+            id: UUID(),
+            message: "another comment",
+            createdAt: (Date(timeIntervalSince1970: 1577881882), "2020-01-01T12:31:22+00:00"),
+            username: "User 2")
         
         expect(sut, toCompleteWithExpectedResult: .success([item1, item2])) {
             let itemsJsonData = makeItemsJson([item1Json, item2Json])
@@ -119,15 +127,17 @@ class LoadImageCommentsFromRemoteUseCaseTests: XCTestCase {
         return .failure(error)
     }
     
-    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageUrl: URL) -> (FeedImage, [String : Any]) {
-        let item = FeedImage(id: id, description: description, location: location, url: imageUrl)
+    private func makeItem(id: UUID, message: String, createdAt: (date: Date, iso8601String: String), username: String) -> (ImageComment, [String : Any]) {
+        let item = ImageComment(id: id, message: message, createdAt: createdAt.date, username: username)
         
-        let itemJson = [
-            "id" : item.id.uuidString,
-            "description" : item.description,
-            "location" : item.location,
-            "image" : item.url.absoluteString
-        ].compactMapValues { $0 }
+        let itemJson: [String : Any] = [
+            "id" : id.uuidString,
+            "message" : message,
+            "created_at" : createdAt.iso8601String,
+            "author" : [
+                "username" : username
+            ]
+        ]
         
         return (item, itemJson)
     }

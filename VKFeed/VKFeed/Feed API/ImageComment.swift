@@ -7,9 +7,16 @@
 
 import Foundation
 
-struct ImageComment {
-    var id: UUID
-    var message: String
-    var date: Date
-    var username: String
+public struct ImageComment: Equatable {
+    public var id: UUID
+    public var message: String
+    public var createdAt: Date
+    public var username: String
+    
+    public init(id: UUID, message: String, createdAt: Date, username: String) {
+          self.id = id
+          self.message = message
+          self.createdAt = createdAt
+          self.username = username
+      }
 }
