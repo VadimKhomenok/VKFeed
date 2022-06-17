@@ -36,46 +36,4 @@ class FeedImageDataMapperTests: XCTestCase {
         
         XCTAssertEqual(result, anyData)
     }
-    
-    
-    // MARK: - Helpers
-    
-    private func failure(_ error: RemoteFeedImageDataLoader.Error) -> FeedImageDataLoader.Result {
-        return .failure(error)
-    }
-    
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: RemoteFeedImageDataLoader, httpClient: HTTPClientSpy) {
-        let httpClient = HTTPClientSpy()
-        let sut = RemoteFeedImageDataLoader(client: httpClient)
-        trackForMemoryLeaks(httpClient, file: file, line: line)
-        trackForMemoryLeaks(sut, file: file, line: line)
-        return (sut, httpClient)
-    }
-    
-    private func expect(sut: RemoteFeedImageDataLoader, toCompleteWith expectedResult: FeedImageDataLoader.Result, onAction action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        let url = anyURL()
-        let exp = expectation(description: "Wait for load to complete")
-        
-        _ = sut.loadImageData(from: url) { result in
-            switch (result, expectedResult) {
-            case let (.success(data), .success(expectedData)):
-                XCTAssertEqual(data, expectedData, file: file, line: line)
-                
-            case let (.failure(error as RemoteFeedImageDataLoader.Error), .failure(expectedError as RemoteFeedImageDataLoader.Error)):
-                XCTAssertEqual(error, expectedError, file: file, line: line)
-                
-            case let (.failure(error as NSError), .failure(expectedError as NSError)):
-                XCTAssertEqual(error, expectedError, file: file, line: line)
-                
-            default:
-                XCTFail("Expected result \(expectedResult) got \(result) instead", file: file, line: line)
-            }
-         
-            exp.fulfill()
-        }
-        
-        action()
-        
-        wait(for: [exp], timeout: 1)
-    }
 }
