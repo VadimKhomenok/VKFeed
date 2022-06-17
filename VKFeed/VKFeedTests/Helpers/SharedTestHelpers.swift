@@ -18,3 +18,10 @@ func anyNSError() -> NSError {
 func anyData() -> Data {
     return Data("any data".utf8)
 }
+ 
+func makeItemsJson(_ items: [[String : Any]]) -> Data {
+    let itemsJson = [
+        "items" : items
+    ]
+    return try! JSONSerialization.data(withJSONObject: itemsJson)
+}

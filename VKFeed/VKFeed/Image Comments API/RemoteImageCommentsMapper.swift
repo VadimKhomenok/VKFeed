@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class RemoteImageCommentsMapper {
+public final class RemoteImageCommentsMapper {
     private struct Root: Decodable {
         private let items: [RemoteImageComments]
         
@@ -27,7 +27,7 @@ final class RemoteImageCommentsMapper {
         }
     }
 
-    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [ImageComment] {
+    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [ImageComment] {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
@@ -38,7 +38,7 @@ final class RemoteImageCommentsMapper {
         return wrapper.comments
     }
     
-    static func isOK(_ urlResponse: HTTPURLResponse) -> Bool {
+    private static func isOK(_ urlResponse: HTTPURLResponse) -> Bool {
         return (200...299).contains(urlResponse.statusCode)
     }
 }
