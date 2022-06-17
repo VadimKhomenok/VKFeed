@@ -53,7 +53,7 @@ class VKFeedAPIEndToEndTests: XCTestCase {
     }
     
     private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> FeedLoader.Result? {
-        let sut = RemoteFeedLoader(url: feedTestServerURL, client: ephemeralClient())
+        let sut = RemoteLoader(url: feedTestServerURL, client: ephemeralClient(), mapper: FeedItemsMapper.map)
         trackForMemoryLeaks(sut, file: file, line: line)
         
         var receivedResult: FeedLoader.Result?

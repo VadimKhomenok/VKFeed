@@ -22,10 +22,14 @@ public final class FeedItemsMapper {
             items.map { FeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.image) }
         }
     }
+    
+    public enum Error: Swift.Error {
+        case invalidData
+    }
 
     public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [FeedImage] {
         guard response.isOK, let wrapper = try? JSONDecoder().decode(FeedItemsWrapper.self, from: data) else {
-            throw RemoteFeedLoader.Error.invalidData
+            throw Error.invalidData
         }
          
         return wrapper.feed
