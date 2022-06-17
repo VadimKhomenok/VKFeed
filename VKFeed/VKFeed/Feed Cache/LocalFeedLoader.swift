@@ -11,7 +11,7 @@ public class LocalFeedLoader {
     private var store: FeedStore
     private let currentDate: () -> Date
     
-    public typealias LoadResult = FeedLoader.Result
+    public typealias LoadResult = Swift.Result<[FeedImage], Error>
     
     public init(store: FeedStore, currentDate: @escaping () -> Date) {
         self.store = store
@@ -54,7 +54,7 @@ private extension Array where Element == FeedImage {
 
 // MARK: - Local Feed Loader Load
 
-extension LocalFeedLoader: FeedLoader {
+extension LocalFeedLoader {
     public func load(completion: @escaping (LoadResult) -> Void) {
         store.retrieve { [weak self] result in
             guard let self = self else { return }

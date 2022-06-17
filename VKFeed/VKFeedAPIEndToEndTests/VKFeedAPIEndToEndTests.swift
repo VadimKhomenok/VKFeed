@@ -52,10 +52,10 @@ class VKFeedAPIEndToEndTests: XCTestCase {
         return client
     }
     
-    private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> FeedLoader.Result? {
+    private func getFeedResult(file: StaticString = #filePath, line: UInt = #line) -> Swift.Result<[FeedImage], Error>? {
         let client = ephemeralClient()
         
-        var receivedResult: FeedLoader.Result?
+        var receivedResult: Swift.Result<[FeedImage], Error>?
         let expectation = expectation(description: "Wait for completion to finish")
         
         client.get(from: feedTestServerURL) { result in

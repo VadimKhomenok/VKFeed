@@ -7,28 +7,31 @@
 
 import VKFeed
 import VKFeediOS
+import Combine
 
 extension FeedUIIntegrationTests {
-    class LoaderSpy: FeedLoader, FeedImageDataLoader {
+    class LoaderSpy: FeedImageDataLoader {
         
         // MARK: - Feed Loader Spy
         
-        private var feedRequests = [(FeedLoader.Result) -> Void]()
+        private var feedRequests = [PassthroughSubject<[FeedImage], Swift.Error>]()
         
         var loadFeedCallCount: Int {
             feedRequests.count
         }
         
-        func load(completion: @escaping (FeedLoader.Result) -> Void) {
-            feedRequests.append(completion)
+        func loadPublisher() -> AnyPublisher<[FeedImage], Swift.Error> {
+            let publisher = PassthroughSubject<[FeedImage], Swift.Error>()
+            feedRequests.append(publisher)
+            return publisher.eraseToAnyPublisher()
         }
         
         func completeFeedLoading(feed: [FeedImage] = [], at index: Int) {
-            feedRequests[index](.success(feed))
+            feedRequests[index].send(feed)
         }
         
         func completeFeedLoading(with error: Error, at index: Int) {
-            feedRequests[index](.failure(error))
+            feedRequests[index].send(completion: .failure(error))
         }
         
         // MARK: - Feed Image Loader Spy
