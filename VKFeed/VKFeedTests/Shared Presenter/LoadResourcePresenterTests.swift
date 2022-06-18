@@ -48,10 +48,12 @@ class LoadResourcePresenterTests: XCTestCase {
     
     // MARK: - Helpers
     
+    private typealias SUT = LoadResourcePresenter<String, ViewSpy>
+    
     private func makeSUT(
-        mapper: @escaping LoadResourcePresenter.Mapper = { _ in "any" },
+        mapper: @escaping SUT.Mapper = { _ in "any" },
         file: StaticString = #filePath,
-        line: UInt = #line) -> (sut: LoadResourcePresenter, view: ViewSpy) {
+        line: UInt = #line) -> (sut: SUT, view: ViewSpy) {
         let view = ViewSpy()
         let sut = LoadResourcePresenter(loadingView: view, resourceView: view, resourceLoadErrorView: view, mapper: mapper)
         trackForMemoryLeaks(sut, file: file, line: line)
@@ -61,7 +63,7 @@ class LoadResourcePresenterTests: XCTestCase {
     
     func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
         let table = "Feed"
-        let bundle = Bundle(for: LoadResourcePresenter.self)
+        let bundle = Bundle(for: SUT.self)
         let value = bundle.localizedString(forKey: key, value: nil, table: table)
         
         if value == key {
@@ -72,7 +74,8 @@ class LoadResourcePresenterTests: XCTestCase {
     }
     
     private class ViewSpy: ResourceLoadingView, ResourceLoadErrorView, ResourceView {
-
+        typealias ResourceViewModel = String
+        
         enum Messages: Hashable {
             case display(resource: String)
             case display(isLoading: Bool)
@@ -85,7 +88,7 @@ class LoadResourcePresenterTests: XCTestCase {
             messages.insert(.display(isLoading: viewModel.isLoading))
         }
         
-        func display(_ viewModel: String) {
+        func display(_ viewModel: ResourceViewModel) {
             messages.insert(.display(resource: viewModel))
         }
         

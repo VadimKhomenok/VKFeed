@@ -8,7 +8,9 @@
 import Foundation
 
 public protocol ResourceView {
-    func display(_ viewModel: String)
+    associatedtype ResourceViewModel
+    
+    func display(_ viewModel: ResourceViewModel)
 }
 
 public struct ResourceLoadingViewModel {
@@ -35,13 +37,13 @@ public protocol ResourceLoadErrorView {
     func display(_ viewModel: ResourceLoadErrorViewModel)
 }
 
-public final class LoadResourcePresenter {
+public final class LoadResourcePresenter<Resource, View: ResourceView> {
     
-    public typealias Mapper = (String) -> String
+    public typealias Mapper = (Resource) -> View.ResourceViewModel
     
     private let loadingView: ResourceLoadingView
     private let resourceLoadErrorView: ResourceLoadErrorView
-    private let resourceView: ResourceView
+    private let resourceView: View
     private let mapper: Mapper
     
     var feedLoadError: String {
@@ -51,7 +53,7 @@ public final class LoadResourcePresenter {
                                  comment: "Error message displayed when we can't load the image feed from the server")
     }
     
-    public init(loadingView: ResourceLoadingView, resourceView: ResourceView, resourceLoadErrorView: ResourceLoadErrorView, mapper: @escaping Mapper) {
+    public init(loadingView: ResourceLoadingView, resourceView: View, resourceLoadErrorView: ResourceLoadErrorView, mapper: @escaping Mapper) {
         self.loadingView = loadingView
         self.resourceLoadErrorView = resourceLoadErrorView
         self.resourceView = resourceView
@@ -63,7 +65,7 @@ public final class LoadResourcePresenter {
         loadingView.display(ResourceLoadingViewModel(isLoading: true))
     }
     
-    public func didFinishLoading(with resource: String) {
+    public func didFinishLoading(with resource: Resource) {
         resourceView.display(mapper(resource))
         loadingView.display(ResourceLoadingViewModel(isLoading: false))
     }
