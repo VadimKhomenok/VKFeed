@@ -7,17 +7,44 @@
 
 import Foundation
 
-public final class LoadResourcePresenter {
-    private let feedView: FeedView
-    private let loadingView: FeedLoadingView
-    private let feedErrorView: FeedErrorView
+public struct ResourceViewModel {
+    public var resource: String
+}
+
+public protocol ResourceView {
+    func display(_ viewModel: ResourceViewModel)
+}
+
+public struct ResourceLoadingViewModel {
+    public var isLoading: Bool
+}
+
+public protocol ResourceLoadingView {
+    func display(_ viewModel: ResourceLoadingViewModel)
+}
+
+public struct ResourceLoadErrorViewModel {
+    public let message: String?
     
-    public static var title: String {
-        return NSLocalizedString("FEED_VIEW_TITLE",
-                                 tableName: "Feed",
-                                 bundle: Bundle(for: FeedPresenter.self),
-                                 comment: "Title for the feed view")
+    public static var noError: ResourceLoadErrorViewModel {
+        return ResourceLoadErrorViewModel(message: .none)
     }
+    
+    public static func error(message: String) -> ResourceLoadErrorViewModel {
+        ResourceLoadErrorViewModel(message: message)
+    }
+}
+
+public protocol ResourceLoadErrorView {
+    func display(_ viewModel: ResourceLoadErrorViewModel)
+}
+
+public final class LoadResourcePresenter {
+    
+    private let loadingView: ResourceLoadingView
+    private let resourceLoadErrorView: ResourceLoadErrorView
+    
+    private let resourceView: ResourceView
     
     var feedLoadError: String {
         return NSLocalizedString("FEED_VIEW_CONNECTION_ERROR",
@@ -26,24 +53,25 @@ public final class LoadResourcePresenter {
                                  comment: "Error message displayed when we can't load the image feed from the server")
     }
     
-    public init(feedLoadingView: FeedLoadingView, feedView: FeedView, feedErrorView: FeedErrorView) {
-        self.loadingView = feedLoadingView
-        self.feedView = feedView
-        self.feedErrorView = feedErrorView
+    public init(loadingView: ResourceLoadingView, resourceView: ResourceView, resourceLoadErrorView: ResourceLoadErrorView) {
+        self.loadingView = loadingView
+        self.resourceLoadErrorView = resourceLoadErrorView
+        
+        self.resourceView = resourceView
     }
     
-    public func didStartLoadingFeed() {
-        feedErrorView.display(.noError)
-        loadingView.display(FeedLoadingViewModel(isLoading: true))
+    public func didStartLoading() {
+        resourceLoadErrorView.display(.noError)
+        loadingView.display(ResourceLoadingViewModel(isLoading: true))
     }
     
-    public func didFinishLoadingFeed(with feed: [FeedImage]) {
-        feedView.display(FeedViewModel(feed: feed))
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
+    public func didFinishLoading(with resource: String) {
+        resourceView.display(ResourceViewModel(resource: resource))
+        loadingView.display(ResourceLoadingViewModel(isLoading: false))
     }
     
-    public func didFinishLoadingFeed(with error: Error) {
-        loadingView.display(FeedLoadingViewModel(isLoading: false))
-        feedErrorView.display(.error(message: feedLoadError))
+    public func didFinishLoading(with error: Error) {
+        loadingView.display(ResourceLoadingViewModel(isLoading: false))
+        resourceLoadErrorView.display(.error(message: feedLoadError))
     }
 }
