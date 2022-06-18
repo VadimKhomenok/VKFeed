@@ -10,6 +10,8 @@
 		670537A62831743C0065BEAB /* Feed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 670537A52831743B0065BEAB /* Feed.storyboard */; };
 		670537A8283190510065BEAB /* UITableView+Dequeueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670537A7283190510065BEAB /* UITableView+Dequeueing.swift */; };
 		670537AB2831927F0065BEAB /* UIImageView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670537A9283192640065BEAB /* UIImageView+Animations.swift */; };
+		67114FBC285E650500AF182D /* LoadResourcePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67114FBB285E650500AF182D /* LoadResourcePresenterTests.swift */; };
+		67114FBF285E65A800AF182D /* LoadResourcePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67114FBE285E65A800AF182D /* LoadResourcePresenter.swift */; };
 		671DC5D3284BD43600C81B23 /* FeedCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671DC5D2284BD43600C81B23 /* FeedCache.swift */; };
 		671DC5DD284BE5A400C81B23 /* FeedImageDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671DC5DC284BE5A400C81B23 /* FeedImageDataCache.swift */; };
 		6727989F2823296F00924F82 /* XCTestCase+MemoryLeaksHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BF84F728085ED600CFC10E /* XCTestCase+MemoryLeaksHelper.swift */; };
@@ -135,6 +137,8 @@
 		670537A52831743B0065BEAB /* Feed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Feed.storyboard; sourceTree = "<group>"; };
 		670537A7283190510065BEAB /* UITableView+Dequeueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeueing.swift"; sourceTree = "<group>"; };
 		670537A9283192640065BEAB /* UIImageView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Animations.swift"; sourceTree = "<group>"; };
+		67114FBB285E650500AF182D /* LoadResourcePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadResourcePresenterTests.swift; sourceTree = "<group>"; };
+		67114FBE285E65A800AF182D /* LoadResourcePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadResourcePresenter.swift; sourceTree = "<group>"; };
 		671DC5D2284BD43600C81B23 /* FeedCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCache.swift; sourceTree = "<group>"; };
 		671DC5DC284BE5A400C81B23 /* FeedImageDataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataCache.swift; sourceTree = "<group>"; };
 		672798A32823402F00924F82 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
@@ -277,6 +281,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		67114FBA285E64F000AF182D /* Shared Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				67114FBB285E650500AF182D /* LoadResourcePresenterTests.swift */,
+			);
+			path = "Shared Presenter";
+			sourceTree = "<group>";
+		};
+		67114FBD285E659E00AF182D /* Shared Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				67114FBE285E65A800AF182D /* LoadResourcePresenter.swift */,
+			);
+			path = "Shared Presenter";
+			sourceTree = "<group>";
+		};
 		6737809128062D260054CD20 /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
@@ -533,6 +553,7 @@
 		67F3F7B22804664F0078CFEA /* VKFeed */ = {
 			isa = PBXGroup;
 			children = (
+				67114FBD285E659E00AF182D /* Shared Presenter */,
 				67F348EE285BDCF9003AD24C /* Image Comments Feature */,
 				67F348EC285BDA67003AD24C /* Image Comments API */,
 				67F348E6285BD935003AD24C /* Shared API */,
@@ -551,6 +572,7 @@
 		67F3F7C1280466A00078CFEA /* VKFeedTests */ = {
 			isa = PBXGroup;
 			children = (
+				67114FBA285E64F000AF182D /* Shared Presenter */,
 				67F348EA285BD9DD003AD24C /* Shared API Infra */,
 				67BF84F928085EF100CFC10E /* Helpers */,
 				67A87F1B280F0D93008717AC /* Feed Cache */,
@@ -891,6 +913,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67114FBF285E65A800AF182D /* LoadResourcePresenter.swift in Sources */,
 				67F9BB782816D10000B606BA /* CoreDataFeedStore.swift in Sources */,
 				67E8E81428100E910057A38E /* LocalFeedImage.swift in Sources */,
 				67E8E810280F66460057A38E /* FeedStore.swift in Sources */,
@@ -943,6 +966,7 @@
 				6736ADA0283ED9ED00D163CD /* FeedImageDataMapperTests.swift in Sources */,
 				67CF6F4D2810493C001F40DB /* LoadCacheFeedUseCaseTests.swift in Sources */,
 				677292E9283C363C00AE05A1 /* FeedPresenterTests.swift in Sources */,
+				67114FBC285E650500AF182D /* LoadResourcePresenterTests.swift in Sources */,
 				67E8A6D428116E5D004B20F2 /* SharedTestHelpers.swift in Sources */,
 				67A87F1D280F0DA9008717AC /* CacheFeedUseCaseTests.swift in Sources */,
 				67E8A6DC2811A8EB004B20F2 /* CodableFeedStoreUseCaseTests.swift in Sources */,
