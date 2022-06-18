@@ -7,18 +7,20 @@
 
 import Foundation
 import XCTest
-import VKFeediOS
+import VKFeed
 
 extension FeedUIIntegrationTests {
-    func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
-        let table = "Feed"
-        let bundle = Bundle(for: FeedViewController.self)
-        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+    private class DummyView: ResourceView {
+        typealias ResourceViewModel = Any
         
-        if value == key {
-            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
-        }
-        
-        return value
+        func display(_ viewModel: Any) {}
+    }
+    
+    var loadError: String {
+        LoadResourcePresenter<Any, DummyView>.loadError
+    }
+    
+    var loadFeedTitle: String {
+        FeedPresenter.title
     }
 }

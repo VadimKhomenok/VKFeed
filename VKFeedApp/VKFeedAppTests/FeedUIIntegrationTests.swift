@@ -21,7 +21,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.title, localized("FEED_VIEW_TITLE"))
+        XCTAssertEqual(sut.title, loadFeedTitle)
     }
     
     func test_loadFeedActions_requestFeedFromLoader() {
@@ -323,7 +323,7 @@ final class FeedUIIntegrationTests: XCTestCase {
         XCTAssertNil(sut.errorMessage, "Expected no error message on feed view loaded")
         
         loader.completeFeedLoading(with: anyNSError(), at: 0)
-        XCTAssertEqual(sut.errorMessage, localized("GENERIC_CONNECTION_ERROR"), "Expected to render error message on feed load failure")
+        XCTAssertEqual(sut.errorMessage, loadError, "Expected to render error message on feed load failure")
         
         sut.simulateUserInitiatedFeedReload()
         XCTAssertNil(sut.errorMessage, "Expected no error message after user initiated reload")
