@@ -7,12 +7,8 @@
 
 import Foundation
 
-public struct ResourceViewModel {
-    public var resource: String
-}
-
 public protocol ResourceView {
-    func display(_ viewModel: ResourceViewModel)
+    func display(_ viewModel: String)
 }
 
 public struct ResourceLoadingViewModel {
@@ -41,10 +37,12 @@ public protocol ResourceLoadErrorView {
 
 public final class LoadResourcePresenter {
     
+    public typealias Mapper = (String) -> String
+    
     private let loadingView: ResourceLoadingView
     private let resourceLoadErrorView: ResourceLoadErrorView
-    
     private let resourceView: ResourceView
+    private let mapper: Mapper
     
     var feedLoadError: String {
         return NSLocalizedString("FEED_VIEW_CONNECTION_ERROR",
@@ -53,11 +51,11 @@ public final class LoadResourcePresenter {
                                  comment: "Error message displayed when we can't load the image feed from the server")
     }
     
-    public init(loadingView: ResourceLoadingView, resourceView: ResourceView, resourceLoadErrorView: ResourceLoadErrorView) {
+    public init(loadingView: ResourceLoadingView, resourceView: ResourceView, resourceLoadErrorView: ResourceLoadErrorView, mapper: @escaping Mapper) {
         self.loadingView = loadingView
         self.resourceLoadErrorView = resourceLoadErrorView
-        
         self.resourceView = resourceView
+        self.mapper = mapper
     }
     
     public func didStartLoading() {
@@ -66,7 +64,7 @@ public final class LoadResourcePresenter {
     }
     
     public func didFinishLoading(with resource: String) {
-        resourceView.display(ResourceViewModel(resource: resource))
+        resourceView.display(mapper(resource))
         loadingView.display(ResourceLoadingViewModel(isLoading: false))
     }
     

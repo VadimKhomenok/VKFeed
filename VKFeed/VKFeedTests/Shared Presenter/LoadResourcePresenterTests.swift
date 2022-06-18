@@ -26,11 +26,14 @@ class LoadResourcePresenterTests: XCTestCase {
     }
     
     func test_didFinishLoadingWithResource() {
-        let (sut, view) = makeSUT()
         let resource = "a resource"
         
+        let (sut, view) = makeSUT(mapper: { resource in
+            resource + " view model"
+        })
+        
         sut.didFinishLoading(with: resource)
-        XCTAssertEqual(view.messages, [.display(resource: resource),
+        XCTAssertEqual(view.messages, [.display(resource: "a resource view model"),
                                        .display(isLoading: false)])
     }
     
@@ -45,9 +48,12 @@ class LoadResourcePresenterTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: LoadResourcePresenter, view: ViewSpy) {
+    private func makeSUT(
+        mapper: @escaping LoadResourcePresenter.Mapper = { _ in "any" },
+        file: StaticString = #filePath,
+        line: UInt = #line) -> (sut: LoadResourcePresenter, view: ViewSpy) {
         let view = ViewSpy()
-        let sut = LoadResourcePresenter(loadingView: view, resourceView: view, resourceLoadErrorView: view)
+        let sut = LoadResourcePresenter(loadingView: view, resourceView: view, resourceLoadErrorView: view, mapper: mapper)
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(view, file: file, line: line)
         return (sut, view)
@@ -79,8 +85,8 @@ class LoadResourcePresenterTests: XCTestCase {
             messages.insert(.display(isLoading: viewModel.isLoading))
         }
         
-        func display(_ viewModel: ResourceViewModel) {
-            messages.insert(.display(resource: viewModel.resource))
+        func display(_ viewModel: String) {
+            messages.insert(.display(resource: viewModel))
         }
         
         func display(_ viewModel: ResourceLoadErrorViewModel) {
