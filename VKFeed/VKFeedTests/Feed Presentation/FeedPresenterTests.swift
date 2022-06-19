@@ -59,7 +59,7 @@ class FeedPresenterTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: FeedPresenter, view: ViewSpy) {
         let view = ViewSpy()
-        let sut = FeedPresenter(feedLoadingView: view, feedView: view, feedErrorView: view)
+        let sut = FeedPresenter(loadingView: view, feedView: view, feedErrorView: view)
         trackForMemoryLeaks(sut, file: file, line: line)
         trackForMemoryLeaks(view, file: file, line: line)
         return (sut, view)
@@ -76,7 +76,7 @@ class FeedPresenterTests: XCTestCase {
         return value
     }
     
-    private class ViewSpy: FeedLoadingView, FeedErrorView, FeedView {
+    private class ViewSpy: ResourceLoadingView, FeedErrorView, FeedView {
 
         enum Messages: Hashable {
             case display(feed: [FeedImage])
@@ -86,7 +86,7 @@ class FeedPresenterTests: XCTestCase {
         
         private(set) var messages = Set<Messages>()
         
-        func display(_ viewModel: FeedLoadingViewModel) {
+        func display(_ viewModel: ResourceLoadingViewModel) {
             messages.insert(.display(isLoading: viewModel.isLoading))
         }
         
