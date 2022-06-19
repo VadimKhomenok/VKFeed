@@ -7,36 +7,6 @@
 
 import Foundation
 
-public protocol ResourceView {
-    associatedtype ResourceViewModel
-    
-    func display(_ viewModel: ResourceViewModel)
-}
-
-public struct ResourceLoadingViewModel {
-    public var isLoading: Bool
-}
-
-public protocol ResourceLoadingView {
-    func display(_ viewModel: ResourceLoadingViewModel)
-}
-
-public struct ResourceLoadErrorViewModel {
-    public let message: String?
-    
-    public static var noError: ResourceLoadErrorViewModel {
-        return ResourceLoadErrorViewModel(message: .none)
-    }
-    
-    public static func error(message: String) -> ResourceLoadErrorViewModel {
-        ResourceLoadErrorViewModel(message: message)
-    }
-}
-
-public protocol ResourceLoadErrorView {
-    func display(_ viewModel: ResourceLoadErrorViewModel)
-}
-
 public final class LoadResourcePresenter<Resource, View: ResourceView> {
     
     public typealias Mapper = (Resource) -> View.ResourceViewModel

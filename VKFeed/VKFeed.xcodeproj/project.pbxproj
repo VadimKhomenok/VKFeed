@@ -22,6 +22,11 @@
 		67378093280700DB0054CD20 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67378092280700DB0054CD20 /* URLSessionHTTPClientTests.swift */; };
 		673B45DD2815F6D100B4859D /* CodableFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673B45DC2815F6D100B4859D /* CodableFeedStore.swift */; };
 		673F09CD2827361E002937C2 /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E8A6D328116E5D004B20F2 /* SharedTestHelpers.swift */; };
+		67493DA3285F430600849B9B /* ResourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67493DA2285F430600849B9B /* ResourceView.swift */; };
+		67493DA5285F431A00849B9B /* ResourceLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67493DA4285F431A00849B9B /* ResourceLoadingViewModel.swift */; };
+		67493DA7285F432C00849B9B /* ResourceLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67493DA6285F432C00849B9B /* ResourceLoadingView.swift */; };
+		67493DA9285F433B00849B9B /* ResourceLoadErrorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67493DA8285F433B00849B9B /* ResourceLoadErrorViewModel.swift */; };
+		67493DAB285F434800849B9B /* ResourceLoadErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67493DAA285F434800849B9B /* ResourceLoadErrorView.swift */; };
 		674AC8BE282B2F250059F18D /* FeedImageCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674AC8BD282B2F250059F18D /* FeedImageCellController.swift */; };
 		6770041228513C0E0068DA24 /* VKFeediOSSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6770041128513C0E0068DA24 /* VKFeediOSSnapshotTests.swift */; };
 		677292E1283C2E7100AE05A1 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677292E0283C2E7100AE05A1 /* ErrorView.swift */; };
@@ -149,6 +154,11 @@
 		6737808F280621600054CD20 /* FeedItemsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemsMapper.swift; sourceTree = "<group>"; };
 		67378092280700DB0054CD20 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		673B45DC2815F6D100B4859D /* CodableFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFeedStore.swift; sourceTree = "<group>"; };
+		67493DA2285F430600849B9B /* ResourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceView.swift; sourceTree = "<group>"; };
+		67493DA4285F431A00849B9B /* ResourceLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoadingViewModel.swift; sourceTree = "<group>"; };
+		67493DA6285F432C00849B9B /* ResourceLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoadingView.swift; sourceTree = "<group>"; };
+		67493DA8285F433B00849B9B /* ResourceLoadErrorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoadErrorViewModel.swift; sourceTree = "<group>"; };
+		67493DAA285F434800849B9B /* ResourceLoadErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoadErrorView.swift; sourceTree = "<group>"; };
 		674AC8B0282B07390059F18D /* FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageDataLoader.swift; sourceTree = "<group>"; };
 		674AC8BD282B2F250059F18D /* FeedImageCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImageCellController.swift; sourceTree = "<group>"; };
 		6770041128513C0E0068DA24 /* VKFeediOSSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKFeediOSSnapshotTests.swift; sourceTree = "<group>"; };
@@ -301,6 +311,11 @@
 		67114FBD285E659E00AF182D /* Shared Presenter */ = {
 			isa = PBXGroup;
 			children = (
+				67493DA2285F430600849B9B /* ResourceView.swift */,
+				67493DA6285F432C00849B9B /* ResourceLoadingView.swift */,
+				67493DA4285F431A00849B9B /* ResourceLoadingViewModel.swift */,
+				67493DAA285F434800849B9B /* ResourceLoadErrorView.swift */,
+				67493DA8285F433B00849B9B /* ResourceLoadErrorViewModel.swift */,
 				67114FBE285E65A800AF182D /* LoadResourcePresenter.swift */,
 				67F8405D285E806700ACB13C /* Shared.strings */,
 			);
@@ -928,6 +943,7 @@
 				67114FBF285E65A800AF182D /* LoadResourcePresenter.swift in Sources */,
 				67F9BB782816D10000B606BA /* CoreDataFeedStore.swift in Sources */,
 				67E8E81428100E910057A38E /* LocalFeedImage.swift in Sources */,
+				67493DA5285F431A00849B9B /* ResourceLoadingViewModel.swift in Sources */,
 				67E8E810280F66460057A38E /* FeedStore.swift in Sources */,
 				677292FA283C53F100AE05A1 /* FeedErrorViewModel.swift in Sources */,
 				67E8CBAB280897E800A48903 /* URLSessionHTTPClient.swift in Sources */,
@@ -942,10 +958,12 @@
 				67F348E3285BC7F6003AD24C /* RemoteImageCommentsMapper.swift in Sources */,
 				67F9BB7D2817133C00B606BA /* CoreDataHelpers.swift in Sources */,
 				677292F6283C53BA00AE05A1 /* FeedLoadingViewModel.swift in Sources */,
+				67493DAB285F434800849B9B /* ResourceLoadErrorView.swift in Sources */,
 				67F9BB6C2816C59000B606BA /* FeedStore.xcdatamodeld in Sources */,
 				67FC9ED52846C928009F9398 /* CoreDataFeedStore+FeedStore.swift in Sources */,
 				67F3F7D32804849A0078CFEA /* HTTPClient.swift in Sources */,
 				67F9BB7F2817143C00B606BA /* ManagedCache.swift in Sources */,
+				67493DA9285F433B00849B9B /* ResourceLoadErrorViewModel.swift in Sources */,
 				67378090280621600054CD20 /* FeedItemsMapper.swift in Sources */,
 				671DC5D3284BD43600C81B23 /* FeedCache.swift in Sources */,
 				67CA3AA3283D9C2B004E247C /* FeedImageViewModel.swift in Sources */,
@@ -956,9 +974,11 @@
 				67E8A6D828117C75004B20F2 /* FeedCachePolicy.swift in Sources */,
 				677292F3283C52CE00AE05A1 /* FeedPresenter.swift in Sources */,
 				67F9BB812817145300B606BA /* ManagedFeedImage.swift in Sources */,
+				67493DA3285F430600849B9B /* ResourceView.swift in Sources */,
 				67E8E80E280F66240057A38E /* LocalFeedLoader.swift in Sources */,
 				67D0C9C02842A06C00A8541A /* HTTPURLResponse+StatusCode.swift in Sources */,
 				67F3F7B52804664F0078CFEA /* VKFeed.docc in Sources */,
+				67493DA7285F432C00849B9B /* ResourceLoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
