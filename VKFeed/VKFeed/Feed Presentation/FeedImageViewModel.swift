@@ -7,12 +7,9 @@
 
 import Foundation
 
-public struct FeedImageViewModel<Image> {
+public struct FeedImageViewModel {
     public var description: String?
     public var location: String?
-    public var isLoading: Bool
-    public var isRetry: Bool
-    public var image: Image?
     
     public var hasLocation: Bool {
         return location != nil
