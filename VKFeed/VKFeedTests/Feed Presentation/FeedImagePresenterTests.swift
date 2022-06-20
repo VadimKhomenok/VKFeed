@@ -7,8 +7,18 @@
 
 import XCTest
 import VKFeed
+import UIKit
 
 class FeedImagePresenterTests: XCTestCase {
+    func test_map_createsViewModel() {
+        let feedImage = makeUniqueImage()
+        
+        let viewModel = FeedImagePresenter<ViewSpy, AnyImage>.map(feedImage)
+        
+        XCTAssertEqual(viewModel.location, feedImage.location)
+        XCTAssertEqual(viewModel.description, feedImage.description)
+    }
+    
     func test_imagePresenterLoad_doesNotSendMessagesToView() {
         let (_, view) = makeSUT()
         
@@ -85,7 +95,7 @@ class FeedImagePresenterTests: XCTestCase {
     private var fail: ImageTransformerClosure {
         return { _ in nil }
     }
-
+    
     private func makeSUT(imageTransformer: @escaping ImageTransformerClosure = { _ in nil }, file: StaticString = #file, line: UInt = #line) -> (sut: FeedImagePresenter<ViewSpy, AnyImage>, view: ViewSpy) {
         let view = ViewSpy()
         let sut = FeedImagePresenter(view: view, imageTransformer: imageTransformer)
@@ -95,12 +105,25 @@ class FeedImagePresenterTests: XCTestCase {
         
         return (sut, view)
     }
-
+    
     private final class ViewSpy: FeedImageView {
         private(set) var messages = [FeedImageViewModel<AnyImage>]()
         
         func display(_ viewModel: FeedImageViewModel<AnyImage>) {
             messages.append(viewModel)
         }
+    }
+}
+
+extension UIImage {
+    static func makeTinyImage(color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(color.cgColor)
+        context.fill(rect)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img!
     }
 }
