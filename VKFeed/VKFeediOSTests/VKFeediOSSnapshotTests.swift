@@ -97,7 +97,7 @@ class VKFeediOSSnapshotTests: XCTestCase {
 private extension FeedViewController {
     func display(stubs: [ImageStub]) {
         let cells: [FeedImageCellController] = stubs.map { stub in
-            let cellController = FeedImageCellController(delegate: stub)
+            let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub)
             stub.controller = cellController
             return cellController
         }
@@ -119,7 +119,11 @@ private class ImageStub: FeedImageCellControllerDelegate {
     }
     
     func didRequestImage() {
-        controller?.display(viewModel)
+        if let image = viewModel.image {
+            controller?.display(image)
+        } else {
+            controller?.display(ResourceLoadErrorViewModel.error(message: "Image load error"))
+        }
     }
     
     func didCancelImageRequest() {}
