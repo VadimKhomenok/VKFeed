@@ -9,7 +9,7 @@ import Foundation
 
 public final class LoadResourcePresenter<Resource, View: ResourceView> {
     
-    public typealias Mapper = (Resource) -> View.ResourceViewModel
+    public typealias Mapper = (Resource) throws -> View.ResourceViewModel
     
     private let loadingView: ResourceLoadingView
     private let resourceLoadErrorView: ResourceLoadErrorView
@@ -36,8 +36,13 @@ public final class LoadResourcePresenter<Resource, View: ResourceView> {
     }
     
     public func didFinishLoading(with resource: Resource) {
-        resourceView.display(mapper(resource))
-        loadingView.display(ResourceLoadingViewModel(isLoading: false))
+        do {
+            try resourceView.display(mapper(resource))
+            loadingView.display(ResourceLoadingViewModel(isLoading: false))
+        } catch {
+            loadingView.display(ResourceLoadingViewModel(isLoading: false))
+            resourceLoadErrorView.display(.error(message: Self.loadError))
+        }
     }
     
     public func didFinishLoading(with error: Error) {
