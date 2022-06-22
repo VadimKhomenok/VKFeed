@@ -10,16 +10,7 @@ import VKFeediOS
 @testable import VKFeed
 
 class VKFeediOSSnapshotTests: XCTestCase {
-    
-    func test_emptyFeed_snapshot() {
-        let sut = makeSUT()
-        
-        sut.display(stubs: [])
-        
-        assert(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "EMPTY_FEED_light")
-        assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "EMPTY_FEED_dark")
-    }
-    
+
     func test_nonEmptyFeed_snapshot() {
         let sut = makeSUT()
         
@@ -27,15 +18,6 @@ class VKFeediOSSnapshotTests: XCTestCase {
         
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "FEED_WITH_CONTENT_light")
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "FEED_WITH_CONTENT_dark")
-    }
-    
-    func test_errorFeed_snapshot() {
-        let sut = makeSUT()
-        
-        sut.display(ResourceLoadErrorViewModel(message: "This is a\nmulti-line\nerror message"))
-        
-        assert(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "FEED_WITH_ERROR_MESSAGE_light")
-        assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "FEED_WITH_ERROR_MESSAGE_dark")
     }
     
     func test_errorImageLoading_snapshot() {
