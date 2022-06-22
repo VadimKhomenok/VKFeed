@@ -17,9 +17,8 @@ public final class FeedUIComposer {
     public static func feedComposedWith(imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher, feedLoader: @escaping () -> LocalFeedLoader.Publisher) -> ListViewController {
         let presentationAdapter = FeedPresentationAdapter(loader: feedLoader)
         
-        let feedViewController = makeWith(
-            delegate: presentationAdapter,
-            title: FeedPresenter.title)
+        let feedViewController = makeWith(title: FeedPresenter.title)
+        feedViewController.onRefresh = presentationAdapter.loadResource
         
         let presenter = LoadResourcePresenter(
             loadingView: WeakRefVirtualProxy(object: feedViewController),
@@ -33,11 +32,10 @@ public final class FeedUIComposer {
         return feedViewController
     }
     
-    private static func makeWith(delegate: ListViewControllerDelegate, title: String) -> ListViewController {
+    private static func makeWith(title: String) -> ListViewController {
         let bundle = Bundle(for: ListViewController.self)
         let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
         let feedViewController = storyboard.instantiateInitialViewController() as! ListViewController
-        feedViewController.delegate = delegate
         feedViewController.title = title
         
         return feedViewController

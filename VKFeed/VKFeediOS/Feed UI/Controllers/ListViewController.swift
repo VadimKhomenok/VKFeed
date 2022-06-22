@@ -14,10 +14,6 @@ public protocol CellController {
     func cancelLoad()
 }
 
-public protocol ListViewControllerDelegate: AnyObject {
-    func didRequestRefresh()
-}
-
 public final class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceLoadErrorView {
     
     private var loadingControllers = [IndexPath: CellController]()
@@ -30,7 +26,7 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         }
     }
     
-    public var delegate: ListViewControllerDelegate?
+    public var onRefresh: (() -> Void)?
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +41,7 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     }
     
     @IBAction func refresh() {
-        delegate?.didRequestRefresh()
+        onRefresh?()
     }
     
     public func display(_ cellControllers: [CellController]) {
