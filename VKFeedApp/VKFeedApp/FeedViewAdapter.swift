@@ -10,12 +10,12 @@ import VKFeed
 import VKFeediOS
 
 final class FeedViewAdapter: ResourceView {
-    private weak var controller: FeedViewController?
+    private weak var controller: ListViewController?
     private let loader: (URL) -> FeedImageDataLoader.Publisher
     
     private typealias ImageDataPresentationAdapter = LoadResourcePresentationAdapter<Data, WeakRefVirtualProxy<FeedImageCellController>>
     
-    init(feedViewController: FeedViewController, loader: @escaping (URL) -> FeedImageDataLoader.Publisher) {
+    init(feedViewController: ListViewController, loader: @escaping (URL) -> FeedImageDataLoader.Publisher) {
         self.controller = feedViewController
         self.loader = loader
     }

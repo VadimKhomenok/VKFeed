@@ -14,11 +14,11 @@ public protocol CellController {
     func cancelLoad()
 }
 
-public protocol FeedViewControllerDelegate: AnyObject {
-    func didRequestFeedRefresh()
+public protocol ListViewControllerDelegate: AnyObject {
+    func didRequestRefresh()
 }
 
-public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceLoadErrorView {
+public final class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceLoadErrorView {
     
     private var loadingControllers = [IndexPath: CellController]()
     
@@ -30,7 +30,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
         }
     }
     
-    public var delegate: FeedViewControllerDelegate?
+    public var delegate: ListViewControllerDelegate?
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +45,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     @IBAction func refresh() {
-        delegate?.didRequestFeedRefresh()
+        delegate?.didRequestRefresh()
     }
     
     public func display(_ cellControllers: [CellController]) {

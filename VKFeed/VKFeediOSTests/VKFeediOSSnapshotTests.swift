@@ -49,10 +49,10 @@ class VKFeediOSSnapshotTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT() -> FeedViewController {
-        let bundle = Bundle(for: FeedViewController.self)
+    private func makeSUT() -> ListViewController {
+        let bundle = Bundle(for: ListViewController.self)
         let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
-        let feedViewController = storyboard.instantiateInitialViewController() as! FeedViewController
+        let feedViewController = storyboard.instantiateInitialViewController() as! ListViewController
         
         trackForMemoryLeaks(feedViewController)
         
@@ -94,7 +94,7 @@ class VKFeediOSSnapshotTests: XCTestCase {
     }
 }
 
-private extension FeedViewController {
+private extension ListViewController {
     func display(stubs: [ImageStub]) {
         let cells: [FeedImageCellController] = stubs.map { stub in
             let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub)
