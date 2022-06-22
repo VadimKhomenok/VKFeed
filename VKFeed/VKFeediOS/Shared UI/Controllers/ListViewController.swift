@@ -8,12 +8,6 @@
 import UIKit
 import VKFeed
 
-public protocol CellController {
-    func view(in tableView: UITableView) -> UITableViewCell
-    func preload()
-    func cancelLoad()
-}
-
 public final class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceLoadErrorView {
     
     private var loadingControllers = [IndexPath: CellController]()
