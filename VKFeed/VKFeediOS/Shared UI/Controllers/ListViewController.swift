@@ -57,15 +57,15 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let controller = cellController(for: indexPath)
-            controller.tableView(tableView, prefetchRowsAt: [indexPath])
+            let dsp = cellController(for: indexPath).dataSourcePrefetching
+            dsp?.tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let controller = removeLoadingController(for: indexPath)
-            controller?.tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
+            let dsp = removeLoadingController(for: indexPath)?.dataSourcePrefetching
+            dsp?.tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
         }
     }
     
@@ -76,13 +76,13 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     }
     
     override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let controller = cellController(for: indexPath)
-        return controller.tableView(tableView, cellForRowAt: indexPath)
+        let ds = cellController(for: indexPath).dataSource
+        return ds.tableView(tableView, cellForRowAt: indexPath)
     }
     
     override public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let controller = removeLoadingController(for: indexPath)
-        controller?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
+        let delegate = removeLoadingController(for: indexPath)?.delegate
+        delegate?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
     
     private func cellController(for indexPath: IndexPath) -> CellController {
