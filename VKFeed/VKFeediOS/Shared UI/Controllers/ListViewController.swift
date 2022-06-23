@@ -57,12 +57,16 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            cellController(for: indexPath).preload()
+            let controller = cellController(for: indexPath)
+            controller.tableView(tableView, prefetchRowsAt: [indexPath])
         }
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(cancelCellControllerLoad(forRowAt:))
+        indexPaths.forEach { indexPath in
+            let controller = removeLoadingController(for: indexPath)
+            controller?.tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
+        }
     }
     
     // MARK: - UITableView Data Source
@@ -72,11 +76,13 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     }
     
     override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return cellController(for: indexPath).view(in: tableView)
+        let controller = cellController(for: indexPath)
+        return controller.tableView(tableView, cellForRowAt: indexPath)
     }
     
     override public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cancelCellControllerLoad(forRowAt: indexPath)
+        let controller = removeLoadingController(for: indexPath)
+        controller?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
     
     private func cellController(for indexPath: IndexPath) -> CellController {
@@ -85,9 +91,10 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         return controller
     }
     
-    private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
-        loadingControllers[indexPath]?.cancelLoad()
+    private func removeLoadingController(for indexPath: IndexPath) -> CellController? {
+        let controller = loadingControllers[indexPath]
         loadingControllers[indexPath] = nil
+        return controller
     }
 }
 
