@@ -808,8 +808,8 @@
 		67F6BDCF281F4964004EB491 /* VKFeediOS */ = {
 			isa = PBXGroup;
 			children = (
-				678B4DCE2863D7DD0089EB5E /* Image Comments UI */,
 				678B4DAE2863C2670089EB5E /* Shared UI */,
+				678B4DCE2863D7DD0089EB5E /* Image Comments UI */,
 				674AC8B3282B076C0059F18D /* Feed UI */,
 				67F6BDD1281F4964004EB491 /* VKFeediOS.docc */,
 			);
