@@ -12,7 +12,7 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     
     private var loadingControllers = [IndexPath: CellController]()
     
-    @IBOutlet public var errorView: ErrorView!
+    private(set) public var errorView: ErrorView = ErrorView()
     
     private var tableModel = [CellController]() {
         didSet {
@@ -26,6 +26,23 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
         super.viewDidLoad()
         
         refresh()
+        configureErrorView()
+    }
+    
+    private func configureErrorView() {
+        #warning("I don't know why but in lectures they put errorView into the container view instead of directly setting tableHeaderView with it. Why it is necessary? Works fine if set errorView directly to tableHeaderView, no difference at all")
+        let containerView = UIView()
+        containerView.addSubview(errorView)
+        
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            errorView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: errorView.trailingAnchor),
+            errorView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: errorView.bottomAnchor)
+        ])
+        
+        tableView.tableHeaderView = containerView
     }
 
     override public func viewDidLayoutSubviews() {
