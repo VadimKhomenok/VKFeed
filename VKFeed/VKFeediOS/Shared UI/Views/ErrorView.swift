@@ -7,24 +7,18 @@
 
 import UIKit
 
-public final class ErrorView: UIView {
-    private lazy var label: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 17)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
+public final class ErrorView: UIButton {
     
     public var message: String? {
-        get { return isVisible ? label.text : .none }
+        get { return isVisible ? title(for: .normal) : .none }
         set { setMessageAnimated(newValue) }
     }
     
     private var isVisible: Bool {
         return self.alpha == 1
     }
+    
+    public var onHide: (() -> Void)?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,19 +37,17 @@ public final class ErrorView: UIView {
     
     private func configure() {
         backgroundColor = .errorBackgroundColor
-        configureLabel()
+        
+        addTarget(self, action: #selector(hideMessageAnimated), for: .touchUpInside)
+        configureTitleLabel()
         hideMessage()
     }
     
-    private func configureLabel() {
-        addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            trailingAnchor.constraint(equalTo: label.trailingAnchor, constant: 8),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            bottomAnchor.constraint(equalTo: label.bottomAnchor, constant: 4)
-        ])
+    private func configureTitleLabel() {
+        titleLabel?.textColor = .white
+        titleLabel?.font = .systemFont(ofSize: 17)
+        titleLabel?.textAlignment = .center
+        titleLabel?.numberOfLines = 0
     }
     
     private func setMessageAnimated(_ message: String?) {
@@ -67,13 +59,15 @@ public final class ErrorView: UIView {
     }
     
     private func showAnimated(_ message: String) {
-        label.text = message
+        setTitle(message, for: .normal)
+        contentEdgeInsets = .init(top: 4, left: 8, bottom: 4, right: 8)
+        
         UIView.animate(withDuration: 0.25) {
             self.alpha = 1
         }
     }
     
-    @IBAction private func hideMessageAnimated() {
+    @objc private func hideMessageAnimated() {
         UIView.animate(withDuration: 0.25) {
             self.alpha = 0
         } completion: { isFinished in
@@ -82,8 +76,10 @@ public final class ErrorView: UIView {
     }
     
     private func hideMessage() {
-        label.text = nil
+        setTitle(nil, for: .normal)
         alpha = 0
+        contentEdgeInsets = .init(top: -6.5, left: 0, bottom: -6.5, right: 0)
+        onHide?()
     }
 }
 

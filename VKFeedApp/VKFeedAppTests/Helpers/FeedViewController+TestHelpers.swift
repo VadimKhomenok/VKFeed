@@ -42,6 +42,10 @@ extension ListViewController {
         dataSource?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
     
+    func simulateErrorViewTap() {
+        errorView.simulateTap()
+    }
+    
     func isShowingLoadingIndicator() -> Bool {
         return refreshControl?.isRefreshing ?? false
     }
