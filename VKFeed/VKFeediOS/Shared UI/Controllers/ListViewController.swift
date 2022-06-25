@@ -23,23 +23,22 @@ public final class ListViewController: UITableViewController, UITableViewDataSou
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        dataSource.defaultRowAnimation = .fade
-        tableView.dataSource = dataSource
         refresh()
-        configureErrorView()
+        configureTableView()
     }
     
-    private func configureErrorView() {
+    private func configureTableView() {
         #warning("I don't know why but in lectures they put errorView into the container view instead of directly setting tableHeaderView with it. Why it is necessary? Works fine if set errorView directly to tableHeaderView, no difference at all")
-        let containerView = errorView.makeContainer()
+        
+        dataSource.defaultRowAnimation = .fade
+        tableView.dataSource = dataSource
+        tableView.tableHeaderView = errorView.makeContainer()
 
         errorView.onHide = { [weak self] in
             self?.tableView.beginUpdates()
             self?.tableView.sizeTableHeaderToFit()
             self?.tableView.endUpdates()
         }
-        
-        tableView.tableHeaderView = containerView
     }
 
     override public func viewDidLayoutSubviews() {
