@@ -37,7 +37,7 @@ class ImageCommentsSnapshotTests: XCTestCase {
     }
     
     private var comments: [CellController] {
-        commentsControllers.map { CellController($0) }
+        commentsControllers.map { CellController(id: UUID(), $0) }
     }
     
     private var commentsControllers: [ImageCommentCellController] {
