@@ -32,17 +32,15 @@ class ListSnapshotTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeSUT() -> ListViewController {
-        let bundle = Bundle(for: ListViewController.self)
-        let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
-        let listViewController = storyboard.instantiateInitialViewController() as! ListViewController
+        let controller = ListViewController()
         
-        trackForMemoryLeaks(listViewController)
+        trackForMemoryLeaks(controller)
         
-        listViewController.loadViewIfNeeded()
-        listViewController.tableView.showsVerticalScrollIndicator = false
-        listViewController.tableView.showsHorizontalScrollIndicator = false
+        controller.loadViewIfNeeded()
+        controller.tableView.showsVerticalScrollIndicator = false
+        controller.tableView.showsHorizontalScrollIndicator = false
         
-        return listViewController
+        return controller
     }
     
     private func emptyList() -> [CellController] {
