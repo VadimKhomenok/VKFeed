@@ -7,11 +7,11 @@
 
 import Foundation
 
-public struct ImageCommentsViewModel {
+public struct ImageCommentsViewModel: Hashable {
     public let comments: [ImageCommentViewModel]
 }
 
-public struct ImageCommentViewModel: Equatable {
+public struct ImageCommentViewModel: Hashable {
     public var message: String
     public var date: String
     public var username: String
