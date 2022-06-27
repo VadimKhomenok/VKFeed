@@ -1,6 +1,6 @@
 
 //
-//  FeedViewController+TestHelpers.swift
+//  ListViewController+TestHelpers.swift
 //  VKFeediOSTests
 //
 //  Created by Vadim Khomenok on 11.05.22.
