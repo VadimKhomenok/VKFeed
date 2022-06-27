@@ -18,7 +18,7 @@ public final class CommentsUIComposer {
     public static func commentsComposedWith(commentsLoader: @escaping () -> AnyPublisher<[FeedImage], Error>) -> ListViewController {
         let presentationAdapter = FeedPresentationAdapter(loader: commentsLoader)
         
-        let feedViewController = makeWith(title: FeedPresenter.title)
+        let feedViewController = makeWith(title: ImageCommentsPresenter.title)
         feedViewController.onRefresh = presentationAdapter.loadResource
         
         let presenter = LoadResourcePresenter(

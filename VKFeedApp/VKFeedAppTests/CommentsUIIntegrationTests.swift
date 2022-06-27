@@ -17,12 +17,12 @@ class CommentsUIIntegrationTests: FeedUIIntegrationTests {
         continueAfterFailure = false
     }
     
-    override func test_feedView_hasTitle() {
+    func test_commentsView_hasTitle() {
         let (_, sut) = makeSUT()
         
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.title, loadFeedTitle)
+        XCTAssertEqual(sut.title, commentsTitle)
     }
     
     override func test_loadFeedActions_requestFeedFromLoader() {
