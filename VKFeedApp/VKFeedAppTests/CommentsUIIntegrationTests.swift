@@ -12,7 +12,7 @@ import VKFeediOS
 import Combine
 @testable import VKFeedApp
 
-class CommentsUIIntegrationTests: FeedUIIntegrationTests {
+class CommentsUIIntegrationTests: XCTestCase {
     
     override func setUp() {
         continueAfterFailure = false
@@ -105,7 +105,7 @@ class CommentsUIIntegrationTests: FeedUIIntegrationTests {
         assert(sut: sut, rendered: [comment])
     }
     
-    override func test_tapOnErrorView_hidesErrorMessage() {
+    func test_tapOnErrorView_hidesErrorMessage() {
         let (loader, sut) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -132,15 +132,15 @@ class CommentsUIIntegrationTests: FeedUIIntegrationTests {
         wait(for: [exp], timeout: 1.0)
     }
     
-    override func test_loadFeedCompletion_rendersErrorMessageOnErrorUntilNextReload() {
+    func test_loadCommentsCompletion_rendersErrorMessageOnErrorUntilNextReload() {
         let (loader, sut) = makeSUT()
         
         sut.loadViewIfNeeded()
         
-        XCTAssertNil(sut.errorMessage, "Expected no error message on feed view loaded")
+        XCTAssertNil(sut.errorMessage, "Expected no error message on comments view loaded")
         
         loader.completeCommentsLoading(with: anyNSError(), at: 0)
-        XCTAssertEqual(sut.errorMessage, loadError, "Expected to render error message on feed load failure")
+        XCTAssertEqual(sut.errorMessage, loadError, "Expected to render error message on comments load failure")
         
         sut.simulateUserInitiatedReload()
         XCTAssertNil(sut.errorMessage, "Expected no error message after user initiated reload")
