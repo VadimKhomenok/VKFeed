@@ -146,6 +146,29 @@ class CommentsUIIntegrationTests: XCTestCase {
         XCTAssertNil(sut.errorMessage, "Expected no error message after user initiated reload")
     }
     
+    func test_deinit_cancelsRunningRequest() {
+        var cancelCalls = 0
+        var sut: ListViewController?
+        
+        autoreleasepool {
+            sut = CommentsUIComposer.commentsComposedWith {
+                PassthroughSubject<[ImageComment], Error>()
+                    .handleEvents(receiveCancel: {
+                        cancelCalls += 1
+                    })
+                    .eraseToAnyPublisher()
+            }
+            
+            sut?.loadViewIfNeeded()
+        }
+        
+        XCTAssertEqual(cancelCalls, 0)
+        
+        sut = nil
+        
+        XCTAssertEqual(cancelCalls, 1)
+    }
+    
     
     // MARK: - Helpers
     
