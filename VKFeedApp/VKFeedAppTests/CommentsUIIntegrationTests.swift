@@ -118,12 +118,12 @@ class CommentsUIIntegrationTests: FeedUIIntegrationTests {
         XCTAssertEqual(sut.errorMessage, nil)
     }
 
-    override func test_loadFeedCompletion_dispatchesFromBackgroundToMainThread() {
+    func test_loadCommentsCompletion_dispatchesFromBackgroundToMainThread() {
         let (loader, sut) = makeSUT()
         
         sut.loadViewIfNeeded()
         
-        let exp = expectation(description: "Complete feed load in background thread")
+        let exp = expectation(description: "Complete comments load in background thread")
         DispatchQueue.global().async {
             loader.completeCommentsLoading(at: 0)
             exp.fulfill()
