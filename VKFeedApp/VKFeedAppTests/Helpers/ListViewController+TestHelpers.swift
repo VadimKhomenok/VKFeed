@@ -65,6 +65,12 @@ extension ListViewController {
         dataSource?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
     
+    func simulateTapOnFeedImage(at row: Int) {
+        let delegate = tableView.delegate
+        let indexPath = feedImageIndexPath(for: row)
+        delegate?.tableView?(tableView, didSelectRowAt: indexPath)
+    }
+    
     var feedImagesSection: Int { 0 }
     
     func feedImageIndexPath(for row: Int) -> IndexPath {

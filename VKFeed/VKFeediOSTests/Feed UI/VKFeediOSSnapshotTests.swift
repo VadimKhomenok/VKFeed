@@ -80,7 +80,7 @@ class VKFeediOSSnapshotTests: XCTestCase {
 private extension ListViewController {
     func display(stubs: [ImageStub]) {
         let cells: [CellController] = stubs.map { stub in
-            let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub)
+            let cellController = FeedImageCellController(viewModel: stub.viewModel, delegate: stub, selection: {})
             stub.controller = cellController
             return CellController(id: UUID(), cellController)
         }

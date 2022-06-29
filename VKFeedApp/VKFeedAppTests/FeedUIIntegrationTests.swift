@@ -342,12 +342,31 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertNil(sut.errorMessage, "Expected no error message after user initiated reload")
     }
     
+    func test_imageSelection_notifiesHandler() {
+        let image0 = makeImage()
+        let image1 = makeImage()
+        var selectedImages = [FeedImage]()
+        let (loader, sut) = makeSUT(selection: { selectedImages.append($0) })
+
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(feed: [image0, image1], at: 0)
+        
+        sut.simulateTapOnFeedImage(at: 0)
+        XCTAssertEqual(selectedImages, [image0])
+        
+        sut.simulateTapOnFeedImage(at: 1)
+        XCTAssertEqual(selectedImages, [image0, image1])
+    }
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (loader: LoaderSpy, sut: ListViewController) {
+    private func makeSUT(
+        selection: @escaping (FeedImage) -> Void = { _ in },
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> (loader: LoaderSpy, sut: ListViewController) {
         let loader = LoaderSpy()
-        let sut = FeedUIComposer.feedComposedWith(imageLoader: loader.loadImageDataPublisher, feedLoader: loader.loadPublisher)
+        let sut = FeedUIComposer.feedComposedWith(imageLoader: loader.loadImageDataPublisher, feedLoader: loader.loadPublisher, selection: selection)
         
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
