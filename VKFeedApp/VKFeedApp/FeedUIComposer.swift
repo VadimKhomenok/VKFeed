@@ -17,7 +17,7 @@ public final class FeedUIComposer {
     public static func feedComposedWith(
         imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher,
         feedLoader: @escaping () -> LocalFeedLoader.Publisher,
-        selection: @escaping (FeedImage) -> Void = { _ in }
+        selection: @escaping (FeedImage) -> Void
     ) -> ListViewController {
         let presentationAdapter = FeedPresentationAdapter(loader: feedLoader)
         
