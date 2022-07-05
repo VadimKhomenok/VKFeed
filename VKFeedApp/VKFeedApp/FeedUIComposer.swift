@@ -8,15 +8,16 @@
 import VKFeed
 import VKFeediOS
 import UIKit
+import Combine
 
 public final class FeedUIComposer {
     private init() {}
     
-    private typealias FeedPresentationAdapter = LoadResourcePresentationAdapter<[FeedImage], FeedViewAdapter>
+    private typealias FeedPresentationAdapter = LoadResourcePresentationAdapter<Paginated<FeedImage>, FeedViewAdapter>
     
     public static func feedComposedWith(
         imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher,
-        feedLoader: @escaping () -> LocalFeedLoader.Publisher,
+        feedLoader: @escaping () -> AnyPublisher<Paginated<FeedImage>, Error>,
         selection: @escaping (FeedImage) -> Void
     ) -> ListViewController {
         let presentationAdapter = FeedPresentationAdapter(loader: feedLoader)
@@ -31,7 +32,7 @@ public final class FeedUIComposer {
                 loader: imageLoader,
                 selection: selection),
             resourceLoadErrorView: WeakRefVirtualProxy(object: feedViewController),
-            mapper: FeedPresenter.map)
+            mapper: { $0 })
         
         presentationAdapter.presenter = presenter
         return feedViewController
