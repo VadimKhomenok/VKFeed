@@ -96,13 +96,13 @@ class VKFeediOSSnapshotTests: XCTestCase {
     }
     
     private func feedWithLoadMoreIndicator() -> [CellController] {
-        let loadMoreCellController = LoadMoreCellController()
+        let loadMoreCellController = LoadMoreCellController(callback: {})
         loadMoreCellController.display(ResourceLoadingViewModel(isLoading: true))
         return feedWith(loadMore: loadMoreCellController)
     }
     
     private func feedWithLoadMoreError() -> [CellController] {
-        let loadMoreCellController = LoadMoreCellController()
+        let loadMoreCellController = LoadMoreCellController(callback: {})
         loadMoreCellController.display(ResourceLoadErrorViewModel(message: "This is a multiline\n error message"))
         return feedWith(loadMore: loadMoreCellController)
     }

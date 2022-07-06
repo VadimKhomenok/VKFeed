@@ -8,7 +8,7 @@
 import Foundation
 
 public struct Paginated<Item> {
-    public typealias LoadMoreCompletion = Result<Self, Swift.Error>
+    public typealias LoadMoreCompletion = (Result<Self, Error>) -> Void
     
     public let items: [Item]
     public let loadMore: ((LoadMoreCompletion) -> Void)?

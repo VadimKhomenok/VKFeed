@@ -34,6 +34,23 @@ extension ListViewController {
     }
 }
 
+// MARK: - Table View Helpers
+
+extension ListViewController {
+    func numberOfRows(in section: Int) -> Int {
+        tableView.numberOfSections > section ? tableView.numberOfRows(inSection: section) : 0
+    }
+    
+    func cell(row: Int, section: Int) -> UITableViewCell? {
+        guard numberOfRows(in: section) > row else {
+            return nil
+        }
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: section)
+        return ds?.tableView(tableView, cellForRowAt: index)
+    }
+}
+
 // MARK: - Feed specific extension
 
 extension ListViewController {
@@ -71,12 +88,21 @@ extension ListViewController {
         delegate?.tableView?(tableView, didSelectRowAt: indexPath)
     }
     
+    func simulateUserInitiatedLoadMoreAction() {
+        guard let loadMoreCell = cell(row: feedLoadMoreIndexPath.row, section: feedLoadMoreIndexPath.section) else { return }
+                
+        let delegate = tableView.delegate
+        delegate?.tableView?(tableView, willDisplay: loadMoreCell, forRowAt: feedLoadMoreIndexPath)
+    }
+    
     var feedImagesSection: Int { 0 }
+    var feedLoadMoreSection: Int { 1 }
+    var feedLoadMoreIndexPath: IndexPath { IndexPath(row: 0, section: feedLoadMoreSection) }
     
     func feedImageIndexPath(for row: Int) -> IndexPath {
         return IndexPath(row: row, section: feedImagesSection)
     }
-
+    
     @discardableResult
     func renderedFeedImageView(at row: Int) -> UITableViewCell? {
         guard numberOfRenderedFeedViews() > row else {
