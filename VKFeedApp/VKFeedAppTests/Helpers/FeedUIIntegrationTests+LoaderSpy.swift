@@ -15,12 +15,15 @@ extension FeedUIIntegrationTests {
         // MARK: - Feed Loader Spy
         
         private var feedRequests = [PassthroughSubject<Paginated<FeedImage>, Swift.Error>]()
+        private var loadMoreRequests = [PassthroughSubject<Paginated<FeedImage>, Swift.Error>]()
         
         var loadFeedCallCount: Int {
             feedRequests.count
         }
         
-        var loadMoreCallCount = 0
+        var loadMoreCallCount: Int {
+            loadMoreRequests.count
+        }
         
         func loadPublisher() -> AnyPublisher<Paginated<FeedImage>, Swift.Error> {
             let publisher = PassthroughSubject<Paginated<FeedImage>, Swift.Error>()
@@ -29,13 +32,29 @@ extension FeedUIIntegrationTests {
         }
         
         func completeFeedLoading(feed: [FeedImage] = [], at index: Int) {
-            feedRequests[index].send(Paginated(items: feed, loadMore: { [weak self] _ in
-                self?.loadMoreCallCount += 1
+            feedRequests[index].send(Paginated(items: feed, loadMorePublisher: { [weak self] in
+                let publisher = PassthroughSubject<Paginated<FeedImage>, Swift.Error>()
+                self?.loadMoreRequests.append(publisher)
+                return publisher.eraseToAnyPublisher()
             }))
         }
         
         func completeFeedLoading(with error: Error, at index: Int) {
             feedRequests[index].send(completion: .failure(error))
+        }
+        
+        func completeLoadMore(with feed: [FeedImage] = [], lastPage: Bool = false, at index: Int) {
+            loadMoreRequests[index].send(Paginated(
+                items: feed,
+                loadMorePublisher: lastPage ? nil : { [weak self] in
+                    let publisher = PassthroughSubject<Paginated<FeedImage>, Swift.Error>()
+                    self?.loadMoreRequests.append(publisher)
+                    return publisher.eraseToAnyPublisher()
+                }))
+        }
+        
+        func completeLoadMore(with error: Error, at index: Int) {
+            loadMoreRequests[index].send(completion: .failure(error))
         }
         
         // MARK: - Feed Image Loader Spy

@@ -51,6 +51,18 @@ class FeedUIIntegrationTests: XCTestCase {
         
         sut.simulateUserInitiatedLoadMoreAction()
         XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected to not make a request if previous is not completed yet")
+        
+        loader.completeLoadMore(lastPage: false, at: 0)
+        sut.simulateUserInitiatedLoadMoreAction()
+        XCTAssertEqual(loader.loadMoreCallCount, 2, "Expected request after load more completed with more pages")
+        
+        loader.completeLoadMore(with: anyNSError(), at: 1)
+        sut.simulateUserInitiatedLoadMoreAction()
+        XCTAssertEqual(loader.loadMoreCallCount, 3, "Expected request after load more failure")
+        
+        loader.completeLoadMore(lastPage: true, at: 2)
+        sut.simulateUserInitiatedLoadMoreAction()
+        XCTAssertEqual(loader.loadMoreCallCount, 3, "Expected no request after loading all pages")
     }
     
     func test_loadingFeedIndicator_isVisibleWhileLoadingFeed() {
