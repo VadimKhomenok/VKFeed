@@ -31,8 +31,7 @@ public final class FeedUIComposer {
                 feedViewController: feedViewController,
                 loader: imageLoader,
                 selection: selection),
-            resourceLoadErrorView: WeakRefVirtualProxy(object: feedViewController),
-            mapper: { $0 })
+            resourceLoadErrorView: WeakRefVirtualProxy(object: feedViewController))
         
         presentationAdapter.presenter = presenter
         return feedViewController
