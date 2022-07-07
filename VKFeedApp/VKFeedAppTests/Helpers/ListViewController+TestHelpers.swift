@@ -32,6 +32,10 @@ extension ListViewController {
     var errorMessage: String? {
         return errorView.message
     }
+    
+    var loadMoreFeedErrorMessage: String? {
+        return loadMoreFeedCell()?.message
+    }
 }
 
 // MARK: - Table View Helpers

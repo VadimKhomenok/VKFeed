@@ -418,6 +418,22 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertNil(sut.errorMessage, "Expected no error message after user initiated reload")
     }
     
+    func test_loadMoreCompletion_rendersErrorMessageOnError() {
+        let (loader, sut) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(at: 0)
+        
+        sut.simulateUserInitiatedLoadMoreAction()
+        XCTAssertNil(sut.loadMoreFeedErrorMessage, "Expected no error message on feed view loaded")
+        
+        loader.completeLoadMore(with: anyNSError(), at: 0)
+        XCTAssertEqual(sut.loadMoreFeedErrorMessage, loadError, "Expected to render error message on feed load failure")
+        
+        sut.simulateUserInitiatedLoadMoreAction()
+        XCTAssertNil(sut.loadMoreFeedErrorMessage, "Expected no error message after user initiated reload")
+    }
+    
     func test_imageSelection_notifiesHandler() {
         let image0 = makeImage()
         let image1 = makeImage()
