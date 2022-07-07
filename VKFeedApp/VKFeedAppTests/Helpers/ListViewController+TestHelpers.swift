@@ -25,6 +25,12 @@ extension ListViewController {
         errorView.simulateTap()
     }
     
+    func simulateLoadMoreErrorViewTap() {
+        let delegate = tableView.delegate
+        let index = IndexPath(row: feedLoadMoreIndexPath.row, section: feedLoadMoreIndexPath.section)
+        delegate?.tableView?(tableView, didSelectRowAt: index)
+    }
+    
     func isShowingLoadingIndicator() -> Bool {
         return refreshControl?.isRefreshing ?? false
     }
