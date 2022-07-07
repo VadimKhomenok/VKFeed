@@ -118,14 +118,18 @@ class FeedUIIntegrationTests: XCTestCase {
         sut.loadViewIfNeeded()
         assert(sut: sut, rendered: [])
         
-        loader.completeFeedLoading(feed: [image0], at: 0)
-        assert(sut: sut, rendered: [image0])
+        loader.completeFeedLoading(feed: [image0, image1], at: 0)
+        assert(sut: sut, rendered: [image0, image1])
+        
+        sut.simulateUserInitiatedLoadMoreAction()
+        loader.completeLoadMore(with: [image0, image1, image2, image3], at: 0)
+        assert(sut: sut, rendered: [image0, image1, image2, image3])
         
         sut.simulateUserInitiatedReload()
-        loader.completeFeedLoading(feed: [image0, image1, image2, image3], at: 1)
-        assert(sut: sut, rendered: [image0, image1, image2, image3])
+        loader.completeFeedLoading(feed: [image0, image1], at: 1)
+        assert(sut: sut, rendered: [image0, image1])
     }
-    
+
     func test_loadFeedCompletionWithError_doesNotAlterCurrentRenderedFeed() {
         let (loader, sut) = makeSUT()
         let image0 = makeImage(description: "a description", location: "a location")
@@ -136,6 +140,10 @@ class FeedUIIntegrationTests: XCTestCase {
         
         sut.simulateUserInitiatedReload()
         loader.completeFeedLoading(with: anyNSError(), at: 1)
+        assert(sut: sut, rendered: [image0])
+        
+        sut.simulateUserInitiatedLoadMoreAction()
+        loader.completeLoadMore(with: anyNSError(), at: 0)
         assert(sut: sut, rendered: [image0])
     }
     
@@ -338,7 +346,11 @@ class FeedUIIntegrationTests: XCTestCase {
 
         sut.loadViewIfNeeded()
     
-        loader.completeFeedLoading(feed: [image0, image1], at: 0)
+        loader.completeFeedLoading(feed: [image0], at: 0)
+        assert(sut: sut, rendered: [image0])
+        
+        sut.simulateUserInitiatedLoadMoreAction()
+        loader.completeLoadMore(with: [image0, image1], at: 0)
         assert(sut: sut, rendered: [image0, image1])
 
         sut.simulateUserInitiatedReload()
@@ -354,6 +366,22 @@ class FeedUIIntegrationTests: XCTestCase {
         let exp = expectation(description: "Complete feed load in background thread")
         DispatchQueue.global().async {
             loader.completeFeedLoading(at: 0)
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadMoreCompletion_dispatchesFromBackgroundToMainThread() {
+        let (loader, sut) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completeFeedLoading(at: 0)
+        sut.simulateUserInitiatedLoadMoreAction()
+        
+        let exp = expectation(description: "Complete feed load in background thread")
+        DispatchQueue.global().async {
+            loader.completeLoadMore(at: 0)
             exp.fulfill()
         }
         
