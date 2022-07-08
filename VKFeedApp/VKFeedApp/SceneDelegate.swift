@@ -82,23 +82,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .tryMap(FeedItemsMapper.map)
             .cache(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
-            .map { [httpClient, baseURL] items in
-                Paginated(items: items, loadMorePublisher: items.last.map { last in
-                    let url = FeedEndpoint.get(after: last).url(baseUrl: baseURL)
-                    
-                    return { [httpClient] in
-                        httpClient
-                            .getPublisher(url: url)
-                            .tryMap(FeedItemsMapper.map)
-                            .map { newItems in
-                                Paginated(items: items + newItems, loadMorePublisher: {
-                                    Empty().eraseToAnyPublisher()
-                                })
-                            }.eraseToAnyPublisher()
-                    }
-                })
+            .map { items in
+                Paginated(items: items, loadMorePublisher: self.makeRemoteLoadMoreLoader(items: items, last: items.last))
             }
             .eraseToAnyPublisher()
+    }
+    
+    func makeRemoteLoadMoreLoader(items: [FeedImage], last: FeedImage?) -> (() -> AnyPublisher<Paginated<FeedImage>, Error>)? {
+        last.map { lastItem in
+            let url = FeedEndpoint.get(after: lastItem).url(baseUrl: baseURL)
+            
+            return { [httpClient] in
+                httpClient
+                    .getPublisher(url: url)
+                    .tryMap(FeedItemsMapper.map)
+                    .map { newItems in
+                        let allItems = items + newItems
+                        return Paginated(items: allItems, loadMorePublisher: self.makeRemoteLoadMoreLoader(items: allItems, last: newItems.last))
+                    }.eraseToAnyPublisher()
+            }
+        }
     }
     
     private func makeLocalImageLoaderWithRemoteFallback(from url: URL) -> FeedImageDataLoader.Publisher {
