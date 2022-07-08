@@ -14,8 +14,10 @@ class FeedEndpointTests: XCTestCase {
         let baseUrl = URL(string: "http://base-url.com")!
         
         let resultUrl = FeedEndpoint.get.url(baseUrl: baseUrl)
-        let expectedUrl = URL(string: "http://base-url.com/v1/feed")!
         
-        XCTAssertEqual(resultUrl, expectedUrl)
+        XCTAssertEqual(resultUrl.scheme, "http", "scheme")
+        XCTAssertEqual(resultUrl.host, "base-url.com", "host")
+        XCTAssertEqual(resultUrl.path, "/v1/feed", "path")
+        XCTAssertEqual(resultUrl.query, "limit=10", "query")
     }
 }
