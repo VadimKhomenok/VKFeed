@@ -138,6 +138,10 @@ extension ListViewController {
     func renderedFeedImageData(at index: Int) -> Data? {
         return simulateFeedImageViewVisible(at: index)?.renderedImage
     }
+    
+    var canLoadMore: Bool {
+        loadMoreFeedCell() != nil
+    }
 }
 
 // MARK: - Comments specific extension

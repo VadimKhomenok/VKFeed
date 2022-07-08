@@ -82,8 +82,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .tryMap(FeedItemsMapper.map)
             .cache(to: localFeedLoader)
             .fallback(to: localFeedLoader.loadPublisher)
-            .map {
-                Paginated(items: $0)
+            .map { [httpClient, baseURL] items in
+                Paginated(items: items, loadMorePublisher: items.last.map { last in
+                    let url = FeedEndpoint.get(after: last).url(baseUrl: baseURL)
+                    
+                    return { [httpClient] in
+                        httpClient
+                            .getPublisher(url: url)
+                            .tryMap(FeedItemsMapper.map)
+                            .map { newItems in
+                                Paginated(items: items + newItems, loadMorePublisher: {
+                                    Empty().eraseToAnyPublisher()
+                                })
+                            }.eraseToAnyPublisher()
+                    }
+                })
             }
             .eraseToAnyPublisher()
     }
