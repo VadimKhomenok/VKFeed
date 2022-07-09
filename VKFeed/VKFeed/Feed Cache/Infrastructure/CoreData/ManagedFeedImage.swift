@@ -23,17 +23,22 @@ extension ManagedFeedImage {
     }
     
     static func images(from localImages: [LocalFeedImage], in context: NSManagedObjectContext) -> NSOrderedSet {
-        return NSOrderedSet(array: localImages.map { local -> ManagedFeedImage in
+        let images = NSOrderedSet(array: localImages.map { local -> ManagedFeedImage in
             let managedFeedImage = ManagedFeedImage(context: context)
             managedFeedImage.id = local.id
             managedFeedImage.imageDescription = local.description
             managedFeedImage.location = local.location
             managedFeedImage.url = local.url
+            managedFeedImage.data = context.userInfo[local.url] as? Data
             return managedFeedImage
         })
+        
+        context.userInfo.removeAllObjects()
+        return images
     }
     
     static func data(with url: URL, in context: NSManagedObjectContext) throws -> Data? {
+        if let cached = context.userInfo[url] as? Data { return cached }
         return try first(with: url, in: context)?.data
     }
     
@@ -43,5 +48,10 @@ extension ManagedFeedImage {
         request.returnsObjectsAsFaults = false
         request.fetchLimit = 1
         return try context.fetch(request).first
+    }
+    
+    override func prepareForDeletion() {
+        super.prepareForDeletion()
+        managedObjectContext?.userInfo[url] = data
     }
 }
