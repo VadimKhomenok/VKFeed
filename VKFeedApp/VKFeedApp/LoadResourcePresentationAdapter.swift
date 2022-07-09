@@ -10,31 +10,41 @@ import VKFeediOS
 import Combine
 
 final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
-    var presenter: LoadResourcePresenter<Resource, View>?
     private let loader: () -> AnyPublisher<Resource, Swift.Error>
     
+    private var isLoading = false
     private var cancellable: Cancellable?
+    
+    var presenter: LoadResourcePresenter<Resource, View>?
     
     init(loader: @escaping () -> AnyPublisher<Resource, Swift.Error>) {
         self.loader = loader
     }
 
     func loadResource() {
+        guard !isLoading else { return }
+        
         presenter?.didStartLoading()
+        isLoading = true
         
         cancellable = loader()
             .dispatchOnMainQueue()
+            .handleEvents(receiveCancel: { [weak self] in
+                self?.isLoading = false
+            })
             .sink { [weak self] completion in
-            switch completion {
-            case .finished:
-                break
+                switch completion {
+                case .finished:
+                    break
+                    
+                case let .failure(error):
+                    self?.presenter?.didFinishLoading(with: error)
+                }
                 
-            case let .failure(error):
-                self?.presenter?.didFinishLoading(with: error)
+                self?.isLoading = false
+            } receiveValue: { [weak self] resource in
+                self?.presenter?.didFinishLoading(with: resource)
             }
-        } receiveValue: { [weak self] resource in
-            self?.presenter?.didFinishLoading(with: resource)
-        }
     }
 }
 
