@@ -5,6 +5,7 @@
 //  Created by Vadim Khomenok on 2.06.22.
 //
 
+import os
 import UIKit
 import VKFeediOS
 import VKFeed
@@ -23,6 +24,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
     
+    private lazy var logger = Logger(subsystem: "com.essentialdeveloper.EssentialAppCaseStudy", category: "main")
+    
     private lazy var store: FeedStore & FeedImageDataStore = {
         do {
             return try CoreDataFeedStore(
@@ -31,6 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     .appendingPathComponent("FeedStore.sqlite"))
         } catch {
             assertionFailure("Failed to instantiate CoreData store with error: \(error.localizedDescription)")
+            logger.fault("Failed to instantiate CoreData store with error: \(error.localizedDescription)")
             return NullStore()
         }
     }()
