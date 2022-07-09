@@ -7,7 +7,7 @@
 
 import VKFeed
 
-class NullStore: FeedStore & FeedImageDataStore {
+class NullStore: FeedStore {
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
         completion(.success(()))
     }
@@ -19,14 +19,9 @@ class NullStore: FeedStore & FeedImageDataStore {
     func deleteCache(_ completion: @escaping DeletionCompletion) {
         completion(.success(()))
     }
-    
-    func insert(_ imageData: Data, for url: URL, completion: @escaping (InsertionResult) -> Void) {
-        completion(.success(()))
-    }
-    
-    func retrieve(dataForURL url: URL, completion: @escaping (FeedImageDataStore.RetrievalResult) -> Void) {
-        completion(.success(.none))
-    }
-    
-    
+}
+
+extension NullStore: FeedImageDataStore {
+    func insert(_ imageData: Data, for url: URL) throws {}
+    func retrieve(dataForURL url: URL) throws -> Data? { .none }
 }
